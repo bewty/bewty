@@ -33,13 +33,9 @@
     "eslint-plugin-jsx-a11y": "^1.2.0",
     "eslint-plugin-react": "^5.1.1",
     "file-loader": "^0.11.1",
-    "node-sass": "^3.7.0",
     "nodemon": "^1.11.0",
     "react-addons-test-utils": "^15.0.2",
     "react-hot-loader": "^1.3.0",
-    "sass-loader": "^3.2.0",
-    "style-loader": "^0.13.1",
-    "url-loader": "^0.5.7",
     "webpack-dev-server": "^1.14.1"
   },
   "dependencies": {
@@ -56,12 +52,16 @@
     "html-webpack-plugin": "^2.16.1",
     "mongoose": "^4.9.3",
     "morgan": "^1.8.1",
+    "node-sass": "^3.7.0",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-redux": "^5.0.2",
     "react-router-dom": "^4.0.0",
     "redux": "^3.5.2",
     "rimraf": "^2.6.1",
+    "sass-loader": "^3.2.0",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.0"
   }
 }
