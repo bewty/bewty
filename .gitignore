@@ -1,0 +1,13 @@
+/node_modules
+/dist/
+.DS_Store
+bundle.js
+npm-debug.log
+
+# Logs
+logs
+*.log
+
+# sass
+.sass-cache/
+*.css.map
