@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
-mongoose.connect('mongodb://localhost/bewty');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/bewty');
 
 const db = mongoose.connection;
 
