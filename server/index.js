@@ -14,9 +14,10 @@ app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 
 app.post('/api/watson', (req, res) => {
-  let target = 'Barack.txt';
+  let target = 'Ghandi.txt';
+  let entry = req.body.text || `${__dirname}/watsonAPI/watsonTest/${target}`;
 
-  fs.readFileAsync(`${__dirname}/watsonAPI/watsonTest/${target}`, 'utf8')
+  fs.readFileAsync(entry, 'utf8')
   .then((results) => {
     return watson.promisifiedPersonality(results);
   })
