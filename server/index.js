@@ -1,12 +1,33 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const db = require('./db/index');
 const app = express();
+const Promise = require('bluebird');
+const fs = Promise.promisifyAll(require('file-system'));
+const watson = require('./watsonAPI/watsonAPI.js');
 
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
+
+app.post('/api/watson', (req, res) => {
+  let target = 'Barack.txt';
+
+  fs.readFileAsync(`${__dirname}/watsonAPI/watsonTest/${target}`, 'utf8')
+  .then((results) => {
+    return watson.promisifiedPersonality(results);
+  })
+  .then((results) => {
+    res.status(200).send(results);
+    return fs.writeFile(`./watsonAPI/watsonResults/${target}`, JSON.stringify(results));
+  })
+  .error(function(e) {
+    console.log('Error received within post to /api/watson', e);
+  });
+});
 
 app.get('/test', (req, res) => {
   res.send('hello world');

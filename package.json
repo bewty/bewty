@@ -47,8 +47,10 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "css-loader": "^0.23.1",
+    "dotenv": "^4.0.0",
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
+    "file-system": "^2.2.2",
     "html-webpack-plugin": "^2.16.1",
     "mongoose": "^4.9.3",
     "morgan": "^1.8.1",
@@ -62,6 +64,7 @@
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "watson-developer-cloud": "^2.28.0",
     "webpack": "^1.13.0"
   }
 }
