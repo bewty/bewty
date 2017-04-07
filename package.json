@@ -59,6 +59,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
+    "getusermedia": "^2.0.1",
     "html-webpack-plugin": "^2.16.1",
     "jquery": "^3.2.1",
     "mongoose": "^4.9.3",
