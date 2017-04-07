@@ -11,7 +11,7 @@ export default class App extends React.Component {
   }
 
   state = {
-    data: window.exampleData
+    data: window.exampleData.personality
   }
 
   getScatterData() {
@@ -27,15 +27,18 @@ export default class App extends React.Component {
   render() {
     return (
       <VictoryChart
+        width = {1000}
+        height ={1000}
         domain={{y: [0, 100]}}
         containerComponent={<VictoryZoomContainer responsive={false} zoomDomain={{x: [5, 35], y: [0, 100]}}/>}
       >
         <VictoryScatter
-          data={this.state.data}
+          x="name"
+          data={this.state.data
           style={{
             data: {
               opacity: (d) =>  d.y % 5 === 0 ? 1 : 0.7,
-              fill: (d) => d.y % 5 === 0 ? "tomato" : "black"
+              fill: (d) => d.y % 5 === 0 ? "tomato" : "darkgrey"
             }
           }}
         />
