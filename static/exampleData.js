@@ -1,4 +1,4 @@
-{
+window.exampleData = {
   "word_count": 13906,
   "processed_language": "en",
   "personality": [
