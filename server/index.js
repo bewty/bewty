@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const db = require('./db/index');
+const speech = require('./api/speech/speech');
 const app = express();
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('file-system'));
@@ -10,7 +11,6 @@ const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const cors = require('cors');
 
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
@@ -42,7 +42,7 @@ app.post('/db/logentry', (req, res) => {
     text: 'Testing for occurrence of missing data',
     watson_results: {Openness: {ReallyOpen: .67}},
     tags: ['Family', 'Work']
-  };  
+  };
 
   database.logEntry(log);
   res.status(200).send(`${log.user_id} entry updated successfuly`);
