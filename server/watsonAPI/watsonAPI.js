@@ -1,5 +1,3 @@
-const express = require('express');
-
 const PersonalityInsightsV3 = require('watson-developer-cloud/personality-insights/v3');
 
 const personalityInsights = new PersonalityInsightsV3({
