@@ -4,8 +4,8 @@ const Speech = require('@google-cloud/speech');
 const projectId = 'bewt-163703';
 const speech = Speech({
   projectId: projectId,
-  keyFileName: __dirname + '/bewt.json',
-  credentials: require('./bewt.json')
+  keyFileName: __dirname + '/../config/bewty.json',
+  credentials: require('../config/bewty.json')
 });
 
 var streamingRecognize = function(filename, encoding, sampleRate) {
