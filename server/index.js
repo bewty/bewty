@@ -2,9 +2,10 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const db = require('./db/index');
+const speech = require('./api/speech/speech');
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 
