@@ -76,6 +76,7 @@ class VideoEntry extends Component {
   }
 
   startRecord() {
+    this.getUserMedia();
     this.captureUserMedia( stream => {
       this.state.recordVideo = RecordRTC(stream, {type:'video'});
       this.state.recordVideo.startRecording();
