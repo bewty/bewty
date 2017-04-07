@@ -44,3 +44,6 @@ dist/
 node_modules/
 bower_components/
 
+
+#config files
+/server/api/config/bewty.json
