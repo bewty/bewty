@@ -10,11 +10,21 @@ const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const cors = require('cors');
 
+const twilio = require('./twilioAPI/twilioAPI.js');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
+
+app.post('api/voice', function(req, res) {
+  var twiml = new twilio.TwimlResponse();
+  twiml.say('Yo dis is yo everyday journalin app calling. Please record a one minute journal entry ta git yo personalitizzle thangs up in dis biatch from our Watson API.');
+
+  res.writeHead(200, {'Content-Type': 'text/xml'});
+  res.end(twiml.toString());
+});
 
 app.get('/db/retrieveEntry/:user', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
