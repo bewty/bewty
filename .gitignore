@@ -47,3 +47,5 @@ bower_components/
 
 #config files
 /server/api/config/bewty.json
+.env
+aws-config.js
