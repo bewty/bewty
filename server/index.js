@@ -5,9 +5,26 @@ const multer = require('multer');
 const db = require('./db/index');
 const cors = require('cors');
 const app = express();
-
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const KEYS = require('../aws-config.js');
+const s3 = new AWS.S3();
 const upload = multer({
-  dest: path.resolve(__dirname, '..', 'dist','upload')
+  dest: path.resolve(__dirname, '..', 'dist','upload'),
+  storage: multerS3({
+    s3: s3,
+    bucket: 'smartdiarybewt',
+    metadata: (req, file, cb) => {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: (req, file, cb) => cb(null, Date.now().toString())
+  })
+});
+
+AWS.config.update({
+  accessKeyId: KEYS.AWS_S3.ACCESS_KEY,
+  secretAccessKey: KEYS.AWS_S3.SECRET_KEY,
+  region: 'us-west-1'
 });
 
 app.use(cors());
@@ -46,7 +63,6 @@ app.get('/getusers', (req, res) => {
 });
 
 app.post('/entry/video', upload.single('video'), (req, res) => {
-  //console.log('req.file is========', req.file);
   res.send('video uploaded');
 });
 
