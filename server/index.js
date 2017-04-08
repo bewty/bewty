@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const multer = require('multer');
 const db = require('./db/index');
 const speech = require('./api/speech/speech');
 const app = express();
@@ -10,12 +11,10 @@ const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const twilio = require('./twilioAPI/twilioAPI.js');
-const multer = require('multer');
 const cors = require('cors');
 const AWS = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -87,7 +86,7 @@ app.post('/db/logentry', (req, res) => {
     text: 'Testing for occurrence of missing data',
     watson_results: {Openness: {ReallyOpen: .67}},
     tags: ['Family', 'Work']
-  };  
+  };
 
   database.logEntry(log);
   res.status(200).send(`${log.user_id} entry updated successfuly`);
@@ -136,6 +135,11 @@ app.post('/test', (req, res) => {
 
 app.post('/entry/audio', upload.single('audio'), (req, res) => {
   res.send('audio uploaded');
+});
+
+app.post('/entry/video', upload.single('video'), (req, res) => {
+  //console.log('req.file is========', req.file);
+  res.send('video uploaded');
 });
 
 app.get('*', (req, res) => {
