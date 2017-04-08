@@ -2,7 +2,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as V from 'victory';
-import { VictoryScatter, VictoryZoomContainer, VictoryChart } from 'victory';
+import { VictoryScatter, VictoryZoomContainer, VictoryTheme, VictoryChart } from 'victory';
+import exampleData from '../../../../static/exampleData.js'
 
 export default class App extends React.Component {
 
@@ -11,36 +12,39 @@ export default class App extends React.Component {
   }
 
   state = {
-    data: window.exampleData.personality
+    data: this.getScatterData()
   }
 
   getScatterData() {
-    return range(100).map((index) => {
+      var counter = 0;
+    return window.exampleData.personality.map((index) => {
       return {
-        x: random(1, 100),
-        y: random(10, 90),
-        size: random(8) + 3
+        y: index.name,
+        x: index.percentile*100,
+        size:40,
+        label: Math.floor(index.percentile*100)
       };
     });
   }
 
   render() {
+    console.log('this is the state', this.state.data)
     return (
       <VictoryChart
+      domainPadding={50}
         width = {1000}
         height ={1000}
-        domain={{y: [0, 100]}}
-        containerComponent={<VictoryZoomContainer responsive={false} zoomDomain={{x: [5, 35], y: [0, 100]}}/>}
+        theme={VictoryTheme.material}
+        // domain={{y: [0, 5]}}
+        domain={{x: [0, 100]}}
+        containerComponent={<VictoryZoomContainer responsive={false} />}
       >
         <VictoryScatter
-          x="name"
-          data={this.state.data
+          data={this.state.data}
           style={{
-            data: {
-              opacity: (d) =>  d.y % 5 === 0 ? 1 : 0.7,
-              fill: (d) => d.y % 5 === 0 ? "tomato" : "darkgrey"
-            }
-          }}
+                  data: {fill: (d) => d.x > 50 ? "red" : "#00796B"},
+                  labels: {fontSize: 12},
+                }}
         />
       </VictoryChart>
     );
