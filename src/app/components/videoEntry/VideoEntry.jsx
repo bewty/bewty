@@ -88,7 +88,6 @@ class VideoEntry extends Component {
   uploadVideo() {
     let blob = this.state.blob;
     let fd = new FormData();
-    let fieldname = `${counter}video`
     fd.append('video', blob);
 
     const config = {
