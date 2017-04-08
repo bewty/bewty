@@ -14,6 +14,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 
+app.get('/db/retrieveEntry/:user', (req, res) => {
+  ///db/retrieveEntry/:user?query=entries
+  let query = {};
+  query.user = req.params.user || '123456789';
+  query.search = req.query.query || 'entries';
+  res.send(JSON.stringify(database.retrieveEntry(query)));
+});
+
 app.post('/db/userentry', (req, res) => {
   let userInfo = req.body.userInfo || {
     name: 'Bob Test',
