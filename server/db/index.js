@@ -12,7 +12,18 @@ db.once('open', function() {
 });
 
 const userSchema = new mongoose.Schema({
-  username: String
+  name: String,
+  user_id: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  entries: [{
+    entry_type: String,
+    created_at: {type: Date, default: Date.now},
+    video_url: String,
+    audio_url: String,
+    text: String,
+    watson_results: Object,
+    tags: Array
+  }]
 });
 
 const User = mongoose.model('User', userSchema);
@@ -21,3 +32,4 @@ module.exports = {
   db: db,
   User: User
 };
+
