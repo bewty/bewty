@@ -34,6 +34,18 @@ const upload = multer({
   })
 });
 
+const uploadVideo = multer({
+  dest: path.resolve(__dirname, '..', 'dist','upload'),
+  storage: multerS3({
+    s3: s3,
+    bucket: 'smartdiarybewt',
+    metadata: (req, file, cb) => {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: (req, file, cb) => cb(null, Date.now().toString())
+  })
+});
+
 AWS.config.update({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY,
   secretAccessKey: process.env.AWS_S3_SECRET_KEY,
@@ -137,8 +149,7 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
   res.send('audio uploaded');
 });
 
-app.post('/entry/video', upload.single('video'), (req, res) => {
-  //console.log('req.file is========', req.file);
+app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
   res.send('video uploaded');
 });
 
