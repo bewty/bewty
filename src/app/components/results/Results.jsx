@@ -2,8 +2,38 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as V from 'victory';
-import { VictoryScatter, VictoryZoomContainer, VictoryLabel, VictoryTheme, VictoryChart } from 'victory';
+import { VictoryScatter,VictoryPie, VictoryZoomContainer, VictoryLabel, VictoryTheme, VictoryChart } from 'victory';
 import exampleData from '../../../../static/exampleData.js'
+
+class CustomPie extends React.Component {
+  static propTypes = {
+    datum: React.PropTypes.object,
+    x: React.PropTypes.number,
+    y: React.PropTypes.number
+  };
+
+  render() {
+    const {datum, x, y} = this.props;
+    const pieWidth = 150;
+
+    return (
+      <g transform={
+        `translate(${x - pieWidth / 2}, ${y - pieWidth / 2})`
+        }
+      >
+        <VictoryPie
+          standalone={false}
+          height={pieWidth}
+          width={pieWidth}
+          data={datum.pie}
+          style={{labels: {fontSize: 0}}}
+          colorScale={["#f77", "#55e", "#8af"]}
+        />
+      </g>
+    );
+  }
+}
+
 
 export default class App extends React.Component {
 
@@ -42,6 +72,9 @@ export default class App extends React.Component {
           data={this.state.data}
           labelComponent={
             <VictoryLabel dy={3.5} verticalAnchor="middle" textAnchor="end"/>
+          }
+          dataComponent= {
+            <CustomPie />
           }
           style={{
             data: {fill: (d) => d.x > 80 ? "tomato" : "grey", stroke: "black", strokeWidth:5},
