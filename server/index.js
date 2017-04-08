@@ -1,9 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const multer = require('multer');
 const db = require('./db/index');
+const cors = require('cors');
 const app = express();
 
+const upload = multer({
+  dest: path.resolve(__dirname, '..', 'dist','upload')
+});
+
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
@@ -36,6 +43,11 @@ app.get('/getusers', (req, res) => {
   .catch(err => {
     res.sendStatus(400).send(err);
   });
+});
+
+app.post('/entry/video', upload.single('video'), (req, res) => {
+  //console.log('req.file is========', req.file);
+  res.send('video uploaded');
 });
 
 app.get('*', (req, res) => {

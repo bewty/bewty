@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
-import $ from 'jquery';
+import axios from 'axios';
 
 class VideoEntry extends Component {
   constructor(props) {
@@ -63,17 +63,6 @@ class VideoEntry extends Component {
     alert('Your browser cannot stream from your webcam. Please switch to Chrome or Firefox.');
   }
 
-  uploadVideo(blob) {
-    let fd = new FormData();
-    fd.append('fname', blob);
-    $.ajax({
-      type:'POST',
-      url:'/entry/video',
-      data: fd,
-      processData: false,
-      contentType: false
-    }).done( data => console.log(data));
-  }
 
   startRecord() {
     this.getUserMedia();
@@ -96,6 +85,19 @@ class VideoEntry extends Component {
     });
   }
 
+  uploadVideo() {
+    let blob = this.state.blob;
+    let fd = new FormData();
+    let fieldname = `${counter}video`
+    fd.append('video', blob);
+
+    const config = {
+      headers: { 'content-type': 'multipart/form-data' }
+    }
+    axios.post('/entry/video', fd, config)
+    .then( res => console.log('video upload to server done', res));
+  }
+
   render() {
     return (
       <div className="container">
@@ -103,6 +105,7 @@ class VideoEntry extends Component {
         <video autoPlay='true' src={this.state.src} controls></video>
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
+        <button onClick={this.uploadVideo}>Upload</button>
       </div>
     )
   }
