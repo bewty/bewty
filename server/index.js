@@ -7,11 +7,21 @@ const app = express();
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
+const database = require('./db/dbHelpers');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
+
+app.post('/db/userentry', (req, res) => {
+  userInfo = {
+    name: 'Bob Test',
+    user_id: '123456789',
+    password: 'password'
+  };
+  database.userEntry(userInfo);
+});
 
 app.post('/api/watson', (req, res) => {
   let target = 'Ghandi.txt';
@@ -30,7 +40,7 @@ app.post('/api/watson', (req, res) => {
   });
 });
 
-app.get('/test', (req, res) => {
+app.post('/test', (req, res) => {
   res.send('hello world');
 });
 
