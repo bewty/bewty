@@ -46,6 +46,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
+    "cors": "^2.8.3",
     "css-loader": "^0.23.1",
     "d3": "^4.7.4",
     "dimple": "git+https://github.com/PMSI-AlignAlytics/dimple.git",

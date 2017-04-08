@@ -8,11 +8,13 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
+const cors = require('cors');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
+app.use(cors());
 
 app.get('/db/retrieveEntry/:user', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
@@ -64,6 +66,7 @@ app.post('/api/watson', (req, res) => {
 });
 
 app.post('/test', (req, res) => {
+  console.log(req.body.test);
   res.send('hello world');
 });
 
