@@ -9,7 +9,29 @@ const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
+const multer = require('multer');
 const cors = require('cors');
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const KEYS = require('../aws-config.js');
+const s3 = new AWS.S3();
+const upload = multer({
+  dest: path.resolve(__dirname, 'api', 'speech', 'audio'),
+  storage: multerS3({
+    s3: s3,
+    bucket: 'bewty',
+    metadata: (req, file, cb) => {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: (req, file, cb) => cb(null, Date.now().toString())
+  })
+});
+
+AWS.config.update({
+  accessKeyId: KEYS.AWS_S3.ACCESS_KEY,
+  secretAccessKey: KEYS.AWS_S3.SECRET_KEY,
+  region: 'us-west-1'
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
@@ -94,6 +116,10 @@ app.get('/getusers', (req, res) => {
   .catch(err => {
     res.sendStatus(400).send(err);
   });
+});
+
+app.post('/entry/audio', upload.single('audio'), (req, res) => {
+  res.send('audio uploaded');
 });
 
 app.get('*', (req, res) => {
