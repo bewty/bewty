@@ -11,11 +11,14 @@ class CustomPie extends React.Component {
     x: React.PropTypes.number,
     y: React.PropTypes.number
   };
+  constructor(props) {
+    super(props);
+  }
 
   render() {
+    console.log(this.props.data, 'pieData')
     const {datum, x, y} = this.props;
     const pieWidth = 150;
-
     return (
       <g transform={
         `translate(${x - pieWidth / 2}, ${y - pieWidth / 2})`
@@ -23,9 +26,12 @@ class CustomPie extends React.Component {
       >
         <VictoryPie
           standalone={false}
-          height={pieWidth}
-          width={pieWidth}
-          data={datum.pie}
+          height={200}
+          width={200}
+          data={this.props.data}
+          labelComponent={
+            <VictoryLabel dy={3.5} verticalAnchor="middle" textAnchor="end"/>
+          }
           style={{labels: {fontSize: 0}}}
           colorScale={["#f77", "#55e", "#8af"]}
         />
@@ -42,7 +48,8 @@ export default class App extends React.Component {
   }
 
   state = {
-    data: this.getScatterData()
+    data: this.getScatterData(),
+    children: window.exampleData.personality.children
   }
 
   getScatterData() {
@@ -50,17 +57,25 @@ export default class App extends React.Component {
       return {
         y: index.name,
         x: index.percentile*100,
-        size:40,
-        label: Math.floor(index.percentile*100)
+        label: Math.floor(index.percentile*100),
+        children: index.children
       };
     });
   }
 
   render() {
-    console.log('this is the state', this.state.data)
+    const pieData = this.state.data.map((index) => {
+      return index.children.map((each) => {
+        return {
+          y: each.name,
+          x: each.percentile*100,
+          label: Math.floor(each.percentile*100)
+        }
+      })
+    })
     return (
       <VictoryChart
-      domainPadding={60}
+      domainPadding={90}
         width = {1000}
         height ={1000}
         theme={VictoryTheme.material}
@@ -74,7 +89,7 @@ export default class App extends React.Component {
             <VictoryLabel dy={3.5} verticalAnchor="middle" textAnchor="end"/>
           }
           dataComponent= {
-            <CustomPie />
+            <CustomPie childrenData={this.pieData}/>
           }
           style={{
             data: {fill: (d) => d.x > 80 ? "tomato" : "grey", stroke: "black", strokeWidth:5},
