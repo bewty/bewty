@@ -15,12 +15,27 @@ app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 
 app.post('/db/userentry', (req, res) => {
-  userInfo = {
+  let userInfo = req.body.userInfo || {
     name: 'Bob Test',
     user_id: '123456789',
     password: 'password'
   };
   database.userEntry(userInfo);
+  res.status(200).send(`${userInfo.name} successfuly added to database`);
+});
+
+app.post('/db/logentry', (req, res) => {
+  let log = req.body.log || {
+    user_id: '123456789',
+    entry_type: 'Goal',
+    audio_url: 'test.com/test',
+    text: 'Testing for occurrence of missing data',
+    watson_results: {Openness: {ReallyOpen: .67}},
+    tags: ['Family', 'Work']
+  };  
+
+  database.logEntry(log);
+  res.status(200).send(`${log.user_id} entry updated successfuly`);
 });
 
 app.post('/api/watson', (req, res) => {

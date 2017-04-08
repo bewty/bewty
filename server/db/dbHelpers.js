@@ -13,7 +13,7 @@ exports.userEntry = (userInfo) => {
 
   newUser.save()
   .then(function(success) {
-    console.log(`${newUser.name} successfully added`);
+    return console.log(`${newUser.name} successfully added`);
   })
   .catch(function(err) {
     console.log('Error occurred in userEntry to db:', err);
@@ -22,8 +22,10 @@ exports.userEntry = (userInfo) => {
 
 exports.logEntry = (log) => {
   const userID = log.user_id;
+
   let logEntry = {
     entry_type: log.entry_type,
+    created_at: Date.now(),
     video_url: log.video_url,
     audio_url: log.audio_url,
     text: log.text,
@@ -39,12 +41,12 @@ exports.logEntry = (log) => {
   //   console.log('Error occurred in logEntry to db:', err);
   // });
 
-  User.findByIdAndUpdate(userID, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true},
+  User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true},
     function(err, model) {
       if (err) {
         console.log('Error occurred in logEntry to db:', err);
       } else {
-        console.log(`successfully added ${userID} entry:`, model);
+        console.log(`successfully added ${logEntry.userID} entry:`, model);
       }
     });
 };
