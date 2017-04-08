@@ -33,14 +33,6 @@ exports.logEntry = (log) => {
     tags: log.tags
   };
 
-  // User.findById(userID)
-  // .then(function(user) {
-  //   user.entries.push(logEntry);
-  // })
-  // .catch(function(err) {
-  //   console.log('Error occurred in logEntry to db:', err);
-  // });
-
   User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true},
     function(err, model) {
       if (err) {
