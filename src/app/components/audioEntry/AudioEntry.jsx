@@ -13,7 +13,8 @@ class AudioEntry extends Component {
       uploading: false,
       uploadSuccess: null,
       start: false,
-      stop: false
+      stop: false,
+      transcript: ''
     };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
@@ -96,7 +97,7 @@ class AudioEntry extends Component {
       headers: { 'content-type': 'multipart/form-data' }
     };
     axios.post('/entry/audio', fd, config)
-    .then( res => console.log('video upload to server done', res));
+    .then( res => console.log('audio upload to server done', res));
   }
 
   onEnd() {
@@ -105,11 +106,11 @@ class AudioEntry extends Component {
   }
 
   onResult ({ finalTranscript }) {
-    const result = finalTranscript;
+    // const result = finalTranscript;
 
-    this.setState({ start: false });
+    this.setState({ start: false,
+                    transcript: finalTranscript });
     // this.props.action('result')(finalTranscript);
-    console.log(result);
   }
 
   render() {
@@ -121,6 +122,7 @@ class AudioEntry extends Component {
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
         <button onClick={this.uploadAudio}>Upload</button>
+        <p>{this.state.transcript}</p>
         <VoiceRecognition
           onEnd={this.onEnd}
           onResult={this.onResult}
