@@ -9,6 +9,7 @@ class VideoEntry extends Component {
       src: null,
       recordVideo: null,
       blob: null,
+      playback: false,
       uploading: false,
       uploadSuccess: null
     }
@@ -65,6 +66,10 @@ class VideoEntry extends Component {
 
 
   startRecord() {
+    this.setState({
+      playback: false
+    });
+
     this.getUserMedia();
     this.captureUserMedia( stream => {
       this.state.recordVideo = RecordRTC(stream, {type:'video'});
@@ -79,9 +84,10 @@ class VideoEntry extends Component {
   stopRecord() {
     this.state.recordVideo.stopRecording((videoURL) => {
       this.setState({
-         blob : this.state.recordVideo.blob,
-         src: videoURL
-       });
+        blob: this.state.recordVideo.blob,
+        src: videoURL,
+        playback: true,
+      });
     });
   }
 
@@ -101,12 +107,16 @@ class VideoEntry extends Component {
     return (
       <div className="container">
         <h1>Video Entry</h1>
-        <video autoPlay='true' src={this.state.src} controls></video>
-        <button onClick={this.startRecord}>Record</button>
-        <button onClick={this.stopRecord}>Stop</button>
-        <button onClick={this.uploadVideo}>Upload</button>
+        <div>
+          { this.state.playback
+            ? <video autoPlay='true' src={this.state.src} controls></video>
+            : <video autoPlay='true' src={this.state.src} muted></video> }
+          <button onClick={this.startRecord}>Record</button>
+          <button onClick={this.stopRecord}>Stop</button>
+          <button onClick={this.uploadVideo}>Upload</button>
+        </div>
       </div>
-    )
+    );
   }
 }
 
