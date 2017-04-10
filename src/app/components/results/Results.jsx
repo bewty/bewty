@@ -47,7 +47,7 @@ class CustomPie extends React.Component {
 }
 
 
-export default class App extends React.Component {
+export default class Chart extends React.Component {
 
   constructor(props) {
     super(props);
@@ -112,4 +112,4 @@ export default class App extends React.Component {
 
 const mountNode = document.getElementById('app')
 
-ReactDOM.render(<App/>, mountNode)
+ReactDOM.render(<Chart/>, mountNode)
