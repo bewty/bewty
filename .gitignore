@@ -37,3 +37,8 @@ dist/
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules/
 bower_components/
+
+#config files
+/server/api/config/bewty.json
+.env
+aws-config.js
