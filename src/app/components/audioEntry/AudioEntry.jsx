@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import VoiceRecognition from '../VoiceRecognition/VoiceRecognition';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 
@@ -10,9 +11,10 @@ class AudioEntry extends Component {
       recordAudio: null,
       blob: null,
       uploading: false,
-      uploadSuccess: null
+      uploadSuccess: null,
+      start: false,
+      stop: false
     };
-
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
     this.handleAudio = this.handleAudio.bind(this);
@@ -20,14 +22,15 @@ class AudioEntry extends Component {
     this.startRecord = this.startRecord.bind(this);
     this.stopRecord = this.stopRecord.bind(this);
     this.uploadAudio = this.uploadAudio.bind(this);
+    this.onEnd = this.onEnd.bind(this);
+    this.onResult = this.onResult.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.getUserMedia();
   }
 
   getUserMedia() {
-
     navigator.getUserMedia = navigator.getUserMedia ||
                          navigator.webkitGetUserMedia ||
                          navigator.mozGetUserMedia;
@@ -35,7 +38,7 @@ class AudioEntry extends Component {
     if (navigator.getUserMedia) {
       this.captureUserMedia( stream => this.handleAudio(stream));
     } else {
-       console.log("getUserMedia not supported");
+      console.log('getUserMedia not supported');
     }
   }
 
@@ -69,13 +72,17 @@ class AudioEntry extends Component {
     setTimeout( () => {
       this.stopRecord();
     }, 30000);
+    this.setState({
+      start: true
+    });
   }
 
   stopRecord() {
     this.state.recordAudio.stopRecording((audioURL) => {
       this.setState({
         blob: this.state.recordAudio.blob,
-        src: audioURL
+        src: audioURL,
+        stop: true
       });
     });
   }
@@ -92,7 +99,21 @@ class AudioEntry extends Component {
     .then( res => console.log('video upload to server done', res));
   }
 
+  onEnd() {
+    this.setState({ start: false, stop: false });
+    // this.props.action('end')();
+  }
+
+  onResult ({ finalTranscript }) {
+    const result = finalTranscript;
+
+    this.setState({ start: false });
+    // this.props.action('result')(finalTranscript);
+    console.log(result);
+  }
+
   render() {
+    console.log(this.state);
     return (
       <div className="container">
         <h1>Audio Entry</h1>
@@ -100,6 +121,13 @@ class AudioEntry extends Component {
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
         <button onClick={this.uploadAudio}>Upload</button>
+        <VoiceRecognition
+          onEnd={this.onEnd}
+          onResult={this.onResult}
+          continuous={true}
+          lang="en-US"
+          stop={this.state.stop}
+        />
       </div>
     );
   }
