@@ -18,14 +18,12 @@ class CustomPie extends React.Component {
   takeOnePieceOfPieData() {
    return this.props.datum.children.map((obj)=>
        {
-       console.log('child obj', obj)
        return {
          x: obj.name +"\n "+ Math.floor(obj.percentile *100),
          y: obj.percentile * 100,
        }
       })}
   render() {
-    console.log('one piece', this.takeOnePieceOfPieData() );
     // console.log(this.getPieData().forEach(el => el.map(x => console.log(x))), 'pie mofo')
     const {x, y} = this.props;
     const pieWidth = 150;
@@ -37,11 +35,11 @@ class CustomPie extends React.Component {
         <VictoryPie
           data={this.takeOnePieceOfPieData()}
           standalone={false}
-          innerRadius ={65}
+          innerRadius ={45}
           height={200}
           width={200}
           style={{labels: {fontSize: 10}}}
-          colorScale={["#f77", "#55e", "#8af","#7c4dff", "#c6ff00", "#ff6e40", "#90a4ae"]}
+          colorScale={["#f77", "#55e", "#8af","#7c4dff", "#c6ff00", "#a1887f", "#90a4ae"]}
         />
       </g>
     );
@@ -84,7 +82,6 @@ export default class App extends React.Component {
 
   render() {
     const pieData =  this.getPieData();
-    console.log('this da new pieData', pieData)
     return (
       <VictoryChart
       domainPadding={120}
@@ -93,7 +90,7 @@ export default class App extends React.Component {
         theme={VictoryTheme.material}
         // domain={{y: [0, 5]}}
         domain={{x: [0, 100]}}
-        containerComponent={<VictoryZoomContainer responsive={false} />}
+        containerComponent={<VictoryZoomContainer zoomDomain={{x: [0,1000], y: [0, 10]}} responsive={false} />}
       >
         <VictoryScatter
           data={this.state.data}
