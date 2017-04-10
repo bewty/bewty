@@ -1,5 +1,0 @@
-<Response>
-	<Say voice="alice">Yo dis is yo everyday journalin app calling. Please record a one minute journal entry ta git yo personalitizzle thangs up in dis biatch from our Watson API!
-	</Say>
-	<Play>http://demo.twilio.com/docs/classic.mp3</Play>
-</Response>

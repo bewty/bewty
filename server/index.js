@@ -9,6 +9,7 @@ const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const cors = require('cors');
+const xml = require('xml');
 
 const twilio = require('./twilioAPI/twilioAPI.js');
 
@@ -18,12 +19,24 @@ app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
 
-app.post('api/voice', function(req, res) {
-  var twiml = new twilio.TwimlResponse();
-  twiml.say('Yo dis is yo everyday journalin app calling. Please record a one minute journal entry ta git yo personalitizzle thangs up in dis biatch from our Watson API.');
+app.post('/recording', (req, res) => {
+  let number = req.body.number || process.env.TWILIO_TO;
+  let name = req.body.name || 'Eugene';
+  console.log('Received post to /recording:', name, ':', number);
+  twilio.dialNumbers(number, name);
+  res.status(200).send('Successfuly called');
+});
 
-  res.writeHead(200, {'Content-Type': 'text/xml'});
-  res.end(twiml.toString());
+app.post('/transcribe', (req, res) => {
+  let text = req.body.TranscriptionText;
+  let callSid = req.body.CallSid;
+  console.log('Received transcription information to /transcribe:', req.body);
+  watson.promisifiedPersonality(text)
+  .then((results) => {
+    console.log('Watson received phone transcription:');
+    fs.writeFile(`./watsonAPI/watsonResults/${req.body.TranscriptionSid}`, JSON.stringify(results));
+  });
+  res.status(200).send('Received to /transcribe');
 });
 
 app.get('/db/retrieveEntry/:user', (req, res) => {
@@ -75,35 +88,9 @@ app.post('/api/watson', (req, res) => {
   });
 });
 
-app.post('/test', (req, res) => {
+app.get('/test', (req, res) => {
   console.log(req.body.test);
   res.send('hello world');
-});
-
-app.post('/newuser', (req, res) => {
-  db.User.create({username: 'Brandon'})
-  .then(result => {
-    res.sendStatus(201);
-  })
-  .error(() => {
-    res.sendStatus(500);
-  })
-  .catch(err => {
-    res.sendStatus(400).send(err);
-  });
-});
-
-app.get('/getusers', (req, res) => {
-  db.User.find({})
-  .then(result => {
-    res.json(result);
-  })
-  .error(() => {
-    res.sendStatus(500);
-  })
-  .catch(err => {
-    res.sendStatus(400).send(err);
-  });
 });
 
 app.get('*', (req, res) => {

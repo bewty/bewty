@@ -1,21 +1,44 @@
+const express = require('express');
+const app = express();
+
 const twilio = require('twilio');
+const twilioAPI = require('twilio-api');
+const cli = new twilioAPI.Client(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-// var SID = 'ACd5868f24e65bcbef726b2f775ef32e4b';
-// var auth = '9694e9889bfb7f9c15ae0510a581792c';
+app.use(cli.middleware() );
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-const client = require('twilio')(accountSid, authToken);
+const phoneNumbers = {
+  'Eugene': '+17143389937', 
+  'Tim': '+13232290550', 
+  'Whitney': '+14152157254',
+  'Brandon': '+14696826913', 
+  'Gary': '+14086428264'
+};
 
-client.calls.create({
-  url: 'http://demo.twilio.com/docs/voice.xml',
-  to: process.env.TWILIO_TO,
-  from: '+19498294984'
-}, function(err, call) {
-  if (err) {
-    console.log('Error occurred in twilioAPI clientCall:', err);
-  } else {
-    console.log(call.sid);
-  }
-});
+
+exports.dialNumbers = (number, name) => {
+  client.calls.create({
+    url: `https://handler.twilio.com/twiml/EHbfb96ad7bafedf5e02460070a5bae8e7?Name=${name}`,
+    to: number,
+    from: '+19498294984',
+    // record: true,
+    transcribe: true,
+    // transcribeCallback: 'http://8f6dd1df.ngrok.io/transcribe',
+    // recordingStatusCallbackMethod: 'POST'
+    transcribeCallback: 'http://8f6dd1df.ngrok.io/transcribe'
+  }, function(err, call) {
+    if (err) {
+      console.log('Error occurred in twilioAPI clientCall:', err);
+    } else {
+      console.log('Twilio SID:', call.sid, 'uri:', call.uri, 'else:', call);
+    }
+  });
+};
+
+// dialNumbers('+17143389937', 'Eugene');
+
+// for (const number in phoneNumbers) {
+//   dialNumbers(phoneNumbers[number], number);
+// }
