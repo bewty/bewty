@@ -123,13 +123,15 @@ class AudioEntry extends Component {
         <button onClick={this.stopRecord}>Stop</button>
         <button onClick={this.uploadAudio}>Upload</button>
         <p>{this.state.transcript}</p>
-        <VoiceRecognition
-          onEnd={this.onEnd}
-          onResult={this.onResult}
-          continuous={true}
-          lang="en-US"
-          stop={this.state.stop}
-        />
+        {this.state.start && (
+          <VoiceRecognition
+            onEnd={this.onEnd}
+            onResult={this.onResult}
+            continuous={true}
+            lang="en-US"
+            stop={this.state.stop}
+          />
+        )}
       </div>
     );
   }
