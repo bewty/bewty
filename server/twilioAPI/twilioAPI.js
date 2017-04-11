@@ -9,13 +9,7 @@ app.use(cli.middleware() );
 
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-const phoneNumbers = {
-  'Eugene': '+17143389937', 
-  'Tim': '+13232290550', 
-  'Whitney': '+14152157254',
-  'Brandon': '+14696826913', 
-  'Gary': '+14086428264'
-};
+const phoneNumbers = process.env.PHONENUMBERS;
 
 
 exports.dialNumbers = (number, name) => {

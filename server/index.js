@@ -32,7 +32,7 @@ app.post('/transcribe', (req, res) => {
   let text = req.body.TranscriptionText;
   // let callSid = req.body.CallSid;
   let textID = req.body.textID || 'test';
-  let divider = '\n------------------------------------';
+  let divider = '\n------------------------------------\n';
   watson.promisifiedTone(text)
   .then((tone) => {
     // console.log('In promise:', tone);
