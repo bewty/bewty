@@ -47,6 +47,9 @@
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
     "css-loader": "^0.23.1",
+    "d3": "^4.7.4",
+    "dimple": "git+https://github.com/PMSI-AlignAlytics/dimple.git",
+    "dimple-js": "^2.1.4",
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.16.1",
@@ -62,6 +65,7 @@
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
+    "victory": "^0.18.4",
     "webpack": "^1.13.0"
   }
 }
