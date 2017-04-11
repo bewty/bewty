@@ -22,7 +22,7 @@ app.use(cors());
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
-  
+  console.log('Received scheduleCall post:', time, question);
 });
 
 app.post('/call', (req, res) => {

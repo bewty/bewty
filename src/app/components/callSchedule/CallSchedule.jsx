@@ -34,7 +34,6 @@ export default class TextEntry extends React.Component {
         question: this.state.question
       })
     });
-    console.log(this.state);
   }
 
   handleClick() {
