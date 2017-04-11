@@ -9,7 +9,7 @@ import Home from './components/home/Home';
 import Header from './components/header/Header';
 import TextEntry from './components/textEntry/TextEntry';
 import AudioEntry from './components/audioEntry/AudioEntry';
-import VideoEntry from './components/videoEntry/VideoEntry';
+import VideoEntry from './components/videoEntry2/VideoEntry2';
 import Results from './components/results/Results';
 
 import reducers from './reducers';
