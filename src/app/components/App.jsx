@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Login from '../Login.jsx';
-
+import UserProfile from '../UserProfile.jsx';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -35,11 +35,15 @@ export default class App extends React.Component {
     return idToken;
   }
   render() {
-    return (
-      <div >
-        <h1> we needchu to lawgin dawg </h1>
-        <Login lock={this.lock}> </Login>
-      </div>
-    )
+    if (this.state.idToken) {
+      return (<UserProfile lock={this.lock} idToken={this.state.idToken} />);
+    } else {
+      return (
+        <div >
+          <h1> yeah we needchu to lawgin </h1>
+          <Login lock={this.lock}> </Login>
+        </div>
+      )
+    }
   }
 }
