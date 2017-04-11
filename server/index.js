@@ -19,24 +19,26 @@ app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
 
-app.post('/recording', (req, res) => {
+app.post('/call', (req, res) => {
   let number = req.body.number || process.env.TWILIO_TO;
   let name = req.body.name || 'Eugene';
-  console.log('Received post to /recording:', name, ':', number);
+  console.log('Received post to /call:', name, ':', number);
   twilio.dialNumbers(number, name);
   res.status(200).send('Successfuly called');
 });
 
 app.post('/transcribe', (req, res) => {
   let text = req.body.TranscriptionText;
-  let callSid = req.body.CallSid;
-  console.log('Received transcription information to /transcribe:', req.body);
-  watson.promisifiedPersonality(text)
+  // let callSid = req.body.CallSid;
+
+  watson.promisifiedTone(text)
+  .then((tone) => {
+    // console.log('In promise:', tone);
+    fs.writeFile('./server/watsonAPI/watsonResults/test', tone);
+  })
   .then((results) => {
-    console.log('Watson received phone transcription:');
-    fs.writeFile(`./watsonAPI/watsonResults/${req.body.TranscriptionSid}`, JSON.stringify(results));
+    res.send('Successfuly transcribed');
   });
-  res.status(200).send('Received to /transcribe');
 });
 
 app.get('/db/retrieveEntry/:user', (req, res) => {
@@ -71,6 +73,7 @@ app.post('/db/logentry', (req, res) => {
   res.status(200).send(`${log.user_id} entry updated successfuly`);
 });
 
+
 app.post('/api/watson', (req, res) => {
   let target = 'Ghandi.txt';
   let entry = req.body.text || `${__dirname}/watsonAPI/watsonTest/${target}`;
@@ -80,8 +83,8 @@ app.post('/api/watson', (req, res) => {
     return watson.promisifiedPersonality(results);
   })
   .then((results) => {
-    res.status(200).send(results);
     return fs.writeFile(`./watsonAPI/watsonResults/${target}`, JSON.stringify(results));
+    res.status(200).send(results);
   })
   .error(function(e) {
     console.log('Error received within post to /api/watson', e);
@@ -89,8 +92,10 @@ app.post('/api/watson', (req, res) => {
 });
 
 app.get('/test', (req, res) => {
-  console.log(req.body.test);
-  res.send('hello world');
+  watson.promisifiedTone('Hello, my name is bob and I like to eat carrots but only on Tuesday')
+  .then((tone) => {
+    res.send(tone);
+  });
 });
 
 app.get('*', (req, res) => {
