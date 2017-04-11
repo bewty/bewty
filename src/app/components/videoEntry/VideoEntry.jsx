@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
+import Loader from '../loader/Loader.jsx';
 
 class VideoEntry extends Component {
   constructor(props) {
@@ -92,6 +93,9 @@ class VideoEntry extends Component {
   }
 
   uploadVideo() {
+    this.setState({
+      uploading: true,
+    });
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('video', blob);
@@ -100,7 +104,20 @@ class VideoEntry extends Component {
       headers: { 'content-type': 'multipart/form-data' }
     }
     axios.post('/entry/video', fd, config)
+    .then( res => {
+      this.setState({
     .then( res => console.log('video upload to server done', res));
+        uploading: false,
+      });
+      console.log('video upload to server done', res);
+    })
+    .catch( err => {
+      this.setState({
+        uploading: false
+      });
+      console.log('video upload to server ERROR', err);
+    });
+  }
   }
 
   render() {
@@ -115,6 +132,7 @@ class VideoEntry extends Component {
           <button onClick={this.stopRecord}>Stop</button>
           <button onClick={this.uploadVideo}>Upload</button>
         </div>
+          {this.state.uploading ? <Loader /> : null }
       </div>
     );
   }
