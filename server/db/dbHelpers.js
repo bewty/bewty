@@ -8,7 +8,8 @@ exports.userEntry = (userInfo) => {
   let newUser = User({
     name: userInfo.name,
     user_id: userInfo.user_id,
-    password: userInfo.password
+    password: userInfo.password,
+    phonenumber: userInfo.phoneNumber
   });
 
   newUser.save()

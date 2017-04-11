@@ -23,7 +23,7 @@ exports.promisifiedPersonality = (text) => {
       }
     });
   });
-});
+};
 
 
 //Watson ToneAnalyzer

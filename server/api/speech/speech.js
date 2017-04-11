@@ -2,11 +2,11 @@ const fs = require('fs');
 const record = require('node-record-lpcm16');
 const Speech = require('@google-cloud/speech');
 const projectId = 'bewt-163703';
-const speech = Speech({
-  projectId: projectId,
-  keyFileName: __dirname + '/../config/bewty.json',
-  credentials: require('../config/bewty.json')
-});
+// const speech = Speech({
+//   projectId: projectId,
+//   keyFileName: __dirname + '/../config/bewty.json',
+//   credentials: require('../config/bewty.json')
+// });
 
 var streamingRecognize = function(filename, encoding, sampleRate) {
   // [START speech_streaming_recognize]

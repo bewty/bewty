@@ -103,10 +103,10 @@ class AudioEntry extends Component {
     .then( res => console.log('audio upload to server done', res));
     console.log(this.state.value);
     $.ajax({
-      url: '/api/watson',
+      url: '/transcribe',
       type: 'POST',
       data: {
-        text: this.state.transcript
+        TranscriptionText: this.state.transcript
       },
       success: function(result) {
         console.log('Success!');

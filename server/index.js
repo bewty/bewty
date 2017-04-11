@@ -14,7 +14,6 @@ const multer = require('multer');
 const cors = require('cors');
 const AWS = require('aws-sdk');
 const multerS3 = require('multer-s3');
-const KEYS = require('../aws-config.js');
 const s3 = new AWS.S3();
 
 
@@ -37,8 +36,8 @@ const upload = multer({
 });
 
 AWS.config.update({
-  accessKeyId: KEYS.AWS_S3.ACCESS_KEY,
-  secretAccessKey: KEYS.AWS_S3.SECRET_KEY,
+  accessKeyId: process.env.AWS_S3_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_S3_SECRET_KEY,
   region: 'us-west-1'
 });
 
@@ -46,6 +45,7 @@ app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
   console.log('Received scheduleCall post:', time, question);
+});
 
 app.post('/call', (req, res) => {
   let number = req.body.number || process.env.TWILIO_TO;
@@ -55,21 +55,6 @@ app.post('/call', (req, res) => {
   res.status(200).send('Successfuly called');
 });
 
-app.post('/transcribe', (req, res) => {
-  console.log('Received post to /transcribe:', req.body);
-  let text = req.body.TranscriptionText;
-  // let callSid = req.body.CallSid;
-  let textID = req.body.textID || 'test';
-  let divider = '\n------------------------------------\n';
-  watson.promisifiedTone(text)
-  .then((tone) => {
-    fs.writeFile(`./server/watsonAPI/watsonResults/${textID}`, text + divider + tone);
-  })
-  .then((results) => {
-    console.log('Successfuly transcribed:', text);
-    res.send('Successfuly transcribed');
-  });
-});
 
 app.get('/db/retrieveEntry/:user', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
@@ -103,6 +88,21 @@ app.post('/db/logentry', (req, res) => {
   res.status(200).send(`${log.user_id} entry updated successfuly`);
 });
 
+app.post('/transcribe', (req, res) => {
+  console.log('Received post to /transcribe:', req.body);
+  let text = req.body.TranscriptionText;
+  // let callSid = req.body.CallSid;
+  let textID = req.body.textID || 'test';
+  let divider = '\n------------------------------------\n';
+  watson.promisifiedTone(text)
+  .then((tone) => {
+    fs.writeFile(`./server/watsonAPI/watsonResults/${textID}`, text + divider + tone);
+  })
+  .then((results) => {
+    console.log('Successfuly transcribed:', text);
+    res.send('Successfuly transcribed');
+  });
+});
 
 app.post('/api/watson', (req, res) => {
   let target = 'Ghandi.txt';
