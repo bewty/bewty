@@ -9,7 +9,7 @@ exports.userEntry = (userInfo) => {
     name: userInfo.name,
     user_id: userInfo.user_id,
     password: userInfo.password,
-    phonenumber: userInfo.phoneNumber
+    phonenumber: userInfo.phonenumber
   });
 
   newUser.save()

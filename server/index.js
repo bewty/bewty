@@ -45,6 +45,7 @@ app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
   console.log('Received scheduleCall post:', time, question);
+  res.status(200).send('Successfuly scheduled call');
 });
 
 app.post('/call', (req, res) => {
@@ -68,7 +69,8 @@ app.post('/db/userentry', (req, res) => {
   let userInfo = req.body.userInfo || {
     name: 'Bob Test',
     user_id: '123456789',
-    password: 'password'
+    password: 'password',
+    phonenumber: '1231231234'
   };
   database.userEntry(userInfo);
   res.status(200).send(`${userInfo.name} successfuly added to database`);
