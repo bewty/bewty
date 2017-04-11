@@ -4,7 +4,10 @@ import React from 'react';
 export default class TextEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {question: ''};
+    this.state = {
+      question: '',
+      time: ''
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleQuestion = this.handleQuestion.bind(this);
