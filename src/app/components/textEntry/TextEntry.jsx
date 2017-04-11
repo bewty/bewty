@@ -8,6 +8,7 @@ export default class TextEntry extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
   
   handleChange(event) {
@@ -16,22 +17,28 @@ export default class TextEntry extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch('http://localhost:3000/test', {
+    let currentScope = this;
+    fetch('http://localhost:3000/transcribe', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       method: 'POST',
       body: JSON.stringify({
-        test: this.state.value
+        TranscriptionText: currentScope.state.value,
+        textID: 'test123'
       })
     });
+  }
+
+  handleClick() {
+    console.log('state:', this.state);
   }
 
   render() {
     return (
       <div className="container">
-        <h1>Text Entry</h1>
+        <h1 onClick={this.handleClick}>Text Entry</h1>
         <form onSubmit={this.handleSubmit}>
         <label>
           <input type="text" value={this.state.value} onChange={this.handleChange} />

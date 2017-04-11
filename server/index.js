@@ -28,15 +28,18 @@ app.post('/call', (req, res) => {
 });
 
 app.post('/transcribe', (req, res) => {
+  console.log('Received post to /transcribe:', req.body);
   let text = req.body.TranscriptionText;
   // let callSid = req.body.CallSid;
-
+  let textID = req.body.textID || 'test';
+  let divider = '\n------------------------------------';
   watson.promisifiedTone(text)
   .then((tone) => {
     // console.log('In promise:', tone);
-    fs.writeFile('./server/watsonAPI/watsonResults/test', tone);
+    fs.writeFile(`./server/watsonAPI/watsonResults/${textID}`, text + divider + tone);
   })
   .then((results) => {
+    console.log('Successfuly transcribed:', text);
     res.send('Successfuly transcribed');
   });
 });
@@ -91,9 +94,10 @@ app.post('/api/watson', (req, res) => {
   });
 });
 
-app.get('/test', (req, res) => {
+app.post('/test', (req, res) => {
   watson.promisifiedTone('Hello, my name is bob and I like to eat carrots but only on Tuesday')
   .then((tone) => {
+    console.log('Received get to /test:', tone);
     res.send(tone);
   });
 });
