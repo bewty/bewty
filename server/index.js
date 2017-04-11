@@ -34,6 +34,7 @@ AWS.config.update({
 });
 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
@@ -71,24 +72,34 @@ app.post('/db/logentry', (req, res) => {
 });
 
 app.post('/api/watson', (req, res) => {
-  let target = 'Ghandi.txt';
-  let entry = req.body.text || `${__dirname}/watsonAPI/watsonTest/${target}`;
-
-  fs.readFileAsync(entry, 'utf8')
+  // console.log('req.body===========', req.body);
+  Promise.resolve(watson.promisifiedTone(req.body.text))
   .then((results) => {
-    return watson.promisifiedPersonality(results);
+    res.json(results);
   })
-  .then((results) => {
-    res.status(200).send(results);
-    return fs.writeFile(`./watsonAPI/watsonResults/${target}`, JSON.stringify(results));
+  .error((err) => {
+    res.sendStatus(500);
   })
-  .error(function(e) {
-    console.log('Error received within post to /api/watson', e);
+  .catch((err) => {
+    res.sendStatus(400).send(err);
   });
+  // let target = 'Ghandi.txt';
+  // let entry = req.body.text || `${__dirname}/watsonAPI/watsonTest/${target}`;
+
+  // fs.readFileAsync(entry, 'utf8')
+  // .then((results) => {
+  //   return watson.promisifiedPersonality(results);
+  // })
+  // .then((results) => {
+  //   res.status(200).send(results);
+  //   return fs.writeFile(`./watsonAPI/watsonResults/${target}`, JSON.stringify(results));
+  // })
+  // .error(function(e) {
+  //   console.log('Error received within post to /api/watson', e);
+  // });
 });
 
 app.post('/test', (req, res) => {
-  console.log(req.body.test);
   res.send('hello world');
 });
 

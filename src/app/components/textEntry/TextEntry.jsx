@@ -1,30 +1,49 @@
 import React from 'react';
-
+import $ from 'jquery';
 
 export default class TextEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {
+      value: '',
+      result: ''
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  
+
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    fetch('http://localhost:3000/test', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+    // fetch('http://localhost:3000/test', {
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json',
+    //   },
+    //   method: 'POST',
+    //   body: JSON.stringify({
+    //     test: this.state.value
+    //   })
+    // });
+    var self = this;
+    console.log(this.state.value);
+    $.ajax({
+      url: '/api/watson',
+      type: 'POST',
+      data: {
+        text: this.state.value
       },
-      method: 'POST',
-      body: JSON.stringify({
-        test: this.state.value
-      })
+      success: function(result) {
+        console.log('Success!');
+        self.setState({result: result});
+      },
+      error: function() {
+        console.log('error result');
+      }
     });
   }
 
@@ -37,6 +56,7 @@ export default class TextEntry extends React.Component {
           <input type="text" value={this.state.value} onChange={this.handleChange} />
         </label>
         <input type="submit" value="Submit" />
+        <p>{this.state.result}</p>
       </form>
       </div>
     );
