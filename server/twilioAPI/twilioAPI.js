@@ -19,7 +19,6 @@ exports.dialNumbers = (number, name) => {
     from: '+19498294984',
     // record: true,
     transcribe: true,
-    // transcribeCallback: 'http://8f6dd1df.ngrok.io/transcribe',
     // recordingStatusCallbackMethod: 'POST'
     transcribeCallback: 'http://08dcb0a2.ngrok.io/transcribe'
   }, function(err, call) {
@@ -31,8 +30,3 @@ exports.dialNumbers = (number, name) => {
   });
 };
 
-// dialNumbers('+17143389937', 'Eugene');
-
-// for (const number in phoneNumbers) {
-//   dialNumbers(phoneNumbers[number], number);
-// }
