@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import VoiceRecognition from '../VoiceRecognition/VoiceRecognition';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
+import $ from 'jquery';
 
 class AudioEntry extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ class AudioEntry extends Component {
       uploadSuccess: null,
       start: false,
       stop: false,
-      transcript: ''
+      transcript: '',
+      result: ''
     };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
@@ -89,6 +91,7 @@ class AudioEntry extends Component {
   }
 
   uploadAudio() {
+    let self = this;
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('audio', blob);
@@ -98,6 +101,21 @@ class AudioEntry extends Component {
     };
     axios.post('/entry/audio', fd, config)
     .then( res => console.log('audio upload to server done', res));
+    console.log(this.state.value);
+    $.ajax({
+      url: '/api/watson',
+      type: 'POST',
+      data: {
+        text: this.state.transcript
+      },
+      success: function(result) {
+        console.log('Success!');
+        self.setState({result: result});
+      },
+      error: function() {
+        console.log('error result');
+      }
+    });
   }
 
   onEnd() {
@@ -123,6 +141,7 @@ class AudioEntry extends Component {
         <button onClick={this.stopRecord}>Stop</button>
         <button onClick={this.uploadAudio}>Upload</button>
         <p>{this.state.transcript}</p>
+        <p>{this.state.result}</p>
         {this.state.start && (
           <VoiceRecognition
             onEnd={this.onEnd}
