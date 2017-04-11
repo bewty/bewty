@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class Login extends React.Component {
+export default class UserProfile extends React.Component {
   constructor(props) {
     super (props);
   }
@@ -9,8 +9,11 @@ export default class Login extends React.Component {
   }
   componentDidMount() {
     console.log('this da lock we passin down', this.props.lock)
-    this.props.lock.getProfile(this.props.idToken, function (err, profile) {
-    if (err) {
+    var appearanceOpts = {
+      autoclose: true
+    };
+    this.props.lock.sms(appearanceOpts,function (error, profile, id_token, access_token, state, refresh_token) {
+    if (error) {
       console.log("Error inside componentDidMount under getProfile", err);
       return;
     }
@@ -18,6 +21,7 @@ export default class Login extends React.Component {
       this.setState({
        profile: profile
       })
+      //TODO: SAVE USERS NUMBER TO DB RIGHT HERE
     }
     }.bind(this))
   }
@@ -33,7 +37,11 @@ export default class Login extends React.Component {
       )
     } else {
       return (
-        <div className="loading"> hold up... </div>
+        <div>
+          <h1> yeah we needchu to lawgin </h1>
+          <div className="loading"> hold up... </div>
+        </div>
+
       );
     }
   }

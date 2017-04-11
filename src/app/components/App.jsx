@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import Login from '../Login.jsx';
 import UserProfile from '../UserProfile.jsx';
 export default class App extends React.Component {
   constructor(props) {
@@ -15,8 +14,10 @@ export default class App extends React.Component {
     })
   }
   createLock() {
-    this.lock = new Auth0Lock('8Xf5mRZcDDcMo0Dkl7OvMLP7ai9jULsn', 'tungnh91.auth0.com')
+    this.lock = new Auth0LockPasswordless('8Xf5mRZcDDcMo0Dkl7OvMLP7ai9jULsn', 'tungnh91.auth0.com');
+    this.getIdToken()
   }
+
   getIdToken() {
     console.log('this da lock', this.lock)
     //check if there's a token already
@@ -34,14 +35,14 @@ export default class App extends React.Component {
     }
     return idToken;
   }
+
   render() {
     if (this.state.idToken) {
       return (<UserProfile lock={this.lock} idToken={this.state.idToken} />);
     } else {
       return (
         <div >
-          <h1> yeah we needchu to lawgin </h1>
-          <Login lock={this.lock}> </Login>
+          <UserProfile lock={this.lock} getIdToken={this.getIdToken}> </UserProfile>
         </div>
       )
     }
