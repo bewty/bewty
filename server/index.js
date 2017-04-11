@@ -13,6 +13,8 @@ const database = require('./db/dbHelpers');
 const twilio = require('./twilioAPI/twilioAPI.js');
 const cors = require('cors');
 const AWS = require('aws-sdk');
+const axios = require('axios');
+const querystring = require('querystring');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
 
@@ -34,6 +36,7 @@ const upload = multer({
   })
 });
 
+let videoId;
 const uploadVideo = multer({
   dest: path.resolve(__dirname, '..', 'dist','upload'),
   storage: multerS3({
@@ -42,8 +45,32 @@ const uploadVideo = multer({
     metadata: (req, file, cb) => {
       cb(null, {fieldName: file.fieldname});
     },
-    key: (req, file, cb) => cb(null, Date.now().toString())
-  })
+    key: (req, file, cb) => cb(null, `${Date.now().toString()}.webm`)
+  }),
+});
+
+// const upload = multer({
+//   storage: multer.diskStorage({
+//     destination: path.resolve(__dirname, '..', 'dist', 'upload'),
+//     filename: (req, file, cb) => cb(null, `${file.originalname}-${Date.now().toString()}.webm`),
+//     limits: { fileSize: 100000 },
+//   })
+// });
+
+const getAWSSignedUrl = (req) => {
+  const params = {
+    Bucket: 'smartdiarybewt',
+    Key: req.file.key
+  };
+  return s3.getSignedUrl('getObject', params);
+};
+
+const karios = axios.create({
+  baseURL: 'https://api.kairos.com',
+  headers: {
+    'app_id': process.env.KAIROS.APP_ID,
+    'app_key': process.env.KAIROS.APP_KEY
+  }
 });
 
 AWS.config.update({
@@ -149,8 +176,46 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
   res.send('audio uploaded');
 });
 
-app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
-  res.send('video uploaded');
+////GET request within POST
+// kairosGetResult = (req, res) => {
+//   return karios.get(`/v2/analytics/${req.videoId}`)
+//   .then( res => {
+//     return res.data;
+//     res.send(res.data);
+//   });
+// };
+
+app.post('/entry/video', upload.single('video'), (req, res) => {
+
+  console.log('amazon link', req.file.location);
+
+  ////aws presigned url
+  // const url = getAWSSignedUrl(req);
+  const url = req.file.location; //aws public link
+  return karios.post(`/v2/media?source=${url}`)
+  .then( postRes => {
+    console.log('karios POST COMPLETED:===', postRes.data);
+
+    //GET results with a button
+    videoId = postRes.data.id;
+
+    ////GET result within POST
+    // req.videoId = postRes.data.id;
+    // return kairosGetResult(req, res);
+  })
+  .then( result => {
+    console.log('/entry/video COMPELTE=====', result);
+    res.send(result);
+  })
+  .catch( err => console.error('KAIROS GET RESULT ERROR:===', err.message));
+});
+
+app.get('/entry/video', (req, res) => {
+  karios.get(`/v2/analytics/${videoId}`)
+    .then( res => {
+      console.log('kairosGetResult======result', res.data);
+      res.send(res.data);
+    });
 });
 
 app.get('*', (req, res) => {
