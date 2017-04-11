@@ -3,15 +3,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const db = require('./db/index');
+const speech = require('./api/speech/speech');
 const app = express();
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
-const cors = require('cors');
-const xml = require('xml');
-
 const twilio = require('./twilioAPI/twilioAPI.js');
+const multer = require('multer');
+const cors = require('cors');
+const AWS = require('aws-sdk');
+const multerS3 = require('multer-s3');
+const KEYS = require('../aws-config.js');
+const s3 = new AWS.S3();
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,11 +24,28 @@ app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
 
+const upload = multer({
+  dest: path.resolve(__dirname, 'api', 'speech', 'audio'),
+  storage: multerS3({
+    s3: s3,
+    bucket: 'bewty',
+    metadata: (req, file, cb) => {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: (req, file, cb) => cb(null, Date.now().toString())
+  })
+});
+
+AWS.config.update({
+  accessKeyId: KEYS.AWS_S3.ACCESS_KEY,
+  secretAccessKey: KEYS.AWS_S3.SECRET_KEY,
+  region: 'us-west-1'
+});
+
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
   console.log('Received scheduleCall post:', time, question);
-});
 
 app.post('/call', (req, res) => {
   let number = req.body.number || process.env.TWILIO_TO;
@@ -105,6 +127,10 @@ app.post('/test', (req, res) => {
     console.log('Received get to /test:', tone);
     res.send(tone);
   });
+});
+
+app.post('/entry/audio', upload.single('audio'), (req, res) => {
+  res.send('audio uploaded');
 });
 
 app.get('*', (req, res) => {
