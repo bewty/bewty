@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import * as V from 'victory';
 import { VictoryScatter,VictoryPie, VictoryZoomContainer, VictoryLabel, VictoryTheme, VictoryChart } from 'victory';
 import exampleData from '../../../../static/exampleData.js'
+import exampleToneData from '../../../../static/exampleToneData.js'
 
 class CustomPie extends React.Component {
   static propTypes = {
