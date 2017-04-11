@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 
 import App from './components/App';
 import Home from './components/home/Home';
@@ -11,6 +11,7 @@ import TextEntry from './components/textEntry/TextEntry';
 import AudioEntry from './components/audioEntry/AudioEntry';
 import VideoEntry from './components/videoEntry/VideoEntry';
 import Results from './components/results/Results';
+import CallSchedule from './components/callSchedule/CallSchedule';
 
 import reducers from './reducers';
 
@@ -29,6 +30,7 @@ ReactDOM.render(
         <Route path="/audio-entry" component={AudioEntry} />
         <Route path="/video-entry" component={VideoEntry} />
         <Route path="/results" component={Results} />
+        <Route path="/call-schedule" component={CallSchedule} />
       </div>
     </Router>
   </Provider>

@@ -21,10 +21,13 @@ function Header() {
           <li>
             <Link to="/results">Results</Link>
           </li>
+          <li>
+            <Link to="/call-schedule">Call Schedule</Link>
+          </li>
         </ul>
       </nav>
     </header>
-  )
+  );
 }
 
 export default Header;

@@ -19,6 +19,12 @@ app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
 
+app.post('/scheduleCall', (req, res) => {
+  let time = req.body.time;
+  let question = req.body.question;
+  
+});
+
 app.post('/call', (req, res) => {
   let number = req.body.number || process.env.TWILIO_TO;
   let name = req.body.name || 'Eugene';
@@ -35,7 +41,6 @@ app.post('/transcribe', (req, res) => {
   let divider = '\n------------------------------------\n';
   watson.promisifiedTone(text)
   .then((tone) => {
-    // console.log('In promise:', tone);
     fs.writeFile(`./server/watsonAPI/watsonResults/${textID}`, text + divider + tone);
   })
   .then((results) => {
