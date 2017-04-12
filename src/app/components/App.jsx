@@ -36,9 +36,21 @@ export default class App extends React.Component {
     return idToken;
   }
 
+   loggedIn(){
+    // Checks if there is a saved token and it's still valid
+    const token = localStorage.getItem('id_token');
+    return !!token
+  }
   render() {
-    if (this.state.idToken) {
-      return (<UserProfile lock={this.lock} idToken={this.state.idToken} />);
+    console.log(this.state.idToken, 'token')
+    console.log(this.loggedIn(), 'isLoggedIn')
+    if (this.state.idToken && this.loggedIn()) {
+      return (
+          <div>
+            <h2 className="profileName"> Welcome! </h2>
+            <button> Logout </button>
+          </div>
+      );
     } else {
       return (
         <div >

@@ -3,6 +3,7 @@ import React from 'react';
 export default class UserProfile extends React.Component {
   constructor(props) {
     super (props);
+    this.logOut = this.logOut.bind(this)
   }
   state = {
     profile: null
@@ -21,24 +22,31 @@ export default class UserProfile extends React.Component {
       this.setState({
        profile: profile
       })
+      localStorage.setItem('id_token', id_token)
+      this.props.getIdToken()
       //TODO: SAVE USERS NUMBER TO DB RIGHT HERE
     }
     }.bind(this))
   }
 
+  logOut() {
+    console.log('clicked')
+    localStorage.removeItem('id_token');
+    window.location.reload()
+  }
   render () {
     if(this.state.profile) {
-      console.log('user info =====', this.state.profile)
       return (
         <div>
           <img className="profilePic" src={this.state.profile.picture} />
-          <h2 className="profileName"> Welcome back {this.state.profile.name} ! </h2>
+          <h2 className="profileName"> Welcome! </h2>
+          <button onClick={this.logOut}> Logout </button>
         </div>
       )
     } else {
       return (
         <div>
-          <h1> yeah we needchu to lawgin </h1>
+          <h1> we gon needchu to lawgin </h1>
           <div className="loading"> hold up... </div>
         </div>
 
