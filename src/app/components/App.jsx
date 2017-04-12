@@ -3,20 +3,32 @@ import UserProfile from '../UserProfile.jsx';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-  }
-  state = {
-    idToken:null
+    this.state = {
+      idToken:null,
+      profile: null
+    }
+    this.getProfile = this.getProfile.bind(this)
   }
   componentWillMount() {
     this.createLock();
     this.setState({
       idToken: this.getIdToken()
     })
+    this.getProfile();
   }
   createLock() {
     this.lock = new Auth0LockPasswordless('8Xf5mRZcDDcMo0Dkl7OvMLP7ai9jULsn', 'tungnh91.auth0.com');
     this.getIdToken()
   }
+
+  getProfile(profile, id_token) {
+      this.setState({
+       profile: profile
+      })
+      localStorage.setItem('id_token', id_token)
+      //TODO: SAVE USERS NUMBER TO DB RIGHT HERE
+  }
+
 
   getIdToken() {
     console.log('this da lock', this.lock)
@@ -41,6 +53,13 @@ export default class App extends React.Component {
     const token = localStorage.getItem('id_token');
     return !!token
   }
+
+  logOut() {
+    console.log('clicked')
+    localStorage.removeItem('id_token');
+    window.location.reload()
+  }
+
   render() {
     console.log(this.state.idToken, 'token')
     console.log(this.loggedIn(), 'isLoggedIn')
@@ -48,13 +67,20 @@ export default class App extends React.Component {
       return (
           <div>
             <h2 className="profileName"> Welcome! </h2>
-            <button> Logout </button>
+            <button onClick={this.logOut}> Logout </button>
           </div>
       );
     } else {
       return (
         <div >
-          <UserProfile lock={this.lock} getIdToken={this.getIdToken}> </UserProfile>
+          <UserProfile
+            lock={this.lock}
+            getIdToken={this.getIdToken}
+            logOut={this.logOut}
+            state={this.state}
+            getProfile={this.getProfile}
+            >
+          </UserProfile>
         </div>
       )
     }
