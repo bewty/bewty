@@ -22,13 +22,23 @@ const userSchema = new mongoose.Schema({
     audio_url: String,
     text: String,
     watson_results: Object,
-    tags: Array
+    tags: Array,
+    scheduled_message: String
   }]
 });
 
+const callSchema = new mongoose.Schema({
+  time: String,
+  schedule: [{
+    user: {type: Schema.Types.ObjectId, ref: 'User'}
+  }]
+});
+
+const Call = mongoose.model('Call', callSchema);
 const User = mongoose.model('User', userSchema);
 
 module.exports = {
-  User: User
+  User: User,
+  Call: Call
 };
 
