@@ -3,7 +3,6 @@
 .DS_Store
 bundle.js
 npm-debug.log
-.env
 
 ### watson results ###
 
@@ -44,8 +43,8 @@ dist/
 node_modules/
 bower_components/
 
-
 #config files
 /server/api/config/bewty.json
 .env
 aws-config.js
+

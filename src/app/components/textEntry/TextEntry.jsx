@@ -1,62 +1,48 @@
 import React from 'react';
-import $ from 'jquery';
 
 export default class TextEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: '',
-      result: ''
-    };
+    this.state = {value: ''};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
-
+  
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    // fetch('http://localhost:3000/test', {
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json',
-    //   },
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     test: this.state.value
-    //   })
-    // });
-    var self = this;
-    console.log(this.state.value);
-    $.ajax({
-      url: '/api/watson',
-      type: 'POST',
-      data: {
-        text: this.state.value
+    let currentScope = this;
+    fetch('http://localhost:3000/transcribe', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
       },
-      success: function(result) {
-        console.log('Success!');
-        self.setState({result: result});
-      },
-      error: function() {
-        console.log('error result');
-      }
+      method: 'POST',
+      body: JSON.stringify({
+        TranscriptionText: currentScope.state.value,
+        textID: 'test123'
+      })
     });
+  }
+
+  handleClick() {
+    console.log('state:', this.state);
   }
 
   render() {
     return (
       <div className="container">
-        <h1>Text Entry</h1>
+        <h1 onClick={this.handleClick}>Text Entry</h1>
         <form onSubmit={this.handleSubmit}>
         <label>
           <input type="text" value={this.state.value} onChange={this.handleChange} />
         </label>
         <input type="submit" value="Submit" />
-        <p>{this.state.result}</p>
       </form>
       </div>
     );
