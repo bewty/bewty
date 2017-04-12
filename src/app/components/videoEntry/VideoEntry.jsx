@@ -103,7 +103,7 @@ class VideoEntry extends Component {
 
     //Results
     this.state.detector.addEventListener('onImageResultsSuccess', function(faces, image, timestamp) {
-      console.log('onImageResultsSuccess====', faces, image, timestamp);
+      // console.log('onImageResultsSuccess====', faces, image, timestamp);
 
       if (faces.length > 0) {
         let instance = [{
@@ -178,9 +178,10 @@ class VideoEntry extends Component {
       recording: true,
     });
 
+    this.getUserMedia();
     this.captureUserMedia( stream => {
       this.state.recordVideo = RecordRTC(stream, {type: 'video'});
-      this.state.recordVideo.onRecording();
+      this.state.recordVideo.startRecording();
     });
 
     setTimeout( () => {
@@ -196,7 +197,14 @@ class VideoEntry extends Component {
 
   onStop() {
     console.log('=====stop button clicked!!');
-    this.state.recordVideo.onStoping((videoURL) => {
+    if (this.state.detector && this.state.detector.isRunning) {
+      this.state.detector.removeEventListener();
+      this.state.detector.stop();
+    }
+
+    this.state.recordVideo.stopRecording((videoURL) => {
+      console.log('videoURL======', videoURL);
+      console.log('bufferSize======', this.state.recordVideo.bufferSize);
       this.setState({
         blob: this.state.recordVideo.blob,
         src: videoURL,
@@ -205,11 +213,6 @@ class VideoEntry extends Component {
         recording: false
       });
     });
-
-    if (this.state.detector && this.state.detector.isRunning) {
-      this.state.detector.removeEventListener();
-      this.state.detector.stop();
-    }
   }
 
   uploadVideo() {
