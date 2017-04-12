@@ -46,26 +46,19 @@ exports.logEntry = (log) => {
 
 exports.retrieveEntry = (query) => {
   let targetUser = query.user || 'Bob Test';
-  //If there is no specified search, fetch user object
-  if (query.search === undefined) {
+  return new Promise((resolve, reject) => {
     User.find({ user_id: targetUser })
     .then((results) => {
-      console.log('Results for retrieveEntry within first if:', JSON.stringify(results));
-      return JSON.stringify(results);
+      if (query.search === undefined) {
+        resolve(JSON.stringify(results));
+      } else {
+        resolve(JSON.stringify(results[0][query.search]));
+      }
     })
     .catch((err) => {
-      console.log('Error occurred in if statement of retrieveEntry to db:', err);
+      reject(err);
     });
-  } else {
-    User.find({ user_id: targetUser })
-    .then((results) => {
-      console.log('Results for retrieveEntry within else:', query.search, 'results:', JSON.stringify(results[0][query.search]));
-      return JSON.stringify(results[0][query.search]);
-    })
-    .catch((err) => {
-      console.log('Error occurred in else statement of retrieveEntry to db:', err);
-    });
-  }
+  });
 };
 
 exports.modifyCall = (callInfo) => {
