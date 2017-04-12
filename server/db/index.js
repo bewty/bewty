@@ -23,8 +23,8 @@ const userSchema = new mongoose.Schema({
     video_url: String,
     audio_url: String,
     text: String,
-    watson_results: Object,
-    tags: Array,
+    watson_results: String,
+    tags: Array
   }]
 });
 

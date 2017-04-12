@@ -95,12 +95,19 @@ app.post('/db/logentry', (req, res) => {
 
 app.post('/transcribe', (req, res) => {
   console.log('Received post to /transcribe:', req.body);
-  let text = req.body.TranscriptionText;
+  let text = req.body.TranscriptionText || 'Test123123';
   // let callSid = req.body.CallSid;
   let textID = req.body.textID || 'transcribeTest';
+  let user_id = req.body.user_id || '123456789';
   let divider = '\n------------------------------------\n';
   watson.promisifiedTone(text)
   .then((tone) => {
+    let log = {
+      user_id: user_id,
+      text: text,
+      watson_results: tone
+    };
+    database.logEntry(log);
     fs.writeFile(`./server/watsonAPI/watsonResults/${textID}`, text + divider + tone);
   })
   .then((results) => {

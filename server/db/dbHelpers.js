@@ -3,6 +3,7 @@ mongoose.Promise = require('bluebird');
 
 const mongoDatabase = require('./index.js');
 const User = mongoDatabase.User;
+const Call = mongoDatabase.Call;
 
 exports.userEntry = (userInfo) => {
   let newUser = User({
@@ -11,13 +12,16 @@ exports.userEntry = (userInfo) => {
     password: userInfo.password,
     phonenumber: userInfo.phonenumber
   });
-
-  newUser.save()
-  .then(function(success) {
-    return console.log(`${newUser.name} successfully added`);
-  })
-  .catch(function(err) {
-    console.log('Error occurred in userEntry to db:', err);
+  return new Promise((resolve, reject) => {
+    newUser.save()
+    .then((success) => {
+      let resolved = `${newUser.name} successfully added`;
+      console.log(resolved);
+      resolve(resolved);
+    })
+    .error((err) => {
+      reject(err);
+    });
   });
 };
 
@@ -33,15 +37,19 @@ exports.logEntry = (log) => {
     watson_results: log.watson_results,
     tags: log.tags
   };
+  console.log('Received logEntry:', logEntry);
 
-  User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true},
-    function(err, model) {
-      if (err) {
-        console.log('Error occurred in logEntry to db:', err);
-      } else {
-        console.log(`successfully added ${logEntry.userID} entry:`, model);
-      }
-    });
+  return new Promise((resolve, reject) => {
+    User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true},
+      function(err, model) {
+        if (err) {
+          reject(err);
+        } else {
+          console.log(`successfully added ${logEntry.userID} entry:`);
+          resolve(model);
+        }
+      });
+  });
 };
 
 exports.retrieveEntry = (query) => {
@@ -55,7 +63,7 @@ exports.retrieveEntry = (query) => {
         resolve(JSON.stringify(results[0][query.search]));
       }
     })
-    .catch((err) => {
+    .error((err) => {
       reject(err);
     });
   });
@@ -71,20 +79,27 @@ exports.modifyCall = (callInfo) => {
     oldTime = user.scheduled_time;
     user.scheduled_time = time;
     user.scheduled_message = newMessage;
+    console.log('Successfully found user', user, 'oldTime:', oldTime);
   })
   .then(() => {
     Call.find({ time: oldTime });
   })
   .then((time) => {
-    call.user.splice(call.user.indexOf(targetUser), 1);
+    if (time) {
+      console.log('Found time in call:', time);
+      time.user.splice(time.user.indexOf(targetUser), 1);
+      console.log('Successfuly spliced:', time);
+    }
+    return;
   })
   .then(() => {
     Call.find({ time: time });
   })
   .then((time) => {
     time.user.push(targetUser);
+    console.log('Added user to time:', time);
   })
-  .catch((err) => {
+  .error((err) => {
     console.log('Error occurred within modifyCall to db:', err);
   });
 
@@ -95,13 +110,14 @@ exports.callEntry = (callInfo) => {
     time: callInfo.time,
     user: callInfo.user_id
   });
-
-  newCall.save()
-  .then(function(success) {
-    return console.log(`${callInfo.user_id} scheduled call successfully added`);
-  })
-  .catch(function(err) {
-    console.log('Error occurred in callEntry to db:', err);
+  return new Promise((resolve, reject) => {
+    newCall.save()
+    .then(function(success) {
+      resolve(console.log(`${callInfo.user_id} scheduled call successfully added`));
+    })
+    .error(function(err) {
+      reject(err);
+    });
   });
 };
 
