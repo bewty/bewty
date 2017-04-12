@@ -94,7 +94,6 @@ app.post('/db/logentry', (req, res) => {
 });
 
 app.post('/transcribe', (req, res) => {
-  console.log('Received post to /transcribe:', req.body);
   let text = req.body.TranscriptionText || 'Test123123';
   // let callSid = req.body.CallSid;
   let textID = req.body.textID || 'transcribeTest';

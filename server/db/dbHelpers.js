@@ -37,7 +37,6 @@ exports.logEntry = (log) => {
     watson_results: log.watson_results,
     tags: log.tags
   };
-  console.log('Received logEntry:', logEntry);
 
   return new Promise((resolve, reject) => {
     User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true},
@@ -45,7 +44,7 @@ exports.logEntry = (log) => {
         if (err) {
           reject(err);
         } else {
-          console.log(`successfully added ${logEntry.userID} entry:`);
+          console.log(`successfully added ${logEntry.userID} entry`);
           resolve(model);
         }
       });
