@@ -69,7 +69,7 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
-  let userInfo = req.body.quserInfo || {
+  let userInfo = req.body.userInfo || {
     name: 'Bob Test',
     user_id: '123456789',
     password: 'password',
