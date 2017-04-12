@@ -4,6 +4,8 @@ import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
 import $ from 'jquery';
 
+var rawData = [];
+
 class VideoEntry extends Component {
   constructor(props) {
     super(props);
@@ -18,38 +20,50 @@ class VideoEntry extends Component {
       uploading: false,
       uploadSuccess: null,
       uploadError: false,
-      emotionable: false
+      emotionable: false,
+      okayToRecord: false,
+      rawData: [],
     };
 
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
     this.handleVideo = this.handleVideo.bind(this);
     this.videoError = this.videoError.bind(this);
-    this.startRecord = this.startRecord.bind(this);
-    this.stopRecord = this.stopRecord.bind(this);
+    this.onRecord = this.onRecord.bind(this);
+    this.onStop = this.onStop.bind(this);
     this.uploadVideo = this.uploadVideo.bind(this);
-    this.getEmotion = this.getEmotion.bind(this);
-    this.affdexStart = this.affdexStart.bind(this);
-    this.affdexStop = this.affdexStop.bind(this);
-    this.affdexReset = this.affdexReset.bind(this);
-    this.log = this.log.bind(this);
+    this.onReset = this.onReset.bind(this);
+    // this.affdexStart = this.affdexStart.bind(this);
+    // this.affdexStop = this.affdexStop.bind(this);
   }
 
   componentDidMount() {
-    console.log('componentDidMount =======');
     this.getUserMedia();
 
-      //Draw the detected facial feature points on the image
-    let drawFeaturePoints = (img, featurePoints)=> {
-      console.log('drawFeaturePoints=====', img, featurePoints);
-      var contxt = $('#face_video_canvas')[0].getContext('2d');
+    const width = 480;
+    const height = 360;
+    const divRoot = $('#affdex_elements')[0];
+    const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
 
-      var hRatio = contxt.canvas.width / img.width;
-      var vRatio = contxt.canvas.height / img.height;
-      var ratio = Math.min(hRatio, vRatio);
+    //Construct a CameraDetector and specify the image width / height and face detector mode.
+    this.state.detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
+
+    //Enable detection of all Expressions, Emotions and Emojis classifiers.
+    this.state.detector.detectAllEmotions();
+    this.state.detector.detectAllEmojis();
+    // this.state.detector.detectAllExpressions();
+    // this.state.detector.detectAllAppearance();
+
+    //Draw the detected facial feature points on the image
+    const drawFeaturePoints = (img, featurePoints)=> {
+      const contxt = $('#face_video_canvas')[0].getContext('2d');
+
+      const hRatio = contxt.canvas.width / img.width;
+      const vRatio = contxt.canvas.height / img.height;
+      const ratio = Math.min(hRatio, vRatio);
 
       contxt.strokeStyle = '#FFFFFF';
-      for (var id in featurePoints) {
+      for (let id in featurePoints) {
         contxt.beginPath();
         contxt.arc(featurePoints[id].x,
           featurePoints[id].y, 2, 0, 2 * Math.PI);
@@ -57,78 +71,67 @@ class VideoEntry extends Component {
       }
     };
 
+    const okayToRecord = () => {
+      console.log('okayToRecord');
+      this.setState({
+        okayToRecord: true
+      });
+    };
 
-    const width = 640;
-    const height = 480;
-    const divRoot = $('#affdex_elements')[0];
-    const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
-
-    //Construct a CameraDetector and specify the image width / height and face detector mode.
-    this.state.detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
-    console.log('=====this.state.detector', this.state.detector);
-
-    //Enable detection of all Expressions, Emotions and Emojis classifiers.
-    this.state.detector.detectAllEmotions();
-    this.state.detector.detectAllExpressions();
-    this.state.detector.detectAllEmojis();
-    this.state.detector.detectAllAppearance();
+    const onRecordingEmotion = () => {
+      return this.state.recording;
+    };
 
     //onInitialize
     this.state.detector.addEventListener('onInitializeSuccess', function() {
       //Display canvas instead of video feed because we want to draw the feature points on it
-      $('#face_video_canvas').css('display', 'block');
-      $('#face_video').css('display', 'none');
+      // $('#face_video_canvas').css('display', 'none');
+      // $('#face_video').css('display', 'none');
+      okayToRecord();
       console.log('onInitializeSuccess');
     });
-    this.state.detector.addEventListener('onInitializeFailure', function(err) {
-      console.log('onInitializeFailure', err);
-    });
-
+    this.state.detector.addEventListener('onInitializeFailure', function(err) { console.log('onInitializeFailure', err); });
     //onWebCamConnect
-    this.state.detector.addEventListener('onWebcamConnectSuccess', function() {
-      console.log('Webcam access allowed');
-    });
-    this.state.detector.addEventListener('onWebcamConnectFailure', function() {
-      console.log('I"ve failed to connect to the camera :(');
-    });
-
+    this.state.detector.addEventListener('onWebcamConnectSuccess', function() { console.log('Webcam access allowed'); });
+    this.state.detector.addEventListener('onWebcamConnectFailure', function() { console.log('I"ve failed to connect to the camera :('); });
     //onStop
-    this.state.detector.addEventListener('onStopSuccess', function() {
-      console.log('======onStopSuccess======');
-      $('#results').html('');
-    });
-    this.state.detector.addEventListener('onStopFailure', function() {
-      console.log('======onStopFailure======');
-    });
-
+    this.state.detector.addEventListener('onStopSuccess', function() { console.log('onStopSuccess'); });
+    this.state.detector.addEventListener('onStopFailure', function() { console.log('onStopFailure'); });
     //onReset
-    detector.addEventListener('onResetSuccess', function() {
-      console.log('======onResetSuccess======');
-    });
-    detector.addEventListener('onResetFailure', function() {
-      console.log('======onResetFailure======');
-    });
+    this.state.detector.addEventListener('onResetSuccess', function() { console.log('onResetSuccess'); });
+    this.state.detector.addEventListener('onResetFailure', function() { console.log('onResetFailure'); });
 
-    //Add a callback to receive the results from processing an image.
-    //The faces object contains the list of the faces detected in an image.
-    //Faces object contains probabilities for all the different expressions, emotions and appearance metrics
+    //Results
     this.state.detector.addEventListener('onImageResultsSuccess', function(faces, image, timestamp) {
-      console.log('=====add listener for logging emotions and results', faces, image, timestamp);
-    //   $('#results').html('');
-    //   console.log('#results', 'Timestamp: ' + timestamp.toFixed(2));
-    //   console.log('#results', 'Number of faces found: ' + faces.length);
-    //   if (faces.length > 0) {
-    //     console.log('#results', 'Appearance: ' + JSON.stringify(faces[0].appearance));
-    //     console.log('#results', 'Emotions: ' + JSON.stringify(faces[0].emotions, function(key, val) {
-    //       return val.toFixed ? Number(val.toFixed(0)) : val;
-    //     }));
-    //     console.log('#results', 'Expressions: ' + JSON.stringify(faces[0].expressions, function(key, val) {
-    //       return val.toFixed ? Number(val.toFixed(0)) : val;
-    //     }));
-    //     console.log('#results', 'Emoji: ' + faces[0].emojis.dominantEmoji);
-    //     drawFeaturePoints(image, faces[0].featurePoints);
-    //   }
+      console.log('onImageResultsSuccess====', faces, image, timestamp);
+
+      if (faces.length > 0) {
+        let instance = [{
+          timestamp: timestamp,
+          anger: faces[0].emotions.anger,
+          contempt: faces[0].emotions.contempt,
+          fear: faces[0].emotions.fear,
+          joy: faces[0].emotions.joy,
+          sadness: faces[0].emotions.sadness,
+          surprise: faces[0].emotions.surprise,
+          emoji: faces[0].emojis.dominantEmoji,
+          // engagement: faces[0].emotions.engagement,
+          // valence: faces[0].emotions.valence,
+        }];
+
+        if ( onRecordingEmotion() ) {
+          rawData.push(instance);
+        }
+        drawFeaturePoints(image, faces[0].featurePoints);
+        console.log('rawData======', rawData);
+      }
     });
+    this.state.detector.addEventListener('onImageResultsFailure', function (image, timestamp, errDetail) { console.log('onImageResultsFailure :', errDetail); });
+
+    //start emotion recording
+    if (this.state.detector && !this.state.detector.isRunning) {
+      this.state.detector.start();
+    }
   }
 
   getUserMedia() {
@@ -165,8 +168,8 @@ class VideoEntry extends Component {
     alert('Your browser cannot stream from your webcam. Please switch to Chrome or Firefox.');
   }
 
-
-  startRecord() {
+  onRecord() {
+    console.log('=====start record clicked!!');
     this.setState({
       playback: false,
       uploadable: false,
@@ -175,19 +178,25 @@ class VideoEntry extends Component {
       recording: true,
     });
 
-    this.getUserMedia();
     this.captureUserMedia( stream => {
       this.state.recordVideo = RecordRTC(stream, {type: 'video'});
-      this.state.recordVideo.startRecording();
+      this.state.recordVideo.onRecording();
     });
 
     setTimeout( () => {
-      this.stopRecord();
+      this.onStop();
+      this.state.detector.removeEventListener();
+      this.state.detector.stop();
     }, 30000);
+
+    if (this.state.detector && !this.state.detector.isRunning) {
+      this.state.detector.start();
+    }
   }
 
-  stopRecord() {
-    this.state.recordVideo.stopRecording((videoURL) => {
+  onStop() {
+    console.log('=====stop button clicked!!');
+    this.state.recordVideo.onStoping((videoURL) => {
       this.setState({
         blob: this.state.recordVideo.blob,
         src: videoURL,
@@ -196,6 +205,11 @@ class VideoEntry extends Component {
         recording: false
       });
     });
+
+    if (this.state.detector && this.state.detector.isRunning) {
+      this.state.detector.removeEventListener();
+      this.state.detector.stop();
+    }
   }
 
   uploadVideo() {
@@ -229,29 +243,7 @@ class VideoEntry extends Component {
     });
   }
 
-  getEmotion() {
-    axios.get('/entry/video')
-    .then( res => console.log('=====getEmotion', res))
-    .catch( err => console.error('====error', err));
-  }
-
-  affdexStart() {
-    if (this.state.detector && !this.state.detector.isRunning) {
-      this.state.detector.start();
-    }
-    this.log('#logs', 'Clicked the start button');
-    console.log('=====start button clicked!!');
-  }
-
-  affdexStop() {
-    console.log('=====stop button clicked!!');
-    if (this.state.detector && this.state.detector.isRunning) {
-      this.state.detector.removeEventListener();
-      this.state.detector.stop();
-    }
-  }
-
-  affdexReset() {
+  onReset() {
     if (this.state.detector && this.state.detector.isRunning) {
       this.state.detector.reset();
     }
@@ -270,21 +262,17 @@ class VideoEntry extends Component {
             : <video autoPlay='true' src={this.state.src} muted></video>
           }
           <div className='controls'>
-            {this.state.recording ? null : <button onClick={this.startRecord}>Record</button>}
-            {this.state.recording ? <button onClick={this.stopRecord}>Stop</button> : null}
+            {this.state.okayToRecord ? <button onClick={this.onRecord}>Record</button> : null}
+            {this.state.recording ? <button onClick={this.onStop}>Stop</button> : null}
             {this.state.uploadable ? <button onClick={this.uploadVideo}>Upload</button> : null }
-            {this.state.emotionable ? <button onClick={this.getEmotion}>Get Emotion Result</button> : null }
           </div>
           <div className='flash-message'>
             {this.state.uploadError ? <p>Error Uploading Video, Please Try Again</p> : null }
+            {this.state.okayToRecord ? null : <p>Loading and starting the emotions detector, this may take few minutes ...</p> }
           </div>
           <div id='affdex_elements'> </div>
           {this.state.uploading ? <Loader /> : null }
-           <button id='start' onClick={this.affdexStart}>Affdex Start</button>
-           <button id='start' onClick={this.affdexStop}>Affdex Stop</button>
-           <button id='start' onClick={this.affdexStop}>Affdex Reset</button>
-          <div id='logs'>Logs</div>
-          <div id='results'>Results</div>
+          <button onClick={this.onReset}>Reset</button>
       </div>
     );
   }
