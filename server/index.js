@@ -44,7 +44,7 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
-  console.log('Received scheduleCall post:', time, question);
+  console.log('Received scheduleCall post:', time.replace(':', ''), question);
   res.status(200).send('Successfuly scheduled call');
 });
 
@@ -66,7 +66,7 @@ app.get('/db/retrieveEntry/:user', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
-  let userInfo = req.body.userInfo || {
+  let userInfo = req.body.quserInfo || {
     name: 'Bob Test',
     user_id: '123456789',
     password: 'password',

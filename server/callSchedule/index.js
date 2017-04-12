@@ -1,3 +1,9 @@
+const cron = require('node-cron');
+
+// cron.schedule('* * * * *', function() {
+//   console.log('running a task every minute');
+// });
+
 exports.scheduleCall = (message) => {
   var now = new Date();
   var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0, 0) - now;

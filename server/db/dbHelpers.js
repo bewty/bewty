@@ -44,28 +44,83 @@ exports.logEntry = (log) => {
     });
 };
 
-
-
 exports.retrieveEntry = (query) => {
   let targetUser = query.user || 'Bob Test';
   //If there is no specified search, fetch user object
   if (query.search === undefined) {
     User.find({ user_id: targetUser })
-    .then(function(results) {
+    .then((results) => {
       console.log('Results for retrieveEntry within first if:', JSON.stringify(results));
       return JSON.stringify(results);
     })
-    .catch(function(err) {
+    .catch((err) => {
       console.log('Error occurred in if statement of retrieveEntry to db:', err);
     });
   } else {
     User.find({ user_id: targetUser })
-    .then(function(results) {
+    .then((results) => {
       console.log('Results for retrieveEntry within else:', query.search, 'results:', JSON.stringify(results[0][query.search]));
       return JSON.stringify(results[0][query.search]);
     })
-    .catch(function(err) {
+    .catch((err) => {
       console.log('Error occurred in else statement of retrieveEntry to db:', err);
     });
   }
+};
+
+exports.modifyCall = (callInfo) => {
+  let targetUser = callInfo.user_id;
+  let newMessage = callInfo.message;
+  let time = callInfo.time.replace(':', '');
+  let oldTime = '';
+  User.find({ user_id: targetUser })
+  .then((user) => {
+    oldTime = user.scheduled_time;
+    user.scheduled_time = time;
+    user.scheduled_message = newMessage;
+  })
+  .then(() => {
+    Call.find({ time: oldTime });
+  })
+  .then((time) => {
+    call.user.splice(call.user.indexOf(targetUser), 1);
+  })
+  .then(() => {
+    Call.find({ time: time });
+  })
+  .then((time) => {
+    time.user.push(targetUser);
+  })
+  .catch((err) => {
+    console.log('Error occurred within modifyCall to db:', err);
+  });
+
+};
+
+exports.callEntry = (callInfo) => {
+  let newCall = Call({
+    time: callInfo.time,
+    user: callInfo.user_id
+  });
+
+  newCall.save()
+  .then(function(success) {
+    return console.log(`${callInfo.user_id} scheduled call successfully added`);
+  })
+  .catch(function(err) {
+    console.log('Error occurred in callEntry to db:', err);
+  });
+};
+
+exports.retrieveCall = (query) => {
+  let time = query.time;
+  Call.find({time: time})
+  .populate('schedule', 'name', 'scheduled_message') 
+  .exec((err, user) => {
+    if (err) {
+      return handleError(err);
+    } else {
+      console.log('Saved users are:', call.schedule.name, 'scheduled message:', call.schedule.scheduled_message);
+    }  
+  });
 };
