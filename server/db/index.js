@@ -15,6 +15,8 @@ const userSchema = new mongoose.Schema({
   user_id: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phonenumber: { type: String, required: true},
+  scheduled_time: String,
+  scheduled_message: String,
   entries: [{
     entry_type: String,
     created_at: {type: Date, default: Date.now},
@@ -22,13 +24,23 @@ const userSchema = new mongoose.Schema({
     audio_url: String,
     text: String,
     watson_results: Object,
-    tags: Array
+    tags: Array,
   }]
 });
 
+const callSchema = new mongoose.Schema({
+  time: String,
+  user: [{type: String, ref: 'User'}]
+});
+
+const Call = mongoose.model('Call', callSchema);
 const User = mongoose.model('User', userSchema);
 
 module.exports = {
-  User: User
+  User: User,
+  Call: Call
 };
+
+
+
 
