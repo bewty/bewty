@@ -94,7 +94,7 @@ app.post('/transcribe', (req, res) => {
   console.log('Received post to /transcribe:', req.body);
   let text = req.body.TranscriptionText;
   // let callSid = req.body.CallSid;
-  let textID = req.body.textID || 'test';
+  let textID = req.body.textID || 'transcribeTest';
   let divider = '\n------------------------------------\n';
   watson.promisifiedTone(text)
   .then((tone) => {
