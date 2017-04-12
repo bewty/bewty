@@ -37,6 +37,7 @@ class VideoEntry extends Component {
 
   componentDidMount() {
     console.log('componentDidMount =======');
+    this.getUserMedia();
 
       //Draw the detected facial feature points on the image
     let drawFeaturePoints = (img, featurePoints)=> {
@@ -56,16 +57,15 @@ class VideoEntry extends Component {
       }
     };
 
-    this.getUserMedia();
 
     const width = 640;
     const height = 480;
-    // const processFPS = 5;
     const divRoot = $('#affdex_elements')[0];
     const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
 
     //Construct a CameraDetector and specify the image width / height and face detector mode.
     this.state.detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
+    console.log('=====this.state.detector', this.state.detector);
 
     //Enable detection of all Expressions, Emotions and Emojis classifiers.
     this.state.detector.detectAllEmotions();
@@ -73,49 +73,61 @@ class VideoEntry extends Component {
     this.state.detector.detectAllEmojis();
     this.state.detector.detectAllAppearance();
 
-    console.log('=====this.state.detector', this.state.detector);
+    //onInitialize
+    this.state.detector.addEventListener('onInitializeSuccess', function() {
+      //Display canvas instead of video feed because we want to draw the feature points on it
+      $('#face_video_canvas').css('display', 'block');
+      $('#face_video').css('display', 'none');
+      console.log('onInitializeSuccess');
+    });
+    this.state.detector.addEventListener('onInitializeFailure', function(err) {
+      console.log('onInitializeFailure', err);
+    });
 
-    //Display canvas instead of video feed because we want to draw the feature points on it
-    $('#face_video_canvas').css('display', 'block');
-    $('#face_video').css('display', 'none');
-
-    //Add a callback to notify when camera access is allowed
+    //onWebCamConnect
     this.state.detector.addEventListener('onWebcamConnectSuccess', function() {
       console.log('Webcam access allowed');
     });
-
-    //Add a callback to notify when camera access is denied
     this.state.detector.addEventListener('onWebcamConnectFailure', function() {
-      // this.log('#logs', 'webcam denied');
-      console.log('Webcam access denied');
+      console.log('I"ve failed to connect to the camera :(');
     });
 
-    //Add a callback to notify when detector is stopped
+    //onStop
     this.state.detector.addEventListener('onStopSuccess', function() {
-      // this.log('#logs', 'The detector reports stopped');
       console.log('======onStopSuccess======');
       $('#results').html('');
+    });
+    this.state.detector.addEventListener('onStopFailure', function() {
+      console.log('======onStopFailure======');
+    });
+
+    //onReset
+    detector.addEventListener('onResetSuccess', function() {
+      console.log('======onResetSuccess======');
+    });
+    detector.addEventListener('onResetFailure', function() {
+      console.log('======onResetFailure======');
     });
 
     //Add a callback to receive the results from processing an image.
     //The faces object contains the list of the faces detected in an image.
     //Faces object contains probabilities for all the different expressions, emotions and appearance metrics
     this.state.detector.addEventListener('onImageResultsSuccess', function(faces, image, timestamp) {
-      console.log('=====add listener for logging emotions and results');
-      $('#results').html('');
-      console.log('#results', 'Timestamp: ' + timestamp.toFixed(2));
-      console.log('#results', 'Number of faces found: ' + faces.length);
-      if (faces.length > 0) {
-        console.log('#results', 'Appearance: ' + JSON.stringify(faces[0].appearance));
-        console.log('#results', 'Emotions: ' + JSON.stringify(faces[0].emotions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-        console.log('#results', 'Expressions: ' + JSON.stringify(faces[0].expressions, function(key, val) {
-          return val.toFixed ? Number(val.toFixed(0)) : val;
-        }));
-        console.log('#results', 'Emoji: ' + faces[0].emojis.dominantEmoji);
-        drawFeaturePoints(image, faces[0].featurePoints);
-      }
+      console.log('=====add listener for logging emotions and results', faces, image, timestamp);
+    //   $('#results').html('');
+    //   console.log('#results', 'Timestamp: ' + timestamp.toFixed(2));
+    //   console.log('#results', 'Number of faces found: ' + faces.length);
+    //   if (faces.length > 0) {
+    //     console.log('#results', 'Appearance: ' + JSON.stringify(faces[0].appearance));
+    //     console.log('#results', 'Emotions: ' + JSON.stringify(faces[0].emotions, function(key, val) {
+    //       return val.toFixed ? Number(val.toFixed(0)) : val;
+    //     }));
+    //     console.log('#results', 'Expressions: ' + JSON.stringify(faces[0].expressions, function(key, val) {
+    //       return val.toFixed ? Number(val.toFixed(0)) : val;
+    //     }));
+    //     console.log('#results', 'Emoji: ' + faces[0].emojis.dominantEmoji);
+    //     drawFeaturePoints(image, faces[0].featurePoints);
+    //   }
     });
   }
 
