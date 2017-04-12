@@ -5,6 +5,16 @@ import Loader from '../loader/Loader.jsx';
 import $ from 'jquery';
 
 var rawData = [];
+var sumData = {
+  timestamp: 0,
+  anger: 0,
+  contempt: 0,
+  fear: 0,
+  joy: 0,
+  sadness: 0,
+  surprise: 0,
+  emoji: '',
+};
 
 class VideoEntry extends Component {
   constructor(props) {
@@ -23,6 +33,14 @@ class VideoEntry extends Component {
       emotionable: false,
       okayToRecord: false,
       rawData: [],
+      sumData: {
+        anger: 0,
+        contempt: 0,
+        fear: 0,
+        joy: 0,
+        sadness: 0,
+        surprise: 0,
+      }
     };
 
     this.getUserMedia = this.getUserMedia.bind(this);
@@ -33,6 +51,7 @@ class VideoEntry extends Component {
     this.onStop = this.onStop.bind(this);
     this.uploadVideo = this.uploadVideo.bind(this);
     this.onReset = this.onReset.bind(this);
+    this.getAverage = this.getAverage.bind(this);
     // this.affdexStart = this.affdexStart.bind(this);
     // this.affdexStop = this.affdexStop.bind(this);
   }
@@ -118,6 +137,13 @@ class VideoEntry extends Component {
           // engagement: faces[0].emotions.engagement,
           // valence: faces[0].emotions.valence,
         }];
+        sumData.anger += faces[0].emotions.anger;
+        sumData.contempt += faces[0].emotions.contempt;
+        sumData.fear += faces[0].emotions.fear;
+        sumData.joy += faces[0].emotions.joy;
+        sumData.sadness += faces[0].emotions.sadness;
+        sumData.surprise += faces[0].emotions.surprise;
+        sumData.emoji += faces[0].emojis.dominantEmoji;
 
         if ( onRecordingEmotion() ) {
           rawData.push(instance);
@@ -136,12 +162,7 @@ class VideoEntry extends Component {
 
   getUserMedia() {
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-    if (navigator.getUserMedia) {
-      this.captureUserMedia( stream => this.handleVideo(stream));
-    } else {
-      console.log('getUserMedia not supported');
-    }
+    navigator.getUserMedia ? this.captureUserMedia( stream => this.handleVideo(stream)) : console.log('getUserMedia not supported');
   }
 
   captureUserMedia(callback) {
@@ -154,14 +175,11 @@ class VideoEntry extends Component {
       },
       audio: true,
     };
-
     navigator.getUserMedia( constraints, callback, err => this.videoError(err));
   }
 
   handleVideo(stream) {
-    this.setState({
-      src: window.URL.createObjectURL(stream)
-    });
+    this.setState({ src: window.URL.createObjectURL(stream) });
   }
 
   videoError(err) {
@@ -170,6 +188,19 @@ class VideoEntry extends Component {
 
   onRecord() {
     console.log('=====start record clicked!!');
+    // rawData = [];
+    // sumData = {
+    //   timestamp: 0,
+    //   anger: 0,
+    //   contempt: 0,
+    //   fear: 0,
+    //   joy: 0,
+    //   sadness: 0,
+    //   surprise: 0,
+    //   emoji: '',
+    // };
+
+    this.getUserMedia();
     this.setState({
       playback: false,
       uploadable: false,
@@ -178,7 +209,6 @@ class VideoEntry extends Component {
       recording: true,
     });
 
-    this.getUserMedia();
     this.captureUserMedia( stream => {
       this.state.recordVideo = RecordRTC(stream, {type: 'video'});
       this.state.recordVideo.startRecording();
@@ -196,15 +226,12 @@ class VideoEntry extends Component {
   }
 
   onStop() {
-    console.log('=====stop button clicked!!');
     if (this.state.detector && this.state.detector.isRunning) {
       this.state.detector.removeEventListener();
       this.state.detector.stop();
     }
 
     this.state.recordVideo.stopRecording((videoURL) => {
-      console.log('videoURL======', videoURL);
-      console.log('bufferSize======', this.state.recordVideo.bufferSize);
       this.setState({
         blob: this.state.recordVideo.blob,
         src: videoURL,
@@ -215,15 +242,34 @@ class VideoEntry extends Component {
     });
   }
 
+  onReset() {
+    console.log('===reset button clicked====');
+    if (this.state.detector && this.state.detector.isRunning) {
+      this.state.detector.reset();
+    }
+  }
+
+  getAverage() {
+    console.log('getAverage=====', sumData);
+    const length = rawData.length;
+    for (let key in sumData) {
+      key === 'emoji' ? null : sumData[key] = sumData[key] / length;
+    }
+  }
+
   uploadVideo() {
     this.setState({
       uploading: true,
       uploadError: false,
     });
 
+    this.getAverage();
+
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('video', blob);
+    fd.append('rawData', rawData);
+    fd.append('sumData', sumData);
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
     };
@@ -231,29 +277,17 @@ class VideoEntry extends Component {
     axios.post('/entry/video', fd, config)
     .then( res => {
       this.setState({
-        emotionable: true,
         uploading: false,
       });
       console.log('video upload to server COMPLETE:', res);
     })
     .catch( err => {
       this.setState({
-        emotionable: false,
         uploadError: true,
         uploading: false
       });
       console.log('video upload to server ERROR:', err);
     });
-  }
-
-  onReset() {
-    if (this.state.detector && this.state.detector.isRunning) {
-      this.state.detector.reset();
-    }
-  }
-
-  log(nodeName, msg) {
-    $(nodeName).append('<span>' + msg + '</span><br />');
   }
 
   render() {
@@ -276,6 +310,7 @@ class VideoEntry extends Component {
           <div id='affdex_elements'> </div>
           {this.state.uploading ? <Loader /> : null }
           <button onClick={this.onReset}>Reset</button>
+          <button onClick={this.getAverage}>Average</button>
       </div>
     );
   }

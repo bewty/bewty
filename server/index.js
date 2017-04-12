@@ -36,7 +36,6 @@ const upload = multer({
   })
 });
 
-let videoId;
 const uploadVideo = multer({
   dest: path.resolve(__dirname, '..', 'dist','upload'),
   storage: multerS3({
@@ -49,14 +48,6 @@ const uploadVideo = multer({
   }),
 });
 
-// const upload = multer({
-//   storage: multer.diskStorage({
-//     destination: path.resolve(__dirname, '..', 'dist', 'upload'),
-//     filename: (req, file, cb) => cb(null, `${file.originalname}-${Date.now().toString()}.webm`),
-//     limits: { fileSize: 100000 },
-//   })
-// });
-
 const getAWSSignedUrl = (req) => {
   const params = {
     Bucket: 'smartdiarybewt',
@@ -64,14 +55,6 @@ const getAWSSignedUrl = (req) => {
   };
   return s3.getSignedUrl('getObject', params);
 };
-
-const karios = axios.create({
-  baseURL: 'https://api.kairos.com',
-  headers: {
-    'app_id': process.env.KAIROS.APP_ID,
-    'app_key': process.env.KAIROS.APP_KEY
-  }
-});
 
 AWS.config.update({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY,
@@ -176,46 +159,19 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
   res.send('audio uploaded');
 });
 
-////GET request within POST
-// kairosGetResult = (req, res) => {
-//   return karios.get(`/v2/analytics/${req.videoId}`)
-//   .then( res => {
-//     return res.data;
-//     res.send(res.data);
-//   });
-// };
-
 app.post('/entry/video', upload.single('video'), (req, res) => {
 
-  console.log('amazon link', req.file.location);
-
+  // console.log('amazon link', req.file.location);
+  let fileBucket = req.file.bucket;
+  let fileKey = req.file.key;
+  let body = req.body;
+  let rawData = body.rawData;
+  let sumData = body.sumData;
+  console.log('sumData=========', sumData);
   ////aws presigned url
   // const url = getAWSSignedUrl(req);
   const url = req.file.location; //aws public link
-  return karios.post(`/v2/media?source=${url}`)
-  .then( postRes => {
-    console.log('karios POST COMPLETED:===', postRes.data);
-
-    //GET results with a button
-    videoId = postRes.data.id;
-
-    ////GET result within POST
-    // req.videoId = postRes.data.id;
-    // return kairosGetResult(req, res);
-  })
-  .then( result => {
-    console.log('/entry/video COMPELTE=====', result);
-    res.send(result);
-  })
-  .catch( err => console.error('KAIROS GET RESULT ERROR:===', err.message));
-});
-
-app.get('/entry/video', (req, res) => {
-  karios.get(`/v2/analytics/${videoId}`)
-    .then( res => {
-      console.log('kairosGetResult======result', res.data);
-      res.send(res.data);
-    });
+  res.send(rawData);
 });
 
 app.get('*', (req, res) => {
