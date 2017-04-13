@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
-import $ from 'jquery';
 
 class VideoEntry extends Component {
   constructor(props) {
@@ -45,10 +44,9 @@ class VideoEntry extends Component {
 
   componentDidMount() {
     this.getUserMedia();
-
     const width = 480;
     const height = 360;
-    const divRoot = $('#affdex_elements')[0];
+    const divRoot = this.refs.affdex_elements;
     const faceMode = affdex.FaceDetectorMode.LARGE_FACES;
 
     this.state.detector = new affdex.CameraDetector(divRoot, width, height, faceMode);
@@ -271,7 +269,7 @@ class VideoEntry extends Component {
             {this.state.uploadable ? <button onClick={this.uploadVideo}>Upload</button> : null }
             <button onClick={this.onReset}>Reset</button>
           </div>
-          <div id='affdex_elements'> </div>
+          <div id='affdex_elements' ref='affdex_elements'> </div>
           {this.state.uploading ? <Loader /> : null }
       </div>
     );
