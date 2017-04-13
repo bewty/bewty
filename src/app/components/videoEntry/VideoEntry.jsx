@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
+import VoiceRecognition from '../VoiceRecognition/VoiceRecognition';
 
 class VideoEntry extends Component {
   constructor(props) {
@@ -28,7 +29,10 @@ class VideoEntry extends Component {
         joy: 0,
         sadness: 0,
         surprise: 0,
-      }
+      },
+      start: false,
+      stop: false,
+      transcript: ''
     };
 
     this.getUserMedia = this.getUserMedia.bind(this);
@@ -40,6 +44,8 @@ class VideoEntry extends Component {
     this.uploadVideo = this.uploadVideo.bind(this);
     this.onReset = this.onReset.bind(this);
     this.getAverage = this.getAverage.bind(this);
+    this.onEnd = this.onEnd.bind(this);
+    this.onResult = this.onResult.bind(this);
   }
 
   componentDidMount() {
@@ -154,7 +160,8 @@ class VideoEntry extends Component {
         joy: 0,
         sadness: 0,
         surprise: 0,
-      }
+      },
+      start: true
     });
 
     this.captureUserMedia( stream => {
@@ -185,7 +192,8 @@ class VideoEntry extends Component {
         src: videoURL,
         playback: true,
         uploadable: true,
-        recording: false
+        recording: false,
+        stop: true
       });
     });
   }
@@ -232,6 +240,7 @@ class VideoEntry extends Component {
     fd.append('video', blob);
     fd.append('rawData', JSON.stringify(this.state.rawData));
     fd.append('avgData', JSON.stringify(this.state.avgData));
+    fd.append('text', this.state.transcript);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
@@ -251,9 +260,29 @@ class VideoEntry extends Component {
     });
   }
 
+
+  onEnd() {
+    this.setState({ start: false, stop: false });
+    // this.props.action('end')();
+  }
+
+  onResult ({ finalTranscript }) {
+    // const result = finalTranscript;
+    this.setState({ start: false,
+                    transcript: finalTranscript });
+    // this.props.action('result')(finalTranscript);
+  }
   render() {
     return (
       <div className='container'>
+        {this.state.start &&
+        (<VoiceRecognition
+          onEnd={this.onEnd}
+          onResult={this.onResult}
+          continuous={true}
+          lang="en-US"
+          stop={this.state.stop}
+        />)}
         <h1 className='title'>Video Entry</h1>
           { this.state.playback
             ? <video autoPlay='true' src={this.state.src} controls></video>

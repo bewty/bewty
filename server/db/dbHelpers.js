@@ -48,6 +48,36 @@ exports.logEntry = (log) => {
     });
 };
 
+exports.saveEntry = (req, res, log) => {
+  const userID = log.user_id;
+  let logEntry = {
+    entry_type: log.entry_type,
+    created_at: Date.now(),
+    video: {
+      bucket: log.video ? log.video.bucket : null,
+      key: log.video ? log.video.key : null,
+      avg_data: log.video ? log.video.avgData : null,
+      raw_data: log.video ? log.video.rawData : null,
+    },
+    audio: {
+      bucket: log.audio ? log.audio.bucket : null,
+      key: log.audio ? log.audio.key : null
+    },
+    text: log.text,
+    watson_results: log.watson_results,
+    tags: log.tags
+  };
+
+  User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
+
+  .then((result) => {
+    console.log('Entry successfully uploaded!', result);
+    res.sendStatus(201);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
+};
+
 exports.retrieveEntry = (query) => {
   let targetUser = query.user || 'Bob Test';
   return new Promise((resolve, reject) => {
@@ -112,12 +142,12 @@ exports.callEntry = (callInfo) => {
 exports.retrieveCall = (query) => {
   let time = query.time;
   Call.find({time: time})
-  .populate('schedule', 'name', 'scheduled_message') 
+  .populate('schedule', 'name', 'scheduled_message')
   .exec((err, user) => {
     if (err) {
       return handleError(err);
     } else {
       console.log('Saved users are:', call.schedule.name, 'scheduled message:', call.schedule.scheduled_message);
-    }  
+    }
   });
 };

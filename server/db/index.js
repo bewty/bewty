@@ -26,9 +26,12 @@ const userSchema = new mongoose.Schema({
       avg_data: Object,
       raw_data: Array,
     },
-    audio_url: String,
+    audio: {
+      bucket: String,
+      key: String
+    },
     text: String,
-    watson_results: Object,
+    watson_results: String,
     tags: Array,
   }]
 });
