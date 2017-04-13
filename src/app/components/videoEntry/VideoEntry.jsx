@@ -276,8 +276,9 @@ class VideoEntry extends Component {
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('video', blob);
-    fd.append('rawData', rawData);
-    fd.append('sumData', sumData);
+    fd.append('rawData', JSON.stringify(this.state.rawData));
+    fd.append('avgData', JSON.stringify(this.state.avgData));
+
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
     };
