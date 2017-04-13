@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
   user_id: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   phonenumber: { type: String, required: true},
-  scheduled_time: String,
+  scheduled_time: { type: String, default: '' },
   scheduled_message: String,
   entries: [{
     entry_type: String,
@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
 });
 
 const callSchema = new mongoose.Schema({
-  time: String,
+  time: {type: String},
   user: [{type: String, ref: 'User'}]
 });
 

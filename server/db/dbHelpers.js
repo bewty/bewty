@@ -73,35 +73,47 @@ exports.modifyCall = (callInfo) => {
   let newMessage = callInfo.message;
   let time = callInfo.time.replace(':', '');
   let oldTime = '';
-  User.find({ user_id: targetUser })
+  User.findOne({ user_id: targetUser })
   .then((user) => {
     oldTime = user.scheduled_time;
     user.scheduled_time = time;
     user.scheduled_message = newMessage;
-    console.log('Successfully found user', user, 'oldTime:', oldTime);
+    user.save()
+    .then(() => {
+      return oldTime;
+    })
+    .error((err) => {
+      console.log('Received error within modifyCall to DB');
+    });
   })
   .then(() => {
-    Call.find({ time: oldTime });
+    return Call.findOne({ time: oldTime });
   })
-  .then((time) => {
-    if (time) {
-      console.log('Found time in call:', time);
-      time.user.splice(time.user.indexOf(targetUser), 1);
-      console.log('Successfuly spliced:', time);
+  .then((call) => {
+    if (call) {
+      call.user.splice(call.user.indexOf(targetUser), 1);
+      call.save();
     }
     return;
   })
   .then(() => {
-    Call.find({ time: time });
+    return Call.findOne({ time: time });
   })
-  .then((time) => {
-    time.user.push(targetUser);
-    console.log('Added user to time:', time);
+  .then((call) => {
+    if (!call) {
+      let newCall = Call({
+        time: time,
+        user: [targetUser]
+      });
+      newCall.save();
+    } else {
+      call.user.push(targetUser);
+      call.save();
+    }
   })
   .error((err) => {
     console.log('Error occurred within modifyCall to db:', err);
   });
-
 };
 
 exports.callEntry = (callInfo) => {
