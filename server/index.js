@@ -163,6 +163,7 @@ app.post('/test', (req, res) => {
 app.post('/entry/audio', upload.single('audio'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
+    console.log('this is the type of the tone', typeof tone);
     let log = {
       user_id: '123456789', // NOTE: hardcode user id
       audio: {
@@ -172,8 +173,9 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
       text: req.body.text,
       watson_results: tone
     };
-    res.send('audio uploaded', log);
-
+    console.log('this is the log to be sent to the db====', log);
+    // res.send('audio uploaded');
+    database.logAudioEntry(req, res, log);
   });
 });
 

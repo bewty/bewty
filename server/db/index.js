@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
       key: String
     },
     text: String,
-    watson_results: Object,
+    watson_results: String,
     tags: Array,
   }]
 });

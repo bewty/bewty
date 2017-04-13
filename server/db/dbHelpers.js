@@ -32,10 +32,7 @@ exports.logEntry = (log) => {
       avg_data: log.video.avgData,
       raw_data: log.video.rawData,
     },
-    audio: {
-      bucket: log.audio.bucket,
-      key: log.audio.key
-    },
+    audio_url: log.audio_url,
     text: log.text,
     watson_results: log.watson_results,
     tags: log.tags
@@ -50,6 +47,29 @@ exports.logEntry = (log) => {
       }
     });
 };
+
+exports.logAudioEntry = (req, res, log) => {
+  const userID = log.user_id;
+  let logEntry = {
+    created_at: Date.now(),
+    audio: {
+      bucket: log.audio.bucket,
+      key: log.audio.key
+    },
+    text: log.text,
+    watson_results: log.watson_results
+  };
+
+  User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
+
+  .then((result) => {
+    console.log('Audio successfully uploaded!', result);
+    res.sendStatus(201);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
+};
+
 
 exports.retrieveEntry = (query) => {
   let targetUser = query.user || 'Bob Test';
