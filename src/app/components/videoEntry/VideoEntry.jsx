@@ -29,7 +29,9 @@ class VideoEntry extends Component {
         joy: 0,
         sadness: 0,
         surprise: 0,
-      }
+      },
+      start: false,
+      stop: false
     };
 
     this.getUserMedia = this.getUserMedia.bind(this);
@@ -252,16 +254,30 @@ class VideoEntry extends Component {
     });
   }
 
+
+  onEnd() {
+    this.setState({ start: false, stop: false });
+    // this.props.action('end')();
+  }
+
+  onResult ({ finalTranscript }) {
+    // const result = finalTranscript;
+
+    this.setState({ start: false,
+                    transcript: finalTranscript });
+    // this.props.action('result')(finalTranscript);
+  }
   render() {
     return (
       <div className='container'>
-        <VoiceRecognition
+        {this.state.start &&
+        (<VoiceRecognition
           onEnd={this.onEnd}
           onResult={this.onResult}
           continuous={true}
           lang="en-US"
           stop={this.state.stop}
-        />
+        />)}
         <h1 className='title'>Video Entry</h1>
           { this.state.playback
             ? <video autoPlay='true' src={this.state.src} controls></video>
