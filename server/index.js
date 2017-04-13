@@ -37,7 +37,7 @@ const upload = multer({
 });
 
 const uploadVideo = multer({
-  dest: path.resolve(__dirname, '..', 'dist','upload'),
+  dest: path.resolve(__dirname, '..', 'dist', 'upload'),
   storage: multerS3({
     s3: s3,
     bucket: 'smartdiarybewt',
@@ -105,6 +105,12 @@ app.post('/db/logentry', (req, res) => {
     user_id: '123456789',
     entry_type: 'Goal',
     audio_url: 'test.com/test',
+    video: {
+      bucket: 'bewt',
+      key: '123902934',
+      rawData: [{joy: 0.34}],
+      avgData: {joy: 0.34, anger: 1.34},
+    },
     text: 'Testing for occurrence of missing data',
     watson_results: {Openness: {ReallyOpen: .67}},
     tags: ['Family', 'Work']
@@ -159,19 +165,24 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
   res.send('audio uploaded');
 });
 
-app.post('/entry/video', upload.single('video'), (req, res) => {
+app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
 
-  // console.log('amazon link', req.file.location);
-  let fileBucket = req.file.bucket;
-  let fileKey = req.file.key;
-  let body = req.body;
-  let rawData = body.rawData;
-  let sumData = body.sumData;
-  console.log('sumData=========', sumData);
+  console.log('avgData====server====', req.body.avgData);
+  console.log('JSON.parse(avgData)====server====', JSON.parse(req.body.avgData));
+  let log = {
+    user_id: '123456789', // NOTE: hardcode user id
+    video: {
+      bucket: req.file.bucket,
+      key: req.file.key,
+      avgData: req.body.avgData,
+      rawData: req.body.rawData,
+    }
+  };
+  database.logEntry(log);
   ////aws presigned url
   // const url = getAWSSignedUrl(req);
   const url = req.file.location; //aws public link
-  res.send(rawData);
+  res.send(req.body.avgData);
 });
 
 app.get('*', (req, res) => {

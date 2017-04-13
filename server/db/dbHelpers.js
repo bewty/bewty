@@ -23,11 +23,15 @@ exports.userEntry = (userInfo) => {
 
 exports.logEntry = (log) => {
   const userID = log.user_id;
-
   let logEntry = {
     entry_type: log.entry_type,
     created_at: Date.now(),
-    video_url: log.video_url,
+    video: {
+      bucket: log.video.bucket,
+      key: log.video.key,
+      avg_data: log.video.avgData,
+      raw_data: log.video.rawData,
+    },
     audio_url: log.audio_url,
     text: log.text,
     watson_results: log.watson_results,
