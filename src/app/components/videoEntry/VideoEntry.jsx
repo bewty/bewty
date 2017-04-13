@@ -32,6 +32,7 @@ class VideoEntry extends Component {
       uploadError: false,
       emotionable: false,
       okayToRecord: false,
+      loadingRecordMsg: true,
       rawData: [],
       avgData: {
         anger: 0,
@@ -185,6 +186,8 @@ class VideoEntry extends Component {
 
     this.getUserMedia();
     this.setState({
+      okayToRecord: false,
+      loadingRecordMsg: false,
       playback: false,
       uploadable: false,
       emotionable: false,
@@ -307,12 +310,14 @@ class VideoEntry extends Component {
             ? <video autoPlay='true' src={this.state.src} controls></video>
             : <video autoPlay='true' src={this.state.src} muted></video>
           }
+          <div className='flash-message'>
+            {this.state.uploadError ? <p>Error Uploading Video, Please Try Again</p> : null }
+            {this.state.loadingRecordMsg ? <p>Loading and starting the emotions detector, this may take few minutes ...</p> : null }
+          </div>
           <div className='controls'>
             {this.state.okayToRecord ? <button onClick={this.onRecord}>Record</button> : null}
             {this.state.recording ? <button onClick={this.onStop}>Stop</button> : null}
             {this.state.uploadable ? <button onClick={this.uploadVideo}>Upload</button> : null }
-          </div>
-          <div className='flash-message'>
             <button onClick={this.onReset}>Reset</button>
           </div>
           <div id='affdex_elements'> </div>
