@@ -163,7 +163,6 @@ app.post('/test', (req, res) => {
 app.post('/entry/audio', upload.single('audio'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
-    console.log('this is the type of the tone', typeof tone);
     let log = {
       user_id: '123456789', // NOTE: hardcode user id
       entry_type: 'audio',
@@ -174,17 +173,11 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
       text: req.body.text,
       watson_results: tone
     };
-    console.log('this is the log to be sent to the db====', log);
-    // res.send('audio uploaded');
     database.saveEntry(req, res, log);
   });
 });
 
 app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
-
-  console.log('avgData====server====', req.body.avgData);
-  console.log('JSON.parse(avgData)====server====', JSON.parse(req.body.avgData));
-
   watson.promisifiedTone(req.body.text)
   .then(tone => {
     let log = {
@@ -199,16 +192,8 @@ app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
       text: req.body.text,
       watson_results: tone
     };
-    console.log('this is the log to be sent to the db====', log);
     database.saveEntry(req, res, log);
-
   });
-
-
-  ////aws presigned url
-  // const url = getAWSSignedUrl(req);
-  // const url = req.file.location; //aws public link
-  // res.send(req.body.avgData);
 });
 
 app.get('*', (req, res) => {

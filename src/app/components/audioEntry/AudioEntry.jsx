@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import VoiceRecognition from '../VoiceRecognition/VoiceRecognition';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
-import $ from 'jquery';
 
 class AudioEntry extends Component {
   constructor(props) {
@@ -104,38 +103,18 @@ class AudioEntry extends Component {
     axios.post('/entry/audio', fd, config)
     .then( res => console.log('audio upload to server done', res))
     .catch(err => console.log('audio upload error...', err));
-    // console.log(this.state.value);
-    // $.ajax({
-    //   url: '/transcribe',
-    //   type: 'POST',
-    //   data: {
-    //     TranscriptionText: this.state.transcript
-    //   },
-    //   success: function(result) {
-    //     console.log('Success!');
-    //     self.setState({result: result});
-    //   },
-    //   error: function() {
-    //     console.log('error result');
-    //   }
-    // });
   }
 
   onEnd() {
     this.setState({ start: false, stop: false });
-    // this.props.action('end')();
   }
 
   onResult ({ finalTranscript }) {
-    // const result = finalTranscript;
-
     this.setState({ start: false,
                     transcript: finalTranscript });
-    // this.props.action('result')(finalTranscript);
   }
 
   render() {
-    console.log(this.state);
     return (
       <div className="container">
         <h1>Audio Entry</h1>
