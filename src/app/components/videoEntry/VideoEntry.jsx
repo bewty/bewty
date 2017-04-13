@@ -44,6 +44,8 @@ class VideoEntry extends Component {
     this.uploadVideo = this.uploadVideo.bind(this);
     this.onReset = this.onReset.bind(this);
     this.getAverage = this.getAverage.bind(this);
+    this.onEnd = this.onEnd.bind(this);
+    this.onResult = this.onResult.bind(this);
   }
 
   componentDidMount() {
