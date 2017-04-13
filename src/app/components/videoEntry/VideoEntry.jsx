@@ -31,7 +31,8 @@ class VideoEntry extends Component {
         surprise: 0,
       },
       start: false,
-      stop: false
+      stop: false,
+      transcript: ''
     };
 
     this.getUserMedia = this.getUserMedia.bind(this);
@@ -157,7 +158,8 @@ class VideoEntry extends Component {
         joy: 0,
         sadness: 0,
         surprise: 0,
-      }
+      },
+      start: true
     });
 
     this.captureUserMedia( stream => {
@@ -188,7 +190,8 @@ class VideoEntry extends Component {
         src: videoURL,
         playback: true,
         uploadable: true,
-        recording: false
+        recording: false,
+        stop: true
       });
     });
   }
@@ -262,7 +265,7 @@ class VideoEntry extends Component {
 
   onResult ({ finalTranscript }) {
     // const result = finalTranscript;
-
+    console.log(finalTranscript);
     this.setState({ start: false,
                     transcript: finalTranscript });
     // this.props.action('result')(finalTranscript);
