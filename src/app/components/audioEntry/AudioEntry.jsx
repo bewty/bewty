@@ -95,27 +95,30 @@ class AudioEntry extends Component {
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('audio', blob);
+    fd.append('text', this.state.transcript);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
     };
+
     axios.post('/entry/audio', fd, config)
-    .then( res => console.log('audio upload to server done', res));
-    console.log(this.state.value);
-    $.ajax({
-      url: '/transcribe',
-      type: 'POST',
-      data: {
-        TranscriptionText: this.state.transcript
-      },
-      success: function(result) {
-        console.log('Success!');
-        self.setState({result: result});
-      },
-      error: function() {
-        console.log('error result');
-      }
-    });
+    .then( res => console.log('audio upload to server done', res))
+    .catch(err => console.log('audio upload error...', err));
+    // console.log(this.state.value);
+    // $.ajax({
+    //   url: '/transcribe',
+    //   type: 'POST',
+    //   data: {
+    //     TranscriptionText: this.state.transcript
+    //   },
+    //   success: function(result) {
+    //     console.log('Success!');
+    //     self.setState({result: result});
+    //   },
+    //   error: function() {
+    //     console.log('error result');
+    //   }
+    // });
   }
 
   onEnd() {
