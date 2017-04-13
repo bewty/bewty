@@ -32,7 +32,10 @@ exports.logEntry = (log) => {
       avg_data: log.video.avgData,
       raw_data: log.video.rawData,
     },
-    audio_url: log.audio_url,
+    audio: {
+      bucket: log.audio.bucket,
+      key: log.audio.key
+    },
     text: log.text,
     watson_results: log.watson_results,
     tags: log.tags
@@ -112,12 +115,12 @@ exports.callEntry = (callInfo) => {
 exports.retrieveCall = (query) => {
   let time = query.time;
   Call.find({time: time})
-  .populate('schedule', 'name', 'scheduled_message') 
+  .populate('schedule', 'name', 'scheduled_message')
   .exec((err, user) => {
     if (err) {
       return handleError(err);
     } else {
       console.log('Saved users are:', call.schedule.name, 'scheduled message:', call.schedule.scheduled_message);
-    }  
+    }
   });
 };
