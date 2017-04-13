@@ -109,13 +109,7 @@ exports.modifyCall = (callInfo) => {
       console.log('Call before push:', user_id, call.user);
       call.user.push(user_id);
       console.log('Call after push:', call.user);
-      call.save()
-      .then(() => {
-        console.log('Successfully saved user');
-      })
-      .error((err) => {
-        console.log('Received error:', err);
-      });
+      call.save();
     }
   })
   .error((err) => {
