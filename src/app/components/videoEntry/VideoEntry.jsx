@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
+import VoiceRecognition from '../VoiceRecognition/VoiceRecognition';
 
 class VideoEntry extends Component {
   constructor(props) {
@@ -254,6 +255,13 @@ class VideoEntry extends Component {
   render() {
     return (
       <div className='container'>
+        <VoiceRecognition
+          onEnd={this.onEnd}
+          onResult={this.onResult}
+          continuous={true}
+          lang="en-US"
+          stop={this.state.stop}
+        />
         <h1 className='title'>Video Entry</h1>
           { this.state.playback
             ? <video autoPlay='true' src={this.state.src} controls></video>
