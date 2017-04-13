@@ -4,17 +4,17 @@ import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
 import $ from 'jquery';
 
-var rawData = [];
-var sumData = {
-  timestamp: 0,
-  anger: 0,
-  contempt: 0,
-  fear: 0,
-  joy: 0,
-  sadness: 0,
-  surprise: 0,
-  emoji: '',
-};
+// var rawData = [];
+// var avgData = {
+//   timestamp: 0,
+//   anger: 0,
+//   contempt: 0,
+//   fear: 0,
+//   joy: 0,
+//   sadness: 0,
+//   surprise: 0,
+//   emoji: '',
+// };
 
 class VideoEntry extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ class VideoEntry extends Component {
       emotionable: false,
       okayToRecord: false,
       rawData: [],
-      sumData: {
+      avgData: {
         anger: 0,
         contempt: 0,
         fear: 0,
@@ -73,57 +73,51 @@ class VideoEntry extends Component {
     // this.state.detector.detectAllExpressions();
     // this.state.detector.detectAllAppearance();
 
-    //Draw the detected facial feature points on the image
-    const drawFeaturePoints = (img, featurePoints)=> {
-      const contxt = $('#face_video_canvas')[0].getContext('2d');
+    ////Draw the detected facial feature points on the image
+    // const drawFeaturePoints = (img, featurePoints) => {
+    //   const contxt = $('#face_video_canvas')[0].getContext('2d');
 
-      const hRatio = contxt.canvas.width / img.width;
-      const vRatio = contxt.canvas.height / img.height;
-      const ratio = Math.min(hRatio, vRatio);
+    //   const hRatio = contxt.canvas.width / img.width;
+    //   const vRatio = contxt.canvas.height / img.height;
+    //   const ratio = Math.min(hRatio, vRatio);
 
-      contxt.strokeStyle = '#FFFFFF';
-      for (let id in featurePoints) {
-        contxt.beginPath();
-        contxt.arc(featurePoints[id].x,
-          featurePoints[id].y, 2, 0, 2 * Math.PI);
-        contxt.stroke();
-      }
-    };
-
-    const okayToRecord = () => {
-      console.log('okayToRecord');
-      this.setState({
-        okayToRecord: true
-      });
-    };
+    //   contxt.strokeStyle = '#FFFFFF';
+    //   for (let id in featurePoints) {
+    //     contxt.beginPath();
+    //     contxt.arc(featurePoints[id].x,
+    //       featurePoints[id].y, 2, 0, 2 * Math.PI);
+    //     contxt.stroke();
+    //   }
+    // };
 
     const onRecordingEmotion = () => {
       return this.state.recording;
     };
 
     //onInitialize
-    this.state.detector.addEventListener('onInitializeSuccess', function() {
+    this.state.detector.addEventListener('onInitializeSuccess', () => {
       //Display canvas instead of video feed because we want to draw the feature points on it
       // $('#face_video_canvas').css('display', 'none');
       // $('#face_video').css('display', 'none');
-      okayToRecord();
+      this.setState({
+        okayToRecord: true,
+        loadingRecordMsg: false
+      });
       console.log('onInitializeSuccess');
     });
-    this.state.detector.addEventListener('onInitializeFailure', function(err) { console.log('onInitializeFailure', err); });
+    this.state.detector.addEventListener('onInitializeFailure', (err) => console.log('onInitializeFailure', err));
     //onWebCamConnect
-    this.state.detector.addEventListener('onWebcamConnectSuccess', function() { console.log('Webcam access allowed'); });
-    this.state.detector.addEventListener('onWebcamConnectFailure', function() { console.log('I"ve failed to connect to the camera :('); });
+    this.state.detector.addEventListener('onWebcamConnectSuccess', () => console.log('Webcam access allowed'));
+    this.state.detector.addEventListener('onWebcamConnectFailure', () => console.log('I"ve failed to connect to the camera :('));
     //onStop
-    this.state.detector.addEventListener('onStopSuccess', function() { console.log('onStopSuccess'); });
-    this.state.detector.addEventListener('onStopFailure', function() { console.log('onStopFailure'); });
+    this.state.detector.addEventListener('onStopSuccess', () => console.log('onStopSuccess'));
+    this.state.detector.addEventListener('onStopFailure', () => console.log('onStopFailure'));
     //onReset
-    this.state.detector.addEventListener('onResetSuccess', function() { console.log('onResetSuccess'); });
-    this.state.detector.addEventListener('onResetFailure', function() { console.log('onResetFailure'); });
+    this.state.detector.addEventListener('onResetSuccess', () => console.log('onResetSuccess'));
+    this.state.detector.addEventListener('onResetFailure', () => console.log('onResetFailure'));
 
     //Results
-    this.state.detector.addEventListener('onImageResultsSuccess', function(faces, image, timestamp) {
-      // console.log('onImageResultsSuccess====', faces, image, timestamp);
-
+    this.state.detector.addEventListener('onImageResultsSuccess', (faces, image, timestamp) => {
       if (faces.length > 0) {
         let instance = [{
           timestamp: timestamp,
@@ -137,22 +131,22 @@ class VideoEntry extends Component {
           // engagement: faces[0].emotions.engagement,
           // valence: faces[0].emotions.valence,
         }];
-        sumData.anger += faces[0].emotions.anger;
-        sumData.contempt += faces[0].emotions.contempt;
-        sumData.fear += faces[0].emotions.fear;
-        sumData.joy += faces[0].emotions.joy;
-        sumData.sadness += faces[0].emotions.sadness;
-        sumData.surprise += faces[0].emotions.surprise;
-        sumData.emoji += faces[0].emojis.dominantEmoji;
+        this.state.avgData.anger += faces[0].emotions.anger;
+        this.state.avgData.contempt += faces[0].emotions.contempt;
+        this.state.avgData.fear += faces[0].emotions.fear;
+        this.state.avgData.joy += faces[0].emotions.joy;
+        this.state.avgData.sadness += faces[0].emotions.sadness;
+        this.state.avgData.surprise += faces[0].emotions.surprise;
+        this.state.avgData.emoji += faces[0].emojis.dominantEmoji;
 
         if ( onRecordingEmotion() ) {
-          rawData.push(instance);
+          this.state.rawData.push(instance);
         }
-        drawFeaturePoints(image, faces[0].featurePoints);
-        console.log('rawData======', rawData);
+        //drawFeaturePoints(image, faces[0].featurePoints);
+        console.log('rawData======', this.state.rawData);
       }
     });
-    this.state.detector.addEventListener('onImageResultsFailure', function (image, timestamp, errDetail) { console.log('onImageResultsFailure :', errDetail); });
+    this.state.detector.addEventListener('onImageResultsFailure', (image, timestamp, errDetail) => console.log('onImageResultsFailure :', errDetail));
 
     //start emotion recording
     if (this.state.detector && !this.state.detector.isRunning) {
@@ -188,17 +182,6 @@ class VideoEntry extends Component {
 
   onRecord() {
     console.log('=====start record clicked!!');
-    // rawData = [];
-    // sumData = {
-    //   timestamp: 0,
-    //   anger: 0,
-    //   contempt: 0,
-    //   fear: 0,
-    //   joy: 0,
-    //   sadness: 0,
-    //   surprise: 0,
-    //   emoji: '',
-    // };
 
     this.getUserMedia();
     this.setState({
@@ -207,6 +190,15 @@ class VideoEntry extends Component {
       emotionable: false,
       uploadError: false,
       recording: true,
+      rawData: [],
+      avgData: {
+        anger: 0,
+        contempt: 0,
+        fear: 0,
+        joy: 0,
+        sadness: 0,
+        surprise: 0,
+      }
     });
 
     this.captureUserMedia( stream => {
@@ -247,13 +239,29 @@ class VideoEntry extends Component {
     if (this.state.detector && this.state.detector.isRunning) {
       this.state.detector.reset();
     }
+    if (this.state.detector && !this.state.detector.isRunning) {
+      this.state.detector.start();
+    }
+    this.setState({
+      okayToRecord: false,
+      loadingRecordMsg: true,
+      rawData: [],
+      avgData: {
+        anger: 0,
+        contempt: 0,
+        fear: 0,
+        joy: 0,
+        sadness: 0,
+        surprise: 0,
+      }
+    });
   }
 
   getAverage() {
-    console.log('getAverage=====', sumData);
-    const length = rawData.length;
-    for (let key in sumData) {
-      key === 'emoji' ? null : sumData[key] = sumData[key] / length;
+    console.log('getAverage=====', this.state.avgData);
+    const length = this.state.rawData.length;
+    for (let key in this.state.avgData) {
+      key === 'emoji' ? null : this.state.avgData[key] = this.state.avgData[key] / length;
     }
   }
 
@@ -304,13 +312,10 @@ class VideoEntry extends Component {
             {this.state.uploadable ? <button onClick={this.uploadVideo}>Upload</button> : null }
           </div>
           <div className='flash-message'>
-            {this.state.uploadError ? <p>Error Uploading Video, Please Try Again</p> : null }
-            {this.state.okayToRecord ? null : <p>Loading and starting the emotions detector, this may take few minutes ...</p> }
+            <button onClick={this.onReset}>Reset</button>
           </div>
           <div id='affdex_elements'> </div>
           {this.state.uploading ? <Loader /> : null }
-          <button onClick={this.onReset}>Reset</button>
-          <button onClick={this.getAverage}>Average</button>
       </div>
     );
   }
