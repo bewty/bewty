@@ -102,7 +102,7 @@ app.post('/db/userentry', (req, res) => {
 app.post('/db/logentry', (req, res) => {
   let log = req.body.log || {
     user_id: '123456789',
-    entry_type: 'Goal',
+    entry_type: 'video',
     audio_url: 'test.com/test',
     video: {
       bucket: 'bewt',
@@ -166,8 +166,8 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
 
 app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
 
-  console.log('avgData====server====', req.body.avgData);
-  console.log('JSON.parse(avgData)====server====', JSON.parse(req.body.avgData));
+  // console.log('avgData====server====', req.body.avgData);
+  // console.log('JSON.parse(avgData)====server====', JSON.parse(req.body.avgData));
   let log = {
     user_id: '123456789', // NOTE: hardcode user id
     video: {
@@ -175,6 +175,7 @@ app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
       key: req.file.key,
       avgData: req.body.avgData,
       rawData: req.body.rawData,
+      entry_type: req.body.entryType,
     }
   };
   database.logEntry(log);
