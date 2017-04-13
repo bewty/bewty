@@ -238,6 +238,7 @@ class VideoEntry extends Component {
     fd.append('video', blob);
     fd.append('rawData', JSON.stringify(this.state.rawData));
     fd.append('avgData', JSON.stringify(this.state.avgData));
+    fd.append('text', this.state.transcript);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
@@ -265,7 +266,6 @@ class VideoEntry extends Component {
 
   onResult ({ finalTranscript }) {
     // const result = finalTranscript;
-    console.log(finalTranscript);
     this.setState({ start: false,
                     transcript: finalTranscript });
     // this.props.action('result')(finalTranscript);
