@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Entry extends Component {
+export default class EntrySnippet extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,5 +35,3 @@ class Entry extends Component {
     );
   }
 }
-
-export default Entry;

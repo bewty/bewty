@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Entry from './Entry';
+import EntrySnippet from './EntrySnippet';
 import axios from 'axios';
 
 export default class EntryList extends Component {
@@ -30,7 +30,7 @@ export default class EntryList extends Component {
       <div>
         <h1>EntryList</h1>
         {this.state.entries.map( (entry, index) => {
-          return <Entry key={index} entry={entry}/>;
+          return <EntrySnippet key={index} entry={entry}/>;
         })}
       </div>
     );
