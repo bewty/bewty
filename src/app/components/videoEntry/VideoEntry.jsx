@@ -237,7 +237,8 @@ class VideoEntry extends Component {
 
     let blob = this.state.blob;
     let fd = new FormData();
-    fd.append('video', blob);
+    fd.append('media', blob);
+    fd.append('entryType', 'video');
     fd.append('rawData', JSON.stringify(this.state.rawData));
     fd.append('avgData', JSON.stringify(this.state.avgData));
     fd.append('text', this.state.transcript);
@@ -246,7 +247,7 @@ class VideoEntry extends Component {
       headers: { 'content-type': 'multipart/form-data' }
     };
 
-    axios.post('/entry/video', fd, config)
+    axios.post('/entry', fd, config)
     .then( res => {
       this.setState({ uploading: false });
       console.log('video upload to server COMPLETE:', res);
@@ -259,7 +260,6 @@ class VideoEntry extends Component {
       console.log('video upload to server ERROR:', err);
     });
   }
-
 
   onEnd() {
     this.setState({ start: false, stop: false });
