@@ -161,14 +161,20 @@ app.post('/test', (req, res) => {
 });
 
 app.post('/entry/audio', upload.single('audio'), (req, res) => {
-  res.send('audio uploaded');
-  let log = {
-    user_id: '123456789', // NOTE: hardcode user id
-    audio: {
-      bucket: req.file.bucket, // should be same as video later
-      key: req.file.key
-    }
-  };
+  watson.promisifiedTone(req.body.text)
+  .then(tone => {
+    let log = {
+      user_id: '123456789', // NOTE: hardcode user id
+      audio: {
+        bucket: req.file.bucket, // should be same as video later
+        key: req.file.key
+      },
+      text: req.body.text,
+      watson_results: tone
+    };
+    res.send('audio uploaded', log);
+
+  });
 });
 
 app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
