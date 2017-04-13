@@ -162,6 +162,13 @@ app.post('/test', (req, res) => {
 
 app.post('/entry/audio', upload.single('audio'), (req, res) => {
   res.send('audio uploaded');
+  let log = {
+    user_id: '123456789', // NOTE: hardcode user id
+    audio: {
+      bucket: req.file.bucket, // should be same as video later
+      key: req.file.key
+    }
+  };
 });
 
 app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
