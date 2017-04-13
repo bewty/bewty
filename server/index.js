@@ -166,7 +166,7 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
     console.log('this is the type of the tone', typeof tone);
     let log = {
       user_id: '123456789', // NOTE: hardcode user id
-      entry_type: 'audio'
+      entry_type: 'audio',
       audio: {
         bucket: req.file.bucket, // should be same as video later
         key: req.file.key
