@@ -89,7 +89,7 @@ app.post('/db/userentry', (req, res) => {
 app.post('/db/logentry', (req, res) => {
   let log = req.body.log || {
     user_id: '123456789',
-    entry_type: 'Goal',
+    entry_type: 'video',
     audio_url: 'test.com/test',
     video: {
       bucket: 'bewt',
