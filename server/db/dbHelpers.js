@@ -88,8 +88,14 @@ exports.modifyCall = (callInfo) => {
   })
   .then((call) => {
     if (call) {
-      console.log('Found splice:', call.user.indexOf(user_id));
-      call.user.splice(call.user.indexOf(user_id), 1);
+      console.log('Length of call is:', call.user.length);
+      if (call.user.length === 1 && call.user.indexOf(user_id) === 0) {
+        console.log('Entered remove section:', call);
+        call.remove();
+      } else {
+        console.log('Found splice:', call.user.indexOf(user_id));
+        call.user.splice(call.user.indexOf(user_id), 1);
+      }
       call.save();
     }
     return;
