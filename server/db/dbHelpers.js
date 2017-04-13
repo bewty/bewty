@@ -48,53 +48,35 @@ exports.logEntry = (log) => {
     });
 };
 
-exports.logVideoEntry = (req, res, log) => {
+exports.saveEntry = (req, res, log) => {
   const userID = log.user_id;
   let logEntry = {
     entry_type: log.entry_type,
     created_at: Date.now(),
     video: {
-      bucket: log.video.bucket,
-      key: log.video.key,
-      avg_data: log.video.avgData,
-      raw_data: log.video.rawData,
+      bucket: log.video ? log.video.bucket : null,
+      key: log.video ? log.video.key : null,
+      avg_data: log.video ? log.video.avgData : null,
+      raw_data: log.video ? log.video.rawData : null,
+    },
+    audio: {
+      bucket: log.audio ? log.audio.bucket : null,
+      key: log.audio ? log.audio.key : null
     },
     text: log.text,
     watson_results: log.watson_results,
+    tags: log.tags
   };
 
   User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
 
   .then((result) => {
-    console.log('Video successfully uploaded!', result);
+    console.log('Entry successfully uploaded!', result);
     res.sendStatus(201);
   })
   .error(err => res.sendStatus(500).send(err))
   .catch(err => res.sendStatus(400).send(err));
 };
-
-exports.logAudioEntry = (req, res, log) => {
-  const userID = log.user_id;
-  let logEntry = {
-    created_at: Date.now(),
-    audio: {
-      bucket: log.audio.bucket,
-      key: log.audio.key
-    },
-    text: log.text,
-    watson_results: log.watson_results
-  };
-
-  User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
-
-  .then((result) => {
-    console.log('Audio successfully uploaded!', result);
-    res.sendStatus(201);
-  })
-  .error(err => res.sendStatus(500).send(err))
-  .catch(err => res.sendStatus(400).send(err));
-};
-
 
 exports.retrieveEntry = (query) => {
   let targetUser = query.user || 'Bob Test';

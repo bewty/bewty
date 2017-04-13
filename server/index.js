@@ -176,7 +176,7 @@ app.post('/entry/audio', upload.single('audio'), (req, res) => {
     };
     console.log('this is the log to be sent to the db====', log);
     // res.send('audio uploaded');
-    database.logAudioEntry(req, res, log);
+    database.saveEntry(req, res, log);
   });
 });
 
@@ -200,7 +200,7 @@ app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
       watson_results: tone
     };
     console.log('this is the log to be sent to the db====', log);
-    database.logVideoEntry(req, res, log);
+    database.saveEntry(req, res, log);
 
   });
 
