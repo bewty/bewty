@@ -73,25 +73,23 @@ exports.modifyCall = (callInfo) => {
   let newMessage = callInfo.message;
   let time = callInfo.time.replace(':', '');
   let oldTime = '';
+  let user_id;
   User.findOne({ user_id: targetUser })
   .then((user) => {
+    console.log('Found user:', user);
     oldTime = user.scheduled_time;
+    user_id = user._id;
     user.scheduled_time = time;
     user.scheduled_message = newMessage;
-    user.save()
-    .then(() => {
-      return oldTime;
-    })
-    .error((err) => {
-      console.log('Received error within modifyCall to DB');
-    });
+    user.save();
   })
   .then(() => {
     return Call.findOne({ time: oldTime });
   })
   .then((call) => {
     if (call) {
-      call.user.splice(call.user.indexOf(targetUser), 1);
+      console.log('Found splice:', call.user.indexOf(user_id));
+      call.user.splice(call.user.indexOf(user_id), 1);
       call.save();
     }
     return;
@@ -100,15 +98,24 @@ exports.modifyCall = (callInfo) => {
     return Call.findOne({ time: time });
   })
   .then((call) => {
+    console.log('Found target call:', call);
     if (!call) {
       let newCall = Call({
         time: time,
-        user: [targetUser]
+        user: [user_id]
       });
       newCall.save();
     } else {
-      call.user.push(targetUser);
-      call.save();
+      console.log('Call before push:', user_id, call.user);
+      call.user.push(user_id);
+      console.log('Call after push:', call.user);
+      call.save()
+      .then(() => {
+        console.log('Successfully saved user');
+      })
+      .error((err) => {
+        console.log('Received error:', err);
+      });
     }
   })
   .error((err) => {
@@ -134,13 +141,15 @@ exports.callEntry = (callInfo) => {
 
 exports.retrieveCall = (query) => {
   let time = query.time;
-  Call.find({time: time})
-  .populate('schedule', 'name', 'scheduled_message') 
-  .exec((err, user) => {
-    if (err) {
-      return handleError(err);
-    } else {
-      console.log('Saved users are:', call.schedule.name, 'scheduled message:', call.schedule.scheduled_message);
-    }  
+  return new Promise((resolve, reject) => {
+    Call.findOne({time: time})
+    .populate('user') 
+    .exec((err, user) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(user);
+      }  
+    });
   });
 };

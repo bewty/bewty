@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 
 const callSchema = new mongoose.Schema({
   time: {type: String},
-  user: [{type: String, ref: 'User'}]
+  user: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
 const Call = mongoose.model('Call', callSchema);
