@@ -4,18 +4,6 @@ import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
 import $ from 'jquery';
 
-// var rawData = [];
-// var avgData = {
-//   timestamp: 0,
-//   anger: 0,
-//   contempt: 0,
-//   fear: 0,
-//   joy: 0,
-//   sadness: 0,
-//   surprise: 0,
-//   emoji: '',
-// };
-
 class VideoEntry extends Component {
   constructor(props) {
     super(props);
@@ -53,8 +41,6 @@ class VideoEntry extends Component {
     this.uploadVideo = this.uploadVideo.bind(this);
     this.onReset = this.onReset.bind(this);
     this.getAverage = this.getAverage.bind(this);
-    // this.affdexStart = this.affdexStart.bind(this);
-    // this.affdexStop = this.affdexStop.bind(this);
   }
 
   componentDidMount() {
@@ -90,10 +76,6 @@ class VideoEntry extends Component {
     //     contxt.stroke();
     //   }
     // };
-
-    const onRecordingEmotion = () => {
-      return this.state.recording;
-    };
 
     //onInitialize
     this.state.detector.addEventListener('onInitializeSuccess', () => {
@@ -140,13 +122,14 @@ class VideoEntry extends Component {
         this.state.avgData.surprise += faces[0].emotions.surprise;
         this.state.avgData.emoji += faces[0].emojis.dominantEmoji;
 
-        if ( onRecordingEmotion() ) {
+        if ( this.state.recording ) {
           this.state.rawData.push(instance);
         }
         //drawFeaturePoints(image, faces[0].featurePoints);
-        console.log('rawData======', this.state.rawData);
+        // console.log('rawData======', this.state.rawData);
       }
     });
+
     this.state.detector.addEventListener('onImageResultsFailure', (image, timestamp, errDetail) => console.log('onImageResultsFailure :', errDetail));
 
     //start emotion recording

@@ -77,7 +77,6 @@ app.post('/call', (req, res) => {
   res.status(200).send('Successfuly called');
 });
 
-
 app.post('/db/retrieveEntry', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
   let query = {};
