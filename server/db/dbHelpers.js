@@ -139,6 +139,20 @@ exports.callEntry = (callInfo) => {
   });
 };
 
+// exports.retrieveCall = (query) => {
+//   let time = query.time;
+//   return new Promise((resolve, reject) => {
+//     Call.findOne({time: time})
+//     .populate('user') 
+//     .exec((err, user) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(user);
+//       }  
+//     });
+//   });
+// };
 exports.retrieveCall = (query) => {
   let time = query.time;
   return new Promise((resolve, reject) => {
@@ -153,3 +167,28 @@ exports.retrieveCall = (query) => {
     });
   });
 };
+
+exports.findNextCall = (time) => {
+  time = '' + time;
+  return new Promise((resolve, reject) => {
+    Call.find(null, null, {sort: {time: 1}})
+    .populate('user') 
+    .exec((err, calls) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(calls);
+      }  
+    });
+  })
+  .then((calls) => {
+    let nextCall;
+    for (var i = 0; i < calls.length; i++) {
+      if (calls[i].time === time) {
+        i === calls.length - 1 ? nextCall = calls[0].time : nextCall = calls[i + 1].time;
+      }
+    }
+    return nextCall;
+  });
+};
+

@@ -32,20 +32,32 @@ const database = require('../db/dbHelpers');
 
 
 // let callInfo = {
-//   user_id: '02',
+//   user_id: '04',
 //   message: 'What good can I do today?',
-//   time: '20:00'
+//   time: '23:59'
 // };
 // console.log('Sending...:', callInfo);
 // database.modifyCall(callInfo);
 
 let retrieveCalls = (time) => {
+  let wakeTime;
+  let callList;
   return new Promise((resolve, reject) => {
     database.retrieveCall({time: time})
     .then((call) => {
-      resolve(call.user.map((user) => {
+      return call.user.map((user) => {
         return [user.phonenumber, user.scheduled_message];
-      }));
+      });
+    })
+    .then((callLog) => {
+      callList = callLog;
+      return database.findNextCall(time);
+    })
+    .then((nextTime) => {
+      wakeTime = nextTime;
+    })
+    .then(() => {
+      resolve({callList, wakeTime});
     })
     .catch((err) => {
       reject(err);
@@ -53,8 +65,6 @@ let retrieveCalls = (time) => {
   });
 };
 
-// retrieveCalls(1400)
-// .then((results) => {
-//   console.log('Received calls:', results);
-// });
+
+
 
