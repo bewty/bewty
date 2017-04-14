@@ -18,7 +18,7 @@ exports.scheduleCall = (info) => {
     });
   }
 
-  let scheduleTwilio = schedule.scheduleJob(`${minute} ${hour} * * *`, () => {
+  let scheduleTwilio = schedule.scheduleJob(`0 ${minute} ${hour} * * *`, () => {
     console.log('Setting new schedule at:', hour, ':', minute);
     cronos.retrieveCalls(time)
     .then((callInfo) => {

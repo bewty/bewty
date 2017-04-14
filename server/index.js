@@ -24,7 +24,7 @@ app.use(require('morgan')('combined'));
 app.use(cors());
 
 app.post('/cron/start', (req, res) => {
-  let startTime = req.body.time || 2101;
+  let startTime = req.body.time || 1522;
 
   cron.scheduleCall({wakeTime: startTime});
   res.send('Sent to scheduleCall');

@@ -54,6 +54,9 @@ exports.retrieveCalls = (time) => {
       return database.findNextCall(time);
     })
     .then((nextTime) => {
+      if ('' + nextTime === '' + time) {
+        nextTime = nextTime - 1;
+      }
       wakeTime = nextTime;
     })
     .then(() => {

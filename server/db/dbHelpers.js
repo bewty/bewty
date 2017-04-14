@@ -76,7 +76,7 @@ exports.modifyCall = (callInfo) => {
   let user_id;
   User.findOne({ user_id: targetUser })
   .then((user) => {
-    console.log('Found user:', user);
+    console.log('Found user:', user.name);
     oldTime = user.scheduled_time;
     user_id = user._id;
     user.scheduled_time = time;

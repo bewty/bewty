@@ -14,10 +14,10 @@ exports.dialNumbers = (number, message) => {
     to: number,
     from: '+19498294984',
     // record: true,
-    transcribe: true,
+    transcribe: true
     // recordingStatusCallbackMethod: 'POST'
-    transcribeCallback: 'http://fcff0acc.ngrok.io/transcribe'
-  }, function(err, call) {
+    // transcribeCallback: 'http://446cad30.ngrok.io/transcribe'
+  }, (err, call) => {
     if (err) {
       console.log('Error occurred in twilioAPI clientCall:', err);
     } else {
