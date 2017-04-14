@@ -242,7 +242,6 @@ class VideoEntry extends Component {
     fd.append('rawData', JSON.stringify(this.state.rawData));
     fd.append('avgData', JSON.stringify(this.state.avgData));
     fd.append('text', this.state.transcript);
-    fd.append('entry_type', JSON.stringify('video'));
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }

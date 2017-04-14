@@ -1,18 +1,12 @@
 import React, {Component} from 'react';
-import EntrySnippet from './EntrySnippet';
+import EntrySnippet from '../entry-snippet/EntrySnippet';
 import axios from 'axios';
 
 export default class EntryList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      entries: [{
-        created_at: '',
-        tags: [],
-        video: {
-        },
-        text: '',
-      }]
+      entries: []
     };
     axios.post('/db/retrieveEntry')
     .then( result => {
@@ -22,13 +16,9 @@ export default class EntryList extends Component {
     });
   }
 
-  componentWillMount() {
-  }
-
   render() {
     return (
       <div>
-        <h1>EntryList</h1>
         {this.state.entries.map( (entry, index) => {
           return <EntrySnippet key={index} entry={entry}/>;
         })}

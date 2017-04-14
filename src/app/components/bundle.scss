@@ -1,6 +1,8 @@
 @import '../styles/variables';
 @import '../styles/global';
 @import './header/header';
+@import './entry/entry-snippet/entrysnippet';
+@import './entry/entry-list/entrylist';
 @import './videoEntry/videoEntry';
 @import './loader/loader';
 @import './home/home';

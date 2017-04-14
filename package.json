@@ -80,6 +80,7 @@
     "rimraf": "^2.6.1",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
+    "svg-url-loader": "^2.0.2",
     "twilio": "^2.11.1",
     "twilio-api": "^0.3.3",
     "url-loader": "^0.5.7",
