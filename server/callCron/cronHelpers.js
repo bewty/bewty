@@ -39,7 +39,7 @@ const database = require('../db/dbHelpers');
 // console.log('Sending...:', callInfo);
 // database.modifyCall(callInfo);
 
-let retrieveCalls = (time) => {
+exports.retrieveCalls = (time) => {
   let wakeTime;
   let callList;
   return new Promise((resolve, reject) => {

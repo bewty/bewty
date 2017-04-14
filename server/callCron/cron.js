@@ -1,4 +1,6 @@
-const cron = require('node-cron');
+const express = require('express');
+const app = express();
+
 const schedule = require('node-schedule');
 const cronos = require('./cronHelpers.js');
 const twilio = require('../twilioAPI/twilioAPI.js');
@@ -15,24 +17,32 @@ const twilio = require('../twilioAPI/twilioAPI.js');
 // │    └──────────────────── minute (0 - 59)
 // └───────────────────────── second (0 - 59, OPTIONAL)
 
-exports.scheduleCall = (message) => {
-  var now = new Date();
-  var millisTill10 = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 10, 0, 0, 0) - now;
-  if (millisTill10 < 0) {
-    millisTill10 += 86400000; // it's after 10am, try 10am tomorrow.
-  }
-  setInterval(() => { alert('Its 10am!'); }, millisTill10);
-};
-
 //{ callList: [ [ '+13232290550', 'What good can I do today?' ] ], wakeTime: '2359' }
 
 exports.scheduleCall = (info) => {
+  let time = info.wakeTime;
+  let hour = info.wakeTime.slice(0, 2);
+  let minute = info.wakeTime.slice(2, 4);
+  let callList = info.callList;
+  console.log('Received call to scheduleCall:', info);
+  if (callList) {
+    console.log('Got into callList with:', callList);
+    callList.forEach((user) => {
+      twilio.dialNumbers(user[0], 'Person');
+    });
+  }
   // '23 18 * * *'
   // let date = new Date(2012, 11, 21, 5, 30, 0);
   // cronos.retrieveCalls()
-  let j = schedule.scheduleJob('24 * * * *', function() {
-    console.log('Testing cron.');
+  //    twilio.dialNumbers('+17143389937', 'Eugene');
+
+  let scheduleTwilio = schedule.scheduleJob(`${minute} ${hour} * * *`, () => {
+    console.log('Setting new schedule at:', hour, ':', minute);
+    cronos.retrieveCalls(time)
+    .then((callInfo) => {
+      console.log('Received callInfo from retrieveCalls:', callInfo);
+      exports.scheduleCall(callInfo);
+    });
   });
 };
 
-scheduleCall();

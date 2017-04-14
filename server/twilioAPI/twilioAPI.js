@@ -2,10 +2,6 @@ const express = require('express');
 const app = express();
 
 const twilio = require('twilio');
-const twilioAPI = require('twilio-api');
-const cli = new twilioAPI.Client(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
-app.use(cli.middleware() );
 
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -29,4 +25,5 @@ exports.dialNumbers = (number, name) => {
     }
   });
 };
+
 

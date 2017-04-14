@@ -15,13 +15,19 @@ const cors = require('cors');
 const AWS = require('aws-sdk');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
-
+const cron = require('./callCron/cron.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
+
+app.post('/cron/start', (req, res) => {
+  let startTime = req.body.time;
+  cron.scheduleCall({wakeTime: startTime});
+  res.send('Sent to scheduleCall');
+});
 
 const upload = multer({
   dest: path.resolve(__dirname, 'api', 'speech', 'audio'),
@@ -97,7 +103,7 @@ app.post('/transcribe', (req, res) => {
   let text = req.body.TranscriptionText || 'Test123123';
   // let callSid = req.body.CallSid;
   let textID = req.body.textID || 'transcribeTest';
-  let user_id = req.body.user_id || '123456789';
+  let user_id = req.body.user_id || '01';
   let divider = '\n------------------------------------\n';
   watson.promisifiedTone(text)
   .then((tone) => {

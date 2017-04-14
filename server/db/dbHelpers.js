@@ -139,20 +139,6 @@ exports.callEntry = (callInfo) => {
   });
 };
 
-// exports.retrieveCall = (query) => {
-//   let time = query.time;
-//   return new Promise((resolve, reject) => {
-//     Call.findOne({time: time})
-//     .populate('user') 
-//     .exec((err, user) => {
-//       if (err) {
-//         reject(err);
-//       } else {
-//         resolve(user);
-//       }  
-//     });
-//   });
-// };
 exports.retrieveCall = (query) => {
   let time = query.time;
   return new Promise((resolve, reject) => {
