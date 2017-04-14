@@ -24,7 +24,8 @@ app.use(require('morgan')('combined'));
 app.use(cors());
 
 app.post('/cron/start', (req, res) => {
-  let startTime = req.body.time;
+  let startTime = req.body.time || 2101;
+
   cron.scheduleCall({wakeTime: startTime});
   res.send('Sent to scheduleCall');
 });
@@ -100,6 +101,7 @@ app.post('/db/logentry', (req, res) => {
 });
 
 app.post('/transcribe', (req, res) => {
+  console.log('Within /transcribe with:', req.body.TranscriptionText);
   let text = req.body.TranscriptionText || 'Test123123';
   // let callSid = req.body.CallSid;
   let textID = req.body.textID || 'transcribeTest';
@@ -107,6 +109,7 @@ app.post('/transcribe', (req, res) => {
   let divider = '\n------------------------------------\n';
   watson.promisifiedTone(text)
   .then((tone) => {
+    console.log('Received tone entry:', tone);
     let log = {
       user_id: user_id,
       text: text,

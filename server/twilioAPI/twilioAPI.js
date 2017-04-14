@@ -8,15 +8,15 @@ const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWI
 const phoneNumbers = process.env.PHONENUMBERS;
 
 
-exports.dialNumbers = (number, name) => {
+exports.dialNumbers = (number, message) => {
   client.calls.create({
-    url: `https://handler.twilio.com/twiml/EHbfb96ad7bafedf5e02460070a5bae8e7?Name=${name}`,
+    url: `https://handler.twilio.com/twiml/EHbfb96ad7bafedf5e02460070a5bae8e7?message=${message}`,
     to: number,
     from: '+19498294984',
     // record: true,
     transcribe: true,
     // recordingStatusCallbackMethod: 'POST'
-    transcribeCallback: 'http://08dcb0a2.ngrok.io/transcribe'
+    transcribeCallback: 'http://fcff0acc.ngrok.io/transcribe'
   }, function(err, call) {
     if (err) {
       console.log('Error occurred in twilioAPI clientCall:', err);
