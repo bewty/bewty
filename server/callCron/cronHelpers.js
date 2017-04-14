@@ -65,6 +65,3 @@ let retrieveCalls = (time) => {
   });
 };
 
-
-
-

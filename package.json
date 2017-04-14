@@ -68,6 +68,7 @@
     "node-cron": "^1.1.3",
     "node-record-lpcm16": "^0.3.0",
     "node-sass": "^3.7.0",
+    "node-schedule": "^1.2.1",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
     "react-redux": "^5.0.2",
