@@ -71,7 +71,7 @@ exports.saveEntry = (req, res, log) => {
   User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
 
   .then((result) => {
-    console.log('Entry successfully uploaded!', result);
+    console.log('Entry successfully uploaded!');
     res.sendStatus(201);
   })
   .error(err => res.sendStatus(500).send(err))

@@ -25,27 +25,14 @@ app.use(require('morgan')('combined'));
 app.use(cors());
 
 const upload = multer({
-  dest: path.resolve(__dirname, 'api', 'speech', 'audio'),
   storage: multerS3({
     s3: s3,
-    bucket: 'bewty',
+    bucket: process.env.AWS_S3_BUCKET,
     metadata: (req, file, cb) => {
       cb(null, {fieldName: file.fieldname});
     },
     key: (req, file, cb) => cb(null, Date.now().toString())
   })
-});
-
-const uploadVideo = multer({
-  dest: path.resolve(__dirname, '..', 'dist', 'upload'),
-  storage: multerS3({
-    s3: s3,
-    bucket: 'smartdiarybewt',
-    metadata: (req, file, cb) => {
-      cb(null, {fieldName: file.fieldname});
-    },
-    key: (req, file, cb) => cb(null, `${Date.now().toString()}.webm`)
-  }),
 });
 
 const getAWSSignedUrl = (req) => {
@@ -160,34 +147,21 @@ app.post('/test', (req, res) => {
   });
 });
 
-app.post('/entry/audio', upload.single('audio'), (req, res) => {
+app.post('/entry', upload.single('media'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
     let log = {
       user_id: '123456789', // NOTE: hardcode user id
-      entry_type: 'audio',
-      audio: {
-        bucket: req.file.bucket, // should be same as video later
-        key: req.file.key
-      },
-      text: req.body.text,
-      watson_results: tone
-    };
-    database.saveEntry(req, res, log);
-  });
-});
-
-app.post('/entry/video', uploadVideo.single('video'), (req, res) => {
-  watson.promisifiedTone(req.body.text)
-  .then(tone => {
-    let log = {
-      user_id: '123456789', // NOTE: hardcode user id
-      entry_type: 'video',
+      entry_type: req.body.entryType,
       video: {
-        bucket: req.file.bucket,
-        key: req.file.key,
-        avgData: req.body.avgData,
-        rawData: req.body.rawData,
+        bucket: req.file ? req.file.bucket : null,
+        key: req.file ? req.file.key : null,
+        avgData: req.body.avgData ? req.body.avgData : null,
+        rawData: req.body.rawData ? req.body.rawData : null,
+      },
+      audio: {
+        bucket: req.file ? req.file.bucket : null, // should be same as video later
+        key: req.file ? req.file.key : null,
       },
       text: req.body.text,
       watson_results: tone
