@@ -2,7 +2,7 @@ const path = require('path');
 module.exports = function(config) {
   config.set({
     basePath: '',
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
     frameworks: ['mocha'],
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
