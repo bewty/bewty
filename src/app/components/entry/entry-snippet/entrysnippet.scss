@@ -2,8 +2,9 @@
   padding: 1em 2em;
   margin-bottom: 12px;
   background-color: #fff;
-  box-shadow: 0px 2px 8px rgba(187, 187, 187, 0.44);
+  box-shadow: $shadow;
 }
+
 .entry-meta {
   display: flex;
   flex-flow: row nowrap;
@@ -14,6 +15,7 @@
   font-size: 0.9em;
   font-weight: bold;
 }
+
 .entry-icon {
   content: '';
   display: inline-block;
@@ -21,6 +23,7 @@
   height: 26px;
   margin-left: 20px;
 }
+
 .video-entry::before {
   @extend .entry-icon;
   background: url('../styles/assets/video.svg');

@@ -16,7 +16,9 @@ import CallSchedule from './components/callSchedule/CallSchedule';
 
 import reducers from './reducers';
 
+import './styles/variables.scss';
 import './components/bundle.scss';
+import './styles/global.scss';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 const store = createStoreWithMiddleware(reducers);
