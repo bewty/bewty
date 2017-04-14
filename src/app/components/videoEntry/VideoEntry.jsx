@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
-import VoiceRecognition from '../VoiceRecognition/VoiceRecognition';
+import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
 
 class VideoEntry extends Component {
   constructor(props) {
