@@ -1,0 +1,40 @@
+.entry-container {
+  padding: 1em 2em;
+  margin-bottom: 12px;
+  background-color: #fff;
+  box-shadow: $shadow;
+}
+
+.entry-meta {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.date {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.entry-icon {
+  content: '';
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  margin-left: 20px;
+}
+
+.video-entry::before {
+  @extend .entry-icon;
+  background: url('../styles/assets/video.svg');
+}
+
+.audio-entry {
+  @extend .entry-icon;
+  background: url('../styles/assets/audio.svg');
+}
+
+.text-entry {
+  @extend .entry-icon;
+  background: url('../styles/assets/text.svg');
+}

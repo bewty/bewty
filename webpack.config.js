@@ -35,14 +35,18 @@ var webpackConfig = {
       include: Path.join(__dirname, './src/app'),
       loader: 'babel',
     },
-    {
-      test: /aws-sdk.js/,
-      loader: 'exports?AWS'
-    },
-    {
-      test: /\.json$/,
-      use: 'json-loader'
-    }],
+      {
+        test: /aws-sdk.js/,
+        loader: 'exports?AWS'
+      },
+      {
+        test: /\.svg/,
+        loader: 'svg-url-loader',
+      },
+      {
+        test: /\.json$/,
+        use: 'json-loader'
+      }],
     noParse: [
       /aws-sdk.js/
     ],
