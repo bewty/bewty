@@ -11,6 +11,7 @@ import TextEntry from './components/textEntry/TextEntry';
 import AudioEntry from './components/audioEntry/AudioEntry';
 import VideoEntry from './components/videoEntry/VideoEntry';
 import EntryList from './components/entry/entry-list/EntryList';
+import EntryView from './components/entry/entry-view/EntryView';
 import Results from './components/results/Results';
 import CallSchedule from './components/callSchedule/CallSchedule';
 
@@ -33,6 +34,7 @@ ReactDOM.render(
         <Route path="/audio-entry" component={AudioEntry} />
         <Route path="/video-entry" component={VideoEntry} />
         <Route path="/entries" component={EntryList} />
+        <Route path="/entry/:id" component={EntryView} />
         <Route path="/results" component={Results} />
         <Route path="/call-schedule" component={CallSchedule} />
       </div>
