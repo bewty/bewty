@@ -9,7 +9,7 @@
     "start": "NODE_ENV=production node ./server/index.js",
     "heroku-postbuild": "rimraf dist && NODE_ENV=production webpack --colors",
     "lint": "eslint webpack",
-    "test": "./node_modules/karma/bin/karma start --single-run --browsers PhantomJS"
+    "test": "./node_modules/karma/bin/karma start --single-run --browsers Chrome"
   },
   "keywords": [
     "ExpressJS",
