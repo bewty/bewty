@@ -27,7 +27,7 @@ app.use(cors());
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'bewty',
+    bucket: process.env.AWS_S3_BUCKET,
     metadata: (req, file, cb) => {
       cb(null, {fieldName: file.fieldname});
     },
