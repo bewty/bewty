@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import VoiceRecognition from '../VoiceRecognition/VoiceRecognition';
+import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 
