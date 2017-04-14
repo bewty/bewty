@@ -2,7 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as V from 'victory';
-import { VictoryScatter,VictoryPie, VictoryZoomContainer, VictoryLabel, VictoryTheme, VictoryChart } from 'victory';
+import { VictoryScatter,VictoryPie, VictoryZoomContainer, VictoryBar, VictoryLabel, VictoryTheme, VictoryChart } from 'victory';
 import exampleData from '../../../../static/exampleData.js'
 import exampleToneData from '../../../../static/exampleToneData.js'
 
@@ -49,14 +49,16 @@ class CustomPie extends React.Component {
 
 
 export default class Chart extends React.Component {
-
   constructor(props) {
     super(props);
+    this.state = {
+      data: this.getScatterData(),
+      children: window.exampleData.personality.children,
+      barData: this.getBarData()
+    }
   }
-
-  state = {
-    data: this.getScatterData(),
-    children: window.exampleData.personality.children
+  componentWillMount() {
+    this.getBarData();
   }
 
   getScatterData() {
@@ -81,17 +83,42 @@ export default class Chart extends React.Component {
   })
   }
 
+  getBarData() {
+   var data = [];
+   var index = 1
+   window.exampleToneData.document_tone.tone_categories.map((obj) => {obj.tones.map((tone)=> {
+     console.log('THIS IS THE TONES MAN WHAT THE FUCK', tone)
+      data.push({
+          y: tone.score *100,
+          x: index++,
+          name: tone.tone_name
+         })
+     console.log('count', index)
+       })
+    });
+   console.log('data', data)
+   return data;
+  }
+
   render() {
     const pieData =  this.getPieData();
+    console.log( 'THIS IS THE STATE YO ', this.state)
     return (
+      <div
+        ref="container"
+        style={{
+          width: '800px',
+          height: '800px',
+        }}
+      >
       <VictoryChart
-      domainPadding={120}
+        domainPadding={120}
         width = {1000}
         height ={1000}
         theme={VictoryTheme.material}
         // domain={{y: [0, 5]}}
         domain={{x: [0, 100]}}
-        containerComponent={<VictoryZoomContainer zoomDomain={{x: [0,1000], y: [0, 10]}} responsive={false} />}
+        containerComponent={<VictoryZoomContainer zoomDomain={{x: [0,100], y: [0, 10]}} responsive={false} />}
       >
         <VictoryScatter
           data={this.state.data}
@@ -104,9 +131,49 @@ export default class Chart extends React.Component {
           style={{
             data: {fill: (d) => d.x > 80 ? "tomato" : "grey", stroke: "black", strokeWidth:5},
                   labels: {fontSize:17},
-                }}
+          }}
         />
       </VictoryChart>
+      <VictoryChart
+        domainPadding={20}
+        style={{
+          labels: {fontSize:9},
+        }}
+      >
+        <VictoryBar
+        name ='bar'
+        data={this.state.barData}
+        eventKey={(datum) => datum.name}
+        events={[
+          {
+            childName: ['bar'],
+            target: "data",
+            eventHandlers: {
+              onMouseOver: () => {
+                return [{
+                  target: "labels",
+                  mutation: (props) => {
+                console.log('this', props)
+                    return props.text === props.datum.name ?
+                      null : { text: props.datum.name }
+                  }
+                }];
+              },
+               onMouseOut: () => {
+                 return [{
+                  target: "labels",
+                  mutation: (props) => {
+                    return props.text === props.datum.name ?
+                      null : { text: props.datum.name }
+                   }
+                 }]
+               }
+            }
+          }
+        ]}
+        />
+      </VictoryChart>
+      </div>
     );
   }
 }
