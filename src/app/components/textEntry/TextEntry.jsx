@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 export default class TextEntry extends React.Component {
   constructor(props) {
@@ -9,24 +10,24 @@ export default class TextEntry extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-  
+
   handleChange(event) {
     this.setState({value: event.target.value});
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    let currentScope = this;
-    fetch('http://localhost:3000/transcribe', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        TranscriptionText: currentScope.state.value,
-        textID: 'test123'
-      })
+    const data = {
+      text: this.state.value,
+      entryType: 'text'
+    };
+
+    axios.post('/entry', data)
+    .then( res => console.log('text upload to server done', res))
+    .catch(err => console.log('text upload error...', err));
+
+    this.setState({
+      value: ''
     });
   }
 

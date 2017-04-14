@@ -20,8 +20,16 @@ const userSchema = new mongoose.Schema({
   entries: [{
     entry_type: String,
     created_at: {type: Date, default: Date.now},
-    video_url: String,
-    audio_url: String,
+    video: {
+      bucket: String,
+      key: String,
+      avg_data: Object,
+      raw_data: Array,
+    },
+    audio: {
+      bucket: String,
+      key: String
+    },
     text: String,
     watson_results: String,
     tags: Array

@@ -1,8 +1,8 @@
 header {
   width: 100%;
   padding: 0;
+  background: #fff;
   border-bottom: 1px solid $light-gray;
-  margin-bottom: 40px;
 
   nav {
 
@@ -18,7 +18,7 @@ header {
           text-decoration: none;
 
           &:hover {
-            color: $light-blue;
+            color: $primary;
             text-decoration: underline;
           }
         }
@@ -26,3 +26,4 @@ header {
     }
   }
 }
+

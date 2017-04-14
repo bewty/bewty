@@ -15,6 +15,9 @@ var port = isProduction ? process.env.PORT || 8080 : process.env.PORT || 3000;
 var webpackConfig = {
   resolve: {
     extensions: ['', '.js', '.jsx'],
+    alias: {
+      'aws-sdk': 'aws-sdk/dist/aws-sdk'
+    }
   },
   plugins: [
     new Webpack.DefinePlugin({
@@ -31,7 +34,22 @@ var webpackConfig = {
       test: /.jsx?$/,
       include: Path.join(__dirname, './src/app'),
       loader: 'babel',
-    }],
+    },
+      {
+        test: /aws-sdk.js/,
+        loader: 'exports?AWS'
+      },
+      {
+        test: /\.svg/,
+        loader: 'svg-url-loader',
+      },
+      {
+        test: /\.json$/,
+        use: 'json-loader'
+      }],
+    noParse: [
+      /aws-sdk.js/
+    ],
   },
 };
 

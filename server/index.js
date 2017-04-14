@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
+const multer = require('multer');
 const db = require('./db/index');
 const speech = require('./api/speech/speech');
 const app = express();
@@ -10,9 +11,10 @@ const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const twilio = require('./twilioAPI/twilioAPI.js');
-const multer = require('multer');
 const cors = require('cors');
 const AWS = require('aws-sdk');
+const axios = require('axios');
+const querystring = require('querystring');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
 const cron = require('./callCron/cron.js');
@@ -31,16 +33,23 @@ app.post('/cron/start', (req, res) => {
 });
 
 const upload = multer({
-  dest: path.resolve(__dirname, 'api', 'speech', 'audio'),
   storage: multerS3({
     s3: s3,
-    bucket: 'bewty',
+    bucket: process.env.AWS_S3_BUCKET,
     metadata: (req, file, cb) => {
       cb(null, {fieldName: file.fieldname});
     },
     key: (req, file, cb) => cb(null, Date.now().toString())
   })
 });
+
+const getAWSSignedUrl = (req) => {
+  const params = {
+    Bucket: 'smartdiarybewt',
+    Key: req.file.key
+  };
+  return s3.getSignedUrl('getObject', params);
+};
 
 AWS.config.update({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY,
@@ -62,7 +71,6 @@ app.post('/call', (req, res) => {
   twilio.dialNumbers(number, name);
   res.status(200).send('Successfuly called');
 });
-
 
 app.post('/db/retrieveEntry', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
@@ -89,12 +97,18 @@ app.post('/db/userentry', (req, res) => {
 app.post('/db/logentry', (req, res) => {
   let log = req.body.log || {
     user_id: '123456789',
-    entry_type: 'Goal',
+    entry_type: 'video',
     audio_url: 'test.com/test',
+    video: {
+      bucket: 'bewt',
+      key: '123902934',
+      rawData: [{joy: 0.34}],
+      avgData: {joy: 0.34, anger: 1.34},
+    },
     text: 'Testing for occurrence of missing data',
     watson_results: {Openness: {ReallyOpen: .67}},
     tags: ['Family', 'Work']
-  };  
+  };
 
   database.logEntry(log);
   res.status(200).send(`${log.user_id} entry updated successfuly`);
@@ -149,8 +163,27 @@ app.post('/test', (req, res) => {
   });
 });
 
-app.post('/entry/audio', upload.single('audio'), (req, res) => {
-  res.send('audio uploaded');
+app.post('/entry', upload.single('media'), (req, res) => {
+  watson.promisifiedTone(req.body.text)
+  .then(tone => {
+    let log = {
+      user_id: '123456789', // NOTE: hardcode user id
+      entry_type: req.body.entryType,
+      video: {
+        bucket: req.file ? req.file.bucket : null,
+        key: req.file ? req.file.key : null,
+        avgData: req.body.avgData ? req.body.avgData : null,
+        rawData: req.body.rawData ? req.body.rawData : null,
+      },
+      audio: {
+        bucket: req.file ? req.file.bucket : null, // should be same as video later
+        key: req.file ? req.file.key : null,
+      },
+      text: req.body.text,
+      watson_results: tone
+    };
+    database.saveEntry(req, res, log);
+  });
 });
 
 app.get('*', (req, res) => {
