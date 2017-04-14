@@ -6,31 +6,30 @@ module.exports = function(config) {
     frameworks: ['mocha'],
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
-      'test/**/*.js'
+      'test/**/*.jsx'
     ],
     preprocessors: {
-      'src/public/AppEntry.js': ['webpack', 'sourcemap'],
-      'test/**/*.js': ['webpack', 'sourcemap']
+      'src/app/index.js': ['webpack', 'sourcemap'],
+      'test/**/*.jsx': ['webpack', 'sourcemap']
     },
     webpack: {
       devtool: 'inline-source-map',
       module: {
-        loaders: [{
-          test: /.jsx?$/,
-          include: Path.join(__dirname, './src/app'),
-          loader: 'babel',
-        },
-        {
-          test: /aws-sdk.js/,
-          loader: 'exports?AWS'
-        },
-        {
-          test: /\.json$/,
-          use: 'json-loader'
-        }],
-        noParse: [
-          /aws-sdk.js/
-        ],
+        loaders: [
+          {
+            test: /.jsx?$/,
+            loader: 'babel-loader',
+            exclude: path.resolve(__dirname, 'node_modules'),
+            query: {
+              plugins: ['transform-decorators-legacy', 'transform-regenerator'],
+              presets: ['react', 'es2015', 'stage-1']
+            }
+          },
+          {
+            test: /\.json$/,
+            loader: 'json-loader',
+          },
+        ]
       },
       externals: {
         'react/addons': true,
@@ -46,7 +45,7 @@ module.exports = function(config) {
       suppressErrorHighlighting: true,
     },
 
-    port: 1337,
+    port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
