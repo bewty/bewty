@@ -17,7 +17,7 @@ exports.scheduleCall = (info) => {
       twilio.dialNumbers(user[0], user[1].replace(/ /g, '%20'));
     });
   }
-
+  console.log('Received new call schedule');
   let scheduleTwilio = schedule.scheduleJob(`0 ${minute} ${hour} * * *`, () => {
     console.log('Setting new schedule at:', hour, ':', minute);
     cronos.retrieveCalls(time)

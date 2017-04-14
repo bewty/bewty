@@ -11,9 +11,6 @@ db.once('open', function() {
 });
 
 const userSchema = new mongoose.Schema({
-  name: String,
-  user_id: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
   phonenumber: { type: String, required: true},
   scheduled_time: { type: String, default: '' },
   scheduled_message: String,
