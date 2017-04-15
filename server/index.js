@@ -37,8 +37,8 @@ const upload = multer({
 
 const getAWSSignedUrl = (req) => {
   const params = {
-    Bucket: 'smartdiarybewt',
-    Key: req.file.key
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: filekey
   };
   return s3.getSignedUrl('getObject', params);
 };
