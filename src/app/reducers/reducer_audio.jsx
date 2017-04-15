@@ -1,4 +1,4 @@
-const audioentries = (state = null, action) => {
+export default (state = null, action) => {
   switch (action.type) {
   case 'SET_SOURCE_URL':
     return action.url;
@@ -6,5 +6,3 @@ const audioentries = (state = null, action) => {
     return state;
   }
 };
-
-export default audioentries;
