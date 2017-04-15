@@ -12,7 +12,7 @@ db.once('open', function() {
 
 const userSchema = new mongoose.Schema({
   user_id: String,
-  phonenumber: { type: String, required: true},
+  phonenumber: { type: String, required: true, unique: true},
   scheduled_time: { type: String, default: '' },
   scheduled_message: String,
   entries: [{
