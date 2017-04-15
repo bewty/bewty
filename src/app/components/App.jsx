@@ -62,14 +62,14 @@ export default class App extends React.Component {
   render() {
     if (this.state.idToken && this.loggedIn()) {
       return (
-          <div>
-            <h2 className="profileName"> Welcome! </h2>
-            <button onClick={this.logOut}> Logout </button>
-          </div>
+        <div className="container">
+          <h2 className="profileName">Welcome!</h2>
+          <button onClick={this.logOut}>Logout</button>
+        </div>
       );
     } else {
       return (
-        <div >
+        <div className="container">
           <UserProfile
             lock={this.lock}
             getIdToken={this.getIdToken}
