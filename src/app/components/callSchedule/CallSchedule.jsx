@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export default class TextEntry extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +13,7 @@ export default class TextEntry extends React.Component {
     this.handleTime = this.handleTime.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
-  
+
   handleQuestion(event) {
     this.setState({question: event.target.value});
   }
@@ -26,7 +25,7 @@ export default class TextEntry extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     let currentScope = this;
-    fetch('http://localhost:3000/scheduleCall', {
+    fetch('/scheduleCall', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -40,7 +39,7 @@ export default class TextEntry extends React.Component {
   }
 
   handleClick() {
-    console.log('state:', this.state);
+    // console.log('state:', this.state);
   }
 
   render() {
