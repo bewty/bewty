@@ -42,8 +42,6 @@ export default class App extends React.Component {
     .catch(err => console.log('text upload error...', err));
   }
 
-  setUser
-
   createLock() {
     this.lock = new Auth0LockPasswordless('8Xf5mRZcDDcMo0Dkl7OvMLP7ai9jULsn', 'tungnh91.auth0.com');
     this.getIdToken();
@@ -51,7 +49,7 @@ export default class App extends React.Component {
 
   getProfile(profile, id_token) {
     this.setState({
-     profile: profile
+      profile: profile
     });
     localStorage.setItem('id_token', id_token);
       //TODO: SAVE USERS NUMBER TO DB RIGHT HERE
@@ -65,26 +63,26 @@ export default class App extends React.Component {
     // if theres none in LS but theres one in the URL hash, save it to LS
     if (!idToken && authHash) {
       if (authHash.id_token) {
-        idToken = authHash.id_token
+        idToken = authHash.id_token;
         localStorage.setItem('id_token', authHash.id_token);
       }
       if (authHash.error) {
-        console.log('error from parseHash yo', authHash);
+        // TODO: HANDLE ERROR
+        // console.log('error from parseHash yo', authHash);
       }
     }
     return idToken;
   }
 
-   loggedIn() {
+  loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = localStorage.getItem('id_token');
     return !!token;
   }
 
   logOut() {
-    console.log('clicked')
     localStorage.removeItem('id_token');
-    window.location.reload()
+    window.location.reload();
   }
 
   render() {
@@ -108,7 +106,7 @@ export default class App extends React.Component {
             >
           </UserProfile>
         </div>
-      )
+      );
     }
   }
 }
