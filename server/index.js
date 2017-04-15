@@ -64,19 +64,11 @@ app.post('/scheduleCall', (req, res) => {
   res.status(200).send('Successfuly scheduled call');
 });
 
-app.post('/call', (req, res) => {
-  let number = req.body.number || process.env.TWILIO_TO;
-  let name = req.body.name || 'Eugene';
-  console.log('Received post to /call:', name, ':', number);
-  twilio.dialNumbers(number, name);
-  res.status(200).send('Successfuly called');
-});
-
 app.post('/db/retrieveEntry', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
   let query = {};
-  query.user = req.body.user || '123456789';
-  query.search = req.body.query || 'entries';
+  query.user_id = req.body.user_id || '01';
+  query.search = req.body.search;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
@@ -85,33 +77,11 @@ app.post('/db/retrieveEntry', (req, res) => {
 
 app.post('/db/userentry', (req, res) => {
   let userInfo = req.body.userInfo || {
-    name: 'Bob Test',
-    user_id: '123456789',
-    password: 'password',
+    user_id: '01',
     phonenumber: '1231231234'
   };
   database.userEntry(userInfo);
-  res.status(200).send(`${userInfo.name} successfuly added to database`);
-});
-
-app.post('/db/logentry', (req, res) => {
-  let log = req.body.log || {
-    user_id: '123456789',
-    entry_type: 'video',
-    audio_url: 'test.com/test',
-    video: {
-      bucket: 'bewt',
-      key: '123902934',
-      rawData: [{joy: 0.34}],
-      avgData: {joy: 0.34, anger: 1.34},
-    },
-    text: 'Testing for occurrence of missing data',
-    watson_results: {Openness: {ReallyOpen: .67}},
-    tags: ['Family', 'Work']
-  };
-
-  database.logEntry(log);
-  res.status(200).send(`${log.user_id} entry updated successfuly`);
+  res.status(200).send(`${phonenumber} successfuly added to database`);
 });
 
 app.post('/transcribe', (req, res) => {
@@ -120,7 +90,6 @@ app.post('/transcribe', (req, res) => {
   // let callSid = req.body.CallSid;
   let textID = req.body.textID || 'transcribeTest';
   let user_id = req.body.user_id || '01';
-  let divider = '\n------------------------------------\n';
   watson.promisifiedTone(text)
   .then((tone) => {
     console.log('Received tone entry:', tone);
@@ -129,13 +98,8 @@ app.post('/transcribe', (req, res) => {
       text: text,
       watson_results: tone
     };
-    database.logEntry(log);
-    fs.writeFile(`./server/watsonAPI/watsonResults/${textID}`, text + divider + tone);
+    database.saveEntry(log);
   })
-  .then((results) => {
-    console.log('Successfuly transcribed:', text);
-    res.send('Successfuly transcribed');
-  });
 });
 
 app.post('/api/watson', (req, res) => {

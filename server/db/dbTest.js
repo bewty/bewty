@@ -4,7 +4,7 @@ const database = require('./dbHelpers');
 //   name: 'Bob Test',
 //   user_id: '02',
 //   password: 'password',
-//   phonenumber: '+123456789'
+//   phonenumber: '+14696826913'
 // };
 
 // let userInfo = {
@@ -12,24 +12,18 @@ const database = require('./dbHelpers');
 //   user_id: '01',
 //   password: 'password123',
 //   phonenumber: '+17143389937'
-// }
+// };
+
 // database.userEntry(userInfo);
 
-// let callInfo = {
-//   user_id: '01',
-//   message: 'What good can I do today?',
-//   time: '05:00'
-// };
-// console.log('Sending...:', callInfo);
-// database.modifyCall(callInfo);
-
-let sendCalls = () => {
-  let calls = [];
-  database.retrieveCall({time: '0500'})
-  .then((call) => {
-    console.log('Received call:', call.user);
-  })
+let callInfo = {
+  user_id: '01',
+  message: 'Whatatatatata jooojojojojaoososodlasod?',
+  time: '1632'
 };
 
-sendCalls();
+database.modifyCall(callInfo);
+
+
+
 

@@ -7,51 +7,19 @@ const Call = mongoDatabase.Call;
 
 exports.userEntry = (userInfo) => {
   let newUser = User({
-    name: userInfo.name,
     user_id: userInfo.user_id,
-    password: userInfo.password,
     phonenumber: userInfo.phonenumber
   });
   return new Promise((resolve, reject) => {
     newUser.save()
     .then((success) => {
-      let resolved = `${newUser.name} successfully added`;
+      let resolved = `${newUser.phonenumber} successfully added`;
       console.log(resolved);
       resolve(resolved);
     })
     .error((err) => {
       reject(err);
     });
-  });
-};
-
-exports.logEntry = (log) => {
-  const userID = log.user_id;
-  let logEntry = {
-    entry_type: log.entry_type,
-    created_at: Date.now(),
-    video: {
-      bucket: log.video.bucket,
-      key: log.video.key,
-      avg_data: log.video.avgData,
-      raw_data: log.video.rawData,
-    },
-    audio_url: log.audio_url,
-    text: log.text,
-    watson_results: log.watson_results,
-    tags: log.tags
-  };
-
-  return new Promise((resolve, reject) => {
-    User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true},
-      function(err, model) {
-        if (err) {
-          reject(err);
-        } else {
-          console.log(`successfully added ${logEntry.userID} entry`);
-          resolve(model);
-        }
-      });
   });
 };
 
@@ -86,9 +54,9 @@ exports.saveEntry = (req, res, log) => {
 };
 
 exports.retrieveEntry = (query) => {
-  let targetUser = query.user || 'Bob Test';
+  let user_id = query.user_id || '01';
   return new Promise((resolve, reject) => {
-    User.find({ user_id: targetUser })
+    User.find({ user_id: user_id })
     .then((results) => {
       if (query.search === undefined) {
         resolve(JSON.stringify(results));
