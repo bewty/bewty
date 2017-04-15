@@ -19,7 +19,7 @@ import reducers from './reducers';
 
 import './styles/variables.scss';
 import './styles/global.scss';
-import './components/bundle.scss';
+import './styles/bundle.scss';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 const store = createStoreWithMiddleware(reducers);
