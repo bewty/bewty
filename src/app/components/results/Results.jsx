@@ -139,8 +139,8 @@ export default class Chart extends React.Component {
       >
       <VictoryChart
         domainPadding={120}
-        width = {1000}
-        height ={1000}
+        width = {800}
+        height ={800}
         theme={VictoryTheme.material}
         // domain={{y: [0, 5]}}
         domain={{x: [0, 100]}}
@@ -168,6 +168,7 @@ export default class Chart extends React.Component {
       >
         <VictoryBar
         name ='bar'
+        theme={VictoryTheme.material}
         data={this.state.barData}
         eventKey={(datum) => datum.name}
         events={[
@@ -179,8 +180,11 @@ export default class Chart extends React.Component {
                 return [{
                   target: "labels",
                   mutation: (props) => {
+                    console.log('props', props)
                     return props.text === props.datum.name ?
-                      null : { text: props.datum.name }
+                      null : {
+                              text: props.datum.name + '\n' + Math.floor(props.datum.y) + " %",
+                              }
                   }
                 }];
               },
@@ -189,7 +193,9 @@ export default class Chart extends React.Component {
                   target: "labels",
                   mutation: (props) => {
                     return props.text === props.datum.name ?
-                      null : { text: props.datum.name }
+                      null : {
+                      text: null,
+                      }
                    }
                  }]
                }

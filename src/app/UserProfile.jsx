@@ -1,4 +1,6 @@
 import React from 'react';
+import Loader from './components/loader/Loader.jsx'
+
 
 export default class UserProfile extends React.Component {
   constructor(props) {
@@ -33,8 +35,8 @@ export default class UserProfile extends React.Component {
     } else {
       return (
         <div>
-          <h1> we gon needchu to lawgin </h1>
-          <div className="loading"> hold up... </div>
+          <h1> Please login </h1>
+          <Loader />
         </div>
 
       );
