@@ -4,7 +4,9 @@ import axios from 'axios';
 export default class TextEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {
+      value: ''
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,19 +29,13 @@ export default class TextEntry extends React.Component {
     .then(res => console.log('text upload to server done'))
     .catch(err => console.log('text upload error...', err));
 
-    this.setState({
-      value: ''
-    });
-  }
-
-  handleClick() {
-    console.log('state:', this.state);
+    this.setState({value: ''});
   }
 
   render() {
     return (
       <div className="container">
-        <h1 onClick={this.handleClick}>Text Entry</h1>
+        <h1>Text Entry</h1>
         <form onSubmit={this.handleSubmit}>
         <label>
           <input type="text" value={this.state.value} onChange={this.handleChange} />
