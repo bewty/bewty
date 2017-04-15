@@ -5,9 +5,10 @@ import {
   Link
 } from 'react-router-dom';
 
-const EntrySnippet = ({entry, index}) => {
-  entry.text.length > 220 ? entry.text = `${entry.text.slice(0, 220)}...` : null;
-  // console.log('entry', entry);
+const EntryText = ({entry, index, type}) => {
+  let text;
+  entry.text.length > 220 && type === 'snippet' ? text = `${entry.text.slice(0, 220)}...` : text = entry.text;
+
   return (
     <div>
      {entry.length === 0 ? null :
@@ -17,7 +18,7 @@ const EntrySnippet = ({entry, index}) => {
             <span className="date">{entry.created_at.slice(0, 10)}</span>
             <span className={`${entry.entry_type}-entry`}></span>
           </div>
-          <p>{entry.text}</p>
+          <p>{text}</p>
         </div>
       </Link>
     }
@@ -25,4 +26,4 @@ const EntrySnippet = ({entry, index}) => {
   );
 };
 
-export default EntrySnippet;
+export default EntryText;
