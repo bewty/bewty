@@ -66,6 +66,25 @@ exports.retrieveEntry = (query) => {
   });
 };
 
+exports.retrieveEntryMedia = (query) => {
+  let targetUser = query.user || 'Bob Test';
+  let entryId = query.entryId || '58f11c6006ecf40ad10b1c88';
+  let entryType = query.entryType || 'video';
+  let queryEntryType = entryType === 'video' ? 'entries._id entries.video.bucket entries.video.key' : 'entries.audio' ;
+  return new Promise((resolve, reject) => {
+    User.find({ 'entries._id': entryId }, queryEntryType)
+    .then( (results) => {
+      if (query.search === undefined) {
+        resolve(JSON.stringify(results));
+      } else {
+        console.log('====results', results);
+        resolve(JSON.stringify(results[0][query.search]));
+      }
+    })
+    .catch(err => console.error('====err', err));
+  });
+};
+
 exports.modifyCall = (callInfo) => {
   let targetUser = callInfo.user_id;
   let newMessage = callInfo.message;
