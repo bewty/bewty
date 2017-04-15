@@ -19,6 +19,7 @@ class EntryList extends Component {
     .catch( err => console.error('Fetching Entry Error'));
   }
 
+
   fetchMedia(entryId, entryType) {
     console.log('fetchMedia invoked', entryId, entryType);
     axios.get(`/entry/${entryId}/${entryType}`)

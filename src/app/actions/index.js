@@ -24,3 +24,4 @@ export function fetchMedia(url) {
     payload: url
   };
 }
+
