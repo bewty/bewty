@@ -23,7 +23,7 @@ export default class TextEntry extends React.Component {
     };
 
     axios.post('/entry', data)
-    .then( res => console.log('text upload to server done', res))
+    .then(res => console.log('text upload to server done'))
     .catch(err => console.log('text upload error...', err));
 
     this.setState({

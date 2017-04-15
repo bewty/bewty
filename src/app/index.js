@@ -10,7 +10,8 @@ import Header from './components/header/Header';
 import TextEntry from './components/textEntry/TextEntry';
 import AudioEntry from './components/audioEntry/AudioEntry';
 import VideoEntry from './components/videoEntry/VideoEntry';
-import EntryList from './components/entry/entry-list/EntryList';
+import EntryList from './containers/entry-list/EntryList';
+import EntryView from './containers/entry-view/EntryView';
 import Results from './components/results/Results';
 import CallSchedule from './components/callSchedule/CallSchedule';
 
@@ -18,7 +19,7 @@ import reducers from './reducers';
 
 import './styles/variables.scss';
 import './styles/global.scss';
-import './components/bundle.scss';
+import './styles/bundle.scss';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 const store = createStoreWithMiddleware(reducers);
@@ -33,6 +34,7 @@ ReactDOM.render(
         <Route path="/audio-entry" component={AudioEntry} />
         <Route path="/video-entry" component={VideoEntry} />
         <Route path="/entries" component={EntryList} />
+        <Route path="/entry/:id" component={EntryView} />
         <Route path="/results" component={Results} />
         <Route path="/call-schedule" component={CallSchedule} />
       </div>
