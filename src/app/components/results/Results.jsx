@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Trend from './trend-chart/Trend.jsx'
-import Daily from './daily-chart/Daily.jsx'
+import Trend from './trend-chart/Trend.jsx';
+import Daily from './daily-chart/Daily.jsx';
 
 export default class Results extends Component {
   render() {
