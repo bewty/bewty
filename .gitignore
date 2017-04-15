@@ -47,4 +47,5 @@ bower_components/
 /server/api/config/bewty.json
 .env
 aws-config.js
+/server/db/dbTest.js
 

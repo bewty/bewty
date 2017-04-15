@@ -43,9 +43,7 @@ exports.promisifiedTone = (text) => {
       if (err) {
         reject(err);
       } else {
-        // console.log('......*****', JSON.stringify(tone, null, 2));
         resolve(JSON.stringify(tone, null, 2));
-        // JSON.stringify(tone, null, 2));
       }
     });
   });

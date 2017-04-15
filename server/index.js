@@ -17,12 +17,20 @@ const axios = require('axios');
 const querystring = require('querystring');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
+const cron = require('./callCron/cron.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 app.use(require('morgan')('combined'));
 app.use(cors());
+
+app.post('/cron/start', (req, res) => {
+  let startTime = req.body.time || 1634;
+
+  cron.scheduleCall({wakeTime: startTime});
+  res.send('Sent to scheduleCall');
+});
 
 const upload = multer({
   storage: multerS3({
@@ -52,23 +60,34 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
+  let user_id = req.body.user_id || '01';
   console.log('Received scheduleCall post:', time.replace(':', ''), question);
-  res.status(200).send('Successfuly scheduled call');
-});
+  
+  let callInfo = {
+    user_id: user_id,
+    message: question,
+    time: time
+  };
 
-app.post('/call', (req, res) => {
-  let number = req.body.number || process.env.TWILIO_TO;
-  let name = req.body.name || 'Eugene';
-  console.log('Received post to /call:', name, ':', number);
-  twilio.dialNumbers(number, name);
-  res.status(200).send('Successfuly called');
+  database.modifyCall(callInfo)
+  .then((result) => {
+    console.log('Received successful result:', result);
+    return cron.scheduleCall();
+  })
+  .then((time) => {
+    console.log(`Successfully set cron for ${time}`);
+    res.status(200);
+  })
+  .catch((e) => {
+    console.log('Received error:', e);
+  });
 });
 
 app.post('/db/retrieveEntry', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
   let query = {};
-  query.user = req.body.user || '123456789';
-  query.search = req.body.query || 'entries';
+  query.user_id = req.body.user_id || '01';
+  query.search = req.body.search;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
@@ -77,48 +96,25 @@ app.post('/db/retrieveEntry', (req, res) => {
 
 app.post('/db/userentry', (req, res) => {
   let userInfo = req.body.userInfo || {
-    name: 'Bob Test',
-    user_id: '123456789',
-    password: 'password',
-    phonenumber: '1231231234'
+    user_id: '05',
+    phonenumber: '11234567835'
   };
-  database.userEntry(userInfo);
-  res.status(200).send(`${userInfo.name} successfuly added to database`);
-});
-
-app.post('/db/logentry', (req, res) => {
-  let log = req.body.log || {
-    user_id: '123456789',
-    entry_type: 'video',
-    audio_url: 'test.com/test',
-    video: {
-      bucket: 'bewt',
-      key: '123902934',
-      rawData: [{joy: 0.34}],
-      avgData: {joy: 0.34, anger: 1.34},
-    },
-    text: 'Testing for occurrence of missing data',
-    watson_results: {Openness: {ReallyOpen: .67}},
-    tags: ['Family', 'Work']
-  };
-
-  database.logEntry(log);
-  res.status(200).send(`${log.user_id} entry updated successfuly`);
+  database.userEntry(req, res, userInfo);
 });
 
 app.post('/transcribe', (req, res) => {
-  console.log('Received post to /transcribe:', req.body);
-  let text = req.body.TranscriptionText;
-  // let callSid = req.body.CallSid;
-  let textID = req.body.textID || 'transcribeTest';
-  let divider = '\n------------------------------------\n';
+  console.log('Within /transcribe with:', req.body.TranscriptionText);
+  let text = req.body.TranscriptionText || 'Test123123';
+  let user_id = req.body.user_id || '01';
   watson.promisifiedTone(text)
   .then((tone) => {
-    fs.writeFile(`./server/watsonAPI/watsonResults/${textID}`, text + divider + tone);
-  })
-  .then((results) => {
-    console.log('Successfuly transcribed:', text);
-    res.send('Successfuly transcribed');
+    console.log('Received tone entry:', tone);
+    let log = {
+      user_id: user_id,
+      text: text,
+      watson_results: tone
+    };
+    database.saveEntry(req, res, log);
   });
 });
 
@@ -139,19 +135,11 @@ app.post('/api/watson', (req, res) => {
   });
 });
 
-app.post('/test', (req, res) => {
-  watson.promisifiedTone('Hello, my name is bob and I like to eat carrots but only on Tuesday')
-  .then((tone) => {
-    console.log('Received get to /test:', tone);
-    res.send(tone);
-  });
-});
-
 app.post('/entry', upload.single('media'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
     let log = {
-      user_id: '123456789', // NOTE: hardcode user id
+      user_id: '01', // NOTE: hardcode user id
       entry_type: req.body.entryType,
       video: {
         bucket: req.file ? req.file.bucket : null,

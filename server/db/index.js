@@ -11,11 +11,9 @@ db.once('open', function() {
 });
 
 const userSchema = new mongoose.Schema({
-  name: String,
-  user_id: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  phonenumber: { type: String, required: true},
-  scheduled_time: String,
+  user_id: String,
+  phonenumber: { type: String, required: true, unique: true},
+  scheduled_time: { type: String, default: '' },
   scheduled_message: String,
   entries: [{
     entry_type: String,
@@ -32,13 +30,13 @@ const userSchema = new mongoose.Schema({
     },
     text: String,
     watson_results: String,
-    tags: Array,
+    tags: Array
   }]
 });
 
 const callSchema = new mongoose.Schema({
-  time: String,
-  user: [{type: String, ref: 'User'}]
+  time: {type: String},
+  user: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
 const Call = mongoose.model('Call', callSchema);
