@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export default class CallSchedule extends React.Component {
   constructor(props) {
     super(props);
@@ -15,7 +14,7 @@ export default class CallSchedule extends React.Component {
     this.handleQuestion = this.handleQuestion.bind(this);
     this.handleTime = this.handleTime.bind(this);
   }
-  
+
   componentDidMount() {
     this.setState({
       phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
@@ -36,7 +35,7 @@ export default class CallSchedule extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     let currentScope = this;
-    fetch('http://localhost:3000/scheduleCall', {
+    fetch('/scheduleCall', {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -49,7 +48,6 @@ export default class CallSchedule extends React.Component {
       })
     });
   }
-
 
   render() {
     return (
