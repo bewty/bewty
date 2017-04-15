@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const multer = require('multer');
 const db = require('./db/index');
-const speech = require('./api/speech/speech');
 const app = express();
 const Promise = require('bluebird');
 const fs = Promise.promisifyAll(require('file-system'));
@@ -13,7 +12,6 @@ const database = require('./db/dbHelpers');
 const twilio = require('./twilioAPI/twilioAPI.js');
 const cors = require('cors');
 const AWS = require('aws-sdk');
-const axios = require('axios');
 const querystring = require('querystring');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
@@ -54,9 +52,7 @@ app.post('/scheduleCall', (req, res) => {
   let question = req.body.question;
   console.log('Receiving user_id phonenumber:', req.body.user_id);
   let user_id = req.body.user_id || '01';
-
-  console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
-
+  // console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
   let callInfo = {
     user_id: user_id,
     message: question,
@@ -65,15 +61,15 @@ app.post('/scheduleCall', (req, res) => {
 
   database.modifyCall(callInfo)
   .then((result) => {
-    console.log('Received successful result:', result);
+    // console.log('Received successful result:', result);
     return cron.scheduleCall();
   })
   .then((time) => {
-    console.log(`Successfully set cron for ${time}`);
+    // console.log(`Successfully set cron for ${time}`);
     res.status(200);
   })
   .catch((e) => {
-    console.log('Received error:', e);
+    // console.log('Received error:', e);
   });
 });
 
@@ -122,7 +118,8 @@ app.post('/api/watson', (req, res) => {
     res.status(200).send(results);
   })
   .error(function(e) {
-    console.log('Error received within post to /api/watson', e);
+    // TODO: HANDLE ERROR
+    // console.log('Error received within post to /api/watson', e);
   });
 });
 
