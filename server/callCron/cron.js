@@ -29,7 +29,10 @@ exports.setCron = (time) => {
 
 exports.scheduleCall = () => {
   let d = new Date();
-  let currentTime = '' + d.getHours() + d.getMinutes();
+  let hour = '' + d.getHours().length === 1 ? '0' + d.getHours() : d.getHours();
+  let minute = '' + d.getMinutes().length === 1 ? '0' + d.getMinutes() : d.getMinutes();
+  let currentTime = hour.toString() + minute.toString();
+  console.log('Current time is:', currentTime, 'hour:', typeof hour, hour, 'minute:', typeof minute, minute);
   return new Promise((resolve, reject) => {
     database.callList()
     .then((calls) => {
@@ -38,6 +41,8 @@ exports.scheduleCall = () => {
       });
       for (var i = 0; i < callArray.length; i++) {
         if (callArray[i] > currentTime) {
+          console.log('Received callArray:', callArray);
+          console.log('Within firstIf:', currentTime, callArray[i], currentTime);
           return callArray[i];
         }
         if (i === callArray.length - 1) {
@@ -46,7 +51,6 @@ exports.scheduleCall = () => {
       }
     })
     .then((time) => {
-      console.log('scheduleCall(): found next time to be:', time);
       exports.setCron(time);
       let resolved = `Set cron job for ${time}`;
       resolve(resolved);

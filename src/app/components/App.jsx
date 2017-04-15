@@ -4,16 +4,16 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      idToken:null,
+      idToken: null,
       profile: null
-    }
+    };
     this.getProfile = this.getProfile.bind(this)
   }
   componentWillMount() {
     this.createLock();
     this.setState({
       idToken: this.getIdToken()
-    })
+    });
     this.getProfile();
   }
   createLock() {

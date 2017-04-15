@@ -5,8 +5,6 @@ const twilio = require('twilio');
 
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
-const phoneNumbers = process.env.PHONENUMBERS;
-
 
 exports.dialNumbers = (number, message) => {
   client.calls.create({

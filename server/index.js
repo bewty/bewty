@@ -135,13 +135,6 @@ app.post('/api/watson', (req, res) => {
   });
 });
 
-app.post('/test', (req, res) => {
-  cron.scheduleCall()
-  .then((results) => {
-    res.send(results);
-  });
-});
-
 app.post('/entry', upload.single('media'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
