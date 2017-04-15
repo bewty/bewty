@@ -264,14 +264,11 @@ class VideoEntry extends Component {
 
   onEnd() {
     this.setState({ start: false, stop: false });
-    // this.props.action('end')();
   }
 
   onResult ({ finalTranscript }) {
-    // const result = finalTranscript;
     this.setState({ start: false,
                     transcript: finalTranscript });
-    // this.props.action('result')(finalTranscript);
   }
   render() {
     return (
