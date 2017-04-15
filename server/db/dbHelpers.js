@@ -42,7 +42,7 @@ exports.saveEntry = (req, res, log) => {
   User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
 
   .then((result) => {
-    console.log('Entry successfully uploaded!');
+    // console.log('Entry successfully uploaded!');
     res.sendStatus(201);
   })
   .error(err => res.sendStatus(500).send(err))
@@ -93,8 +93,8 @@ exports.modifyCall = (callInfo) => {
   return new Promise((resolve, reject) => {
     User.findOne({ user_id: targetUser })
     .then((user) => {
-      console.log('Found user:', typeof targetUser, targetUser);
-      console.log('number is:', user.phonenumber);
+      // console.log('Found user:', typeof targetUser, targetUser);
+      // console.log('number is:', user.phonenumber);
       oldTime = user.scheduled_time;
       user_id = user._id;
       user.scheduled_time = time;
@@ -106,12 +106,12 @@ exports.modifyCall = (callInfo) => {
     })
     .then((call) => {
       if (call) {
-        console.log('Length of call is:', call.user.length);
+        // console.log('Length of call is:', call.user.length);
         if (call.user.length === 1 && call.user.indexOf(user_id) === 0) {
-          console.log('Entered remove section:', call);
+          // console.log('Entered remove section:', call);
           call.remove();
         } else {
-          console.log('Found splice:', call.user.indexOf(user_id));
+          // console.log('Found splice:', call.user.indexOf(user_id));
           call.user.splice(call.user.indexOf(user_id), 1);
         }
         call.save();
@@ -122,7 +122,7 @@ exports.modifyCall = (callInfo) => {
       return Call.findOne({ time: time });
     })
     .then((call) => {
-      console.log('Found target call:', call);
+      // console.log('Found target call:', call);
       if (!call) {
         let newCall = Call({
           time: time,
@@ -130,9 +130,9 @@ exports.modifyCall = (callInfo) => {
         });
         newCall.save();
       } else {
-        console.log('Call before push:', user_id, call.user);
+        // console.log('Call before push:', user_id, call.user);
         call.user.push(user_id);
-        console.log('Call after push:', call.user);
+        // console.log('Call after push:', call.user);
         call.save();
       }
       return;
@@ -153,7 +153,7 @@ exports.callEntry = (callInfo) => {
   return new Promise((resolve, reject) => {
     newCall.save()
     .then(function(success) {
-      resolve(console.log(`${callInfo.user_id} scheduled call successfully added`));
+      // resolve(console.log(`${callInfo.user_id} scheduled call successfully added`));
     })
     .error(function(err) {
       reject(err);
@@ -211,4 +211,3 @@ exports.findNextCall = (time) => {
     return nextCall;
   });
 };
-
