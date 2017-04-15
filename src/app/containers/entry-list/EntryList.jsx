@@ -8,24 +8,18 @@ import axios from 'axios';
 class EntryList extends Component {
   constructor(props) {
     super(props);
-
     this.props.fetchEntry = this.props.fetchEntry.bind(this);
-
   }
 
   componentWillMount() {
-    console.log('====componnet will mount');
     axios.post('/db/retrieveEntry')
     .then( result => {
-      console.log('=========retrieveEntry invoked', result);
       this.props.fetchEntry(result.data);
     })
     .catch( err => console.error('Fetching Entry Error'));
-
   }
 
   renderList() {
-    // console.log('this.props', this.props);
     return this.props.entries.map( (entry, index) => {
       return (
         <div key={index} onClick={ () => this.props.selectEntry(entry)}>

@@ -52,12 +52,12 @@ exports.saveEntry = (req, res, log) => {
 exports.retrieveEntry = (query) => {
   let user_id = query.user_id || '01';
   return new Promise((resolve, reject) => {
-    User.find({ user_id: targetUser }, '-entries.audio -entries.video.bucket -entries.video.key')
+    User.find({ user_id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
     .then((results) => {
-      if (query.search === undefined) {
+      if (results[0] === undefined) {
         resolve(JSON.stringify(results));
       } else {
-        resolve(JSON.stringify(results[0][query.search]));
+        resolve(JSON.stringify(results[0].entries));
       }
     })
     .error((err) => {

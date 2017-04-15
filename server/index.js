@@ -62,7 +62,7 @@ app.post('/scheduleCall', (req, res) => {
   let question = req.body.question;
   let user_id = req.body.user_id || '01';
   console.log('Received scheduleCall post:', time.replace(':', ''), question);
-  
+
   let callInfo = {
     user_id: user_id,
     message: question,
@@ -85,18 +85,20 @@ app.post('/scheduleCall', (req, res) => {
 
 app.post('/db/retrieveEntry', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
+
   let query = {};
   query.user_id = req.body.user_id || '01';
   query.search = req.body.search;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
-  });
+  })
+  .catch( err => console.error(err));
 });
 
 app.post('/db/userentry', (req, res) => {
   let userInfo = req.body.userInfo || {
-    user_id: '05',
+    user_id: '01', //hardcoded
     phonenumber: '11234567835'
   };
   database.userEntry(req, res, userInfo);

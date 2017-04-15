@@ -3,7 +3,6 @@ export const ENTRY_SELECTED = 'ENTRY_SELECTED';
 import axios from 'axios';
 
 export function fetchEntry(entries) {
-  console.log('action=====fetchEntry===entries', entries);
   return {
     type: FETCH_ENTRY,
     payload: entries
