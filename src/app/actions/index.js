@@ -25,6 +25,7 @@ export function fetchMedia(url) {
 }
 
 export const setSourceUrl = (url) => {
+  console.log('Selecting source url');
   return {
     type: 'SET_SOURCE_URL',
     url

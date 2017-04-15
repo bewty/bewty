@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
+import VoiceRecognition from '../components/VoiceRecognition/VoiceRecognition.jsx';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { selectSourceUrl } from '../actions/index.js';
+import { bindActionCreators } from 'redux';
 
 class AudioEntry extends Component {
   constructor(props) {
@@ -58,6 +60,7 @@ class AudioEntry extends Component {
     // this.setState({
     //   src: window.URL.createObjectURL(stream)
     // });
+    this.props.selectSourceUrl();
   }
 
   audioError(err) {
@@ -82,6 +85,7 @@ class AudioEntry extends Component {
 
   stopRecord() {
     this.state.recordAudio.stopRecording((audioURL) => {
+      this.props.selectSourceUrl();
       this.setState({
         blob: this.state.recordAudio.blob,
         // src: audioURL,
@@ -120,7 +124,7 @@ class AudioEntry extends Component {
     return (
       <div className="container">
         <h1>Audio Entry</h1>
-        <audio autoPlay='true' src={/*this.state.src*/} muted="muted" controls></audio>
+        <audio autoPlay='true' src={this.props.src} muted="muted" controls></audio>
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
         <button onClick={this.uploadAudio}>Upload</button>
@@ -146,4 +150,8 @@ var mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(AudioEntry);
+var mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({selectSourceUrl: selectSourceUrl}, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AudioEntry);
