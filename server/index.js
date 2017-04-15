@@ -165,6 +165,7 @@ app.get('/entry/:entryId/:entryType', (req, res) => {
   query.entryId = req.params.entryId;
   query.entryType = req.params.entryType || 'video';
   query.user = req.body.user || '123456789';
+  console.log('query is====', query);
   database.retrieveEntryMedia(query)
   .then( result => {
     let key;
@@ -172,6 +173,7 @@ app.get('/entry/:entryId/:entryType', (req, res) => {
     query.entryType === 'video' ? key = result[0].video.key : key = result[0].audio.key;
     query.entryType === 'video' ? bucket = result[0].video.bucket : bucket = result[0].audio.bucket;
     let url = getAWSSignedUrl(bucket, key);
+    console.log('url=====', url);
     res.send(url);
   })
   .catch(err => res.sendStatus(400).send(err));
