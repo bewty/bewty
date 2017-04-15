@@ -69,19 +69,18 @@ exports.retrieveEntry = (query) => {
 exports.retrieveEntryMedia = (query) => {
   let targetUser = query.user || 'Bob Test';
   let entryId = query.entryId || '58f11c6006ecf40ad10b1c88';
-  let entryType = query.entryType || 'video';
-  let queryEntryType = entryType === 'video' ? 'entries._id entries.video.bucket entries.video.key' : 'entries.audio' ;
   return new Promise((resolve, reject) => {
-    User.find({ 'entries._id': entryId }, queryEntryType)
+    User.find({'entries._id': entryId}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
     .then( (results) => {
-      if (query.search === undefined) {
-        resolve(JSON.stringify(results));
+      if (results[0] === undefined) {
+        throw 'no entries found with entryId';
       } else {
-        console.log('====results', results);
-        resolve(JSON.stringify(results[0][query.search]));
+        resolve(results[0].entries);
       }
     })
-    .catch(err => console.error('====err', err));
+    .catch( err => {
+      reject(err);
+    });
   });
 };
 

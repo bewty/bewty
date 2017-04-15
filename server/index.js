@@ -152,25 +152,29 @@ app.post('/entry', upload.single('media'), (req, res) => {
   });
 });
 
-const getAWSSignedUrl = (filekey) => {
+const getAWSSignedUrl = (bucket, key) => {
   const params = {
-    Bucket: process.env.AWS_S3_BUCKET,
-    Key: filekey
+    Bucket: bucket,
+    Key: key
   };
   return s3.getSignedUrl('getObject', params);
 };
 
-app.get('/entry/:entryid', (req, res) => {
-  let entryid = req.params.entryid;
-  console.log('entryid=======', entryid);
-  //let url = getAWSSignedUrl(entryid);
+app.get('/entry/:entryId/:entryType', (req, res) => {
   let query = {};
+  query.entryId = req.params.entryId;
+  query.entryType = req.params.entryType || 'video';
   query.user = req.body.user || '123456789';
-  query.search = req.body.query || 'entries';
   database.retrieveEntryMedia(query)
   .then( result => {
-    res.send(result);
-  });
+    let key;
+    let bucket;
+    query.entryType === 'video' ? key = result[0].video.key : key = result[0].audio.key;
+    query.entryType === 'video' ? bucket = result[0].video.bucket : bucket = result[0].audio.bucket;
+    let url = getAWSSignedUrl(bucket, key);
+    res.send(url);
+  })
+  .catch(err => res.sendStatus(400).send(err));
 });
 
 
