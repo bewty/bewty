@@ -5,21 +5,17 @@ const mongoDatabase = require('./index.js');
 const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
 
-exports.userEntry = (userInfo) => {
+exports.userEntry = (req, res, userInfo) => {
   let newUser = User({
     user_id: userInfo.user_id,
     phonenumber: userInfo.phonenumber
   });
-  return new Promise((resolve, reject) => {
-    newUser.save()
-    .then((success) => {
-      let resolved = `${newUser.phonenumber} successfully added`;
-      console.log(resolved);
-      resolve(resolved);
-    })
-    .error((err) => {
-      reject(err);
-    });
+  newUser.save((err, results) => {
+    if (err) {
+      res.sendStatus(400).send(err);
+    } else {
+      res.sendStatus(201);
+    }
   });
 };
 
@@ -44,7 +40,7 @@ exports.saveEntry = (req, res, log) => {
   };
 
   User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
-  
+
   .then((result) => {
     console.log('Entry successfully uploaded!');
     res.sendStatus(201);
@@ -70,7 +66,7 @@ exports.retrieveEntry = (query) => {
   });
 };
 
-exports.modifyCall = (callInfo) => {
+exports.modifyCall = (req, res, callInfo) => {
   let targetUser = callInfo.user_id;
   let newMessage = callInfo.message;
   let time = callInfo.time.replace(':', '');
@@ -78,7 +74,7 @@ exports.modifyCall = (callInfo) => {
   let user_id;
   User.findOne({ user_id: targetUser })
   .then((user) => {
-    console.log('Found user:', user.name);
+    console.log('Found user:', targetUser, 'number is:', user.phonenumber);
     oldTime = user.scheduled_time;
     user_id = user._id;
     user.scheduled_time = time;
@@ -119,10 +115,14 @@ exports.modifyCall = (callInfo) => {
       console.log('Call after push:', call.user);
       call.save();
     }
+    return;
   })
-  .error((err) => {
-    console.log('Error occurred within modifyCall to db:', err);
-  });
+  .then((result) => {
+    console.log('Entry successfully uploaded!');
+    res.sendStatus(201);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
 };
 
 exports.callEntry = (callInfo) => {

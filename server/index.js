@@ -60,8 +60,16 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
+  let user_id = req.body.user_id || '01';
   console.log('Received scheduleCall post:', time.replace(':', ''), question);
-  res.status(200).send('Successfuly scheduled call');
+  
+  let callInfo = {
+    user_id: user_id,
+    message: question,
+    time: time
+  };
+
+  database.modifyCall(req, res, callInfo);
 });
 
 app.post('/db/retrieveEntry', (req, res) => {
@@ -77,18 +85,15 @@ app.post('/db/retrieveEntry', (req, res) => {
 
 app.post('/db/userentry', (req, res) => {
   let userInfo = req.body.userInfo || {
-    user_id: '01',
-    phonenumber: '1231231234'
+    user_id: '05',
+    phonenumber: '11234567835'
   };
-  database.userEntry(userInfo);
-  res.status(200).send(`${phonenumber} successfuly added to database`);
+  database.userEntry(req, res, userInfo);
 });
 
 app.post('/transcribe', (req, res) => {
   console.log('Within /transcribe with:', req.body.TranscriptionText);
   let text = req.body.TranscriptionText || 'Test123123';
-  // let callSid = req.body.CallSid;
-  let textID = req.body.textID || 'transcribeTest';
   let user_id = req.body.user_id || '01';
   watson.promisifiedTone(text)
   .then((tone) => {
@@ -98,8 +103,8 @@ app.post('/transcribe', (req, res) => {
       text: text,
       watson_results: tone
     };
-    database.saveEntry(log);
-  })
+    database.saveEntry(req, res, log);
+  });
 });
 
 app.post('/api/watson', (req, res) => {
@@ -131,7 +136,7 @@ app.post('/entry', upload.single('media'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
     let log = {
-      user_id: '123456789', // NOTE: hardcode user id
+      user_id: '01', // NOTE: hardcode user id
       entry_type: req.body.entryType,
       video: {
         bucket: req.file ? req.file.bucket : null,
