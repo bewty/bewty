@@ -20,8 +20,9 @@ class CustomPie extends React.Component {
    return this.props.datum.children.map((obj)=>
        {
        return {
-         x: obj.name +"\n "+ Math.floor(obj.percentile *100),
+         x:" ",
          y: obj.percentile * 100,
+         name:  obj.name +"\n "+ Math.floor(obj.percentile *100) + "%"
        }
       })}
   render() {
@@ -34,12 +35,38 @@ class CustomPie extends React.Component {
         }
       >
         <VictoryPie
+          name='pieceOfThePie'
+          events={[
+            {
+              target: "data",
+              eventHandlers: {
+                onMouseOver: () => {
+                  return [{
+                    target: "labels",
+                    mutation: (props) => {
+                      return props.text === props.datum.name ?
+                        null : { text: props.datum.name }
+                    }
+                  }];
+                },
+                 onMouseOut: () => {
+                   return [{
+                    target: "labels",
+                    mutation: (props) => {
+                      return props.text === props.datum.name ?
+                        null : { text: props.datum.name }
+                     }
+                   }]
+                 }
+              }
+            }
+          ]}
           data={this.takeOnePieceOfPieData()}
           standalone={false}
-          innerRadius ={45}
+          innerRadius ={35}
           height={200}
           width={200}
-          style={{labels: {fontSize: 10}}}
+          style={{labels: {fontSize: 20}}}
           colorScale={["#f77", "#55e", "#8af","#7c4dff", "#c6ff00", "#a1887f", "#90a4ae"]}
         />
       </g>
@@ -87,22 +114,21 @@ export default class Chart extends React.Component {
    var data = [];
    var index = 1
    window.exampleToneData.document_tone.tone_categories.map((obj) => {obj.tones.map((tone)=> {
-     console.log('THIS IS THE TONES MAN WHAT THE FUCK', tone)
       data.push({
           y: tone.score *100,
           x: index++,
           name: tone.tone_name
          })
-     console.log('count', index)
+     // console.log('count', index)
        })
     });
-   console.log('data', data)
+   // console.log('data', data)
    return data;
   }
 
   render() {
     const pieData =  this.getPieData();
-    console.log( 'THIS IS THE STATE YO ', this.state)
+    // console.log( 'THIS IS THE STATE YO ', this.state)
     return (
       <div
         ref="container"
@@ -118,12 +144,12 @@ export default class Chart extends React.Component {
         theme={VictoryTheme.material}
         // domain={{y: [0, 5]}}
         domain={{x: [0, 100]}}
-        containerComponent={<VictoryZoomContainer zoomDomain={{x: [0,100], y: [0, 10]}} responsive={false} />}
+        containerComponent={<VictoryZoomContainer zoomDomain={{x: [0,100], y: [0, 6]}} responsive={false} />}
       >
         <VictoryScatter
           data={this.state.data}
           labelComponent={
-            <VictoryLabel dx={22} dy={2} verticalAnchor="middle" textAnchor="end"/>
+            <VictoryLabel dx={25} dy={2} verticalAnchor="middle" textAnchor="end"/>
           }
           dataComponent= {
             <CustomPie pieData={pieData}/>
@@ -137,7 +163,7 @@ export default class Chart extends React.Component {
       <VictoryChart
         domainPadding={20}
         style={{
-          labels: {fontSize:9},
+          labels: {fontSize:20},
         }}
       >
         <VictoryBar
@@ -153,7 +179,6 @@ export default class Chart extends React.Component {
                 return [{
                   target: "labels",
                   mutation: (props) => {
-                console.log('this', props)
                     return props.text === props.datum.name ?
                       null : { text: props.datum.name }
                   }
