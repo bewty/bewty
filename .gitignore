@@ -4,11 +4,6 @@
 bundle.js
 npm-debug.log
 
-### watson results ###
-
-/server/watsonAPI/watsonResults
-/server/watsonAPI/watsonTest
-
 ### node etc ###
 
 # Logs
@@ -44,8 +39,4 @@ node_modules/
 bower_components/
 
 #config files
-/server/api/config/bewty.json
 .env
-aws-config.js
-/server/db/dbTest.js
-
