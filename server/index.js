@@ -35,14 +35,6 @@ const upload = multer({
   })
 });
 
-const getAWSSignedUrl = (req) => {
-  const params = {
-    Bucket: process.env.AWS_S3_BUCKET,
-    Key: filekey
-  };
-  return s3.getSignedUrl('getObject', params);
-};
-
 AWS.config.update({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY,
   secretAccessKey: process.env.AWS_S3_SECRET_KEY,
@@ -169,6 +161,28 @@ app.post('/entry', upload.single('media'), (req, res) => {
     database.saveEntry(req, res, log);
   });
 });
+
+const getAWSSignedUrl = (filekey) => {
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: filekey
+  };
+  return s3.getSignedUrl('getObject', params);
+};
+
+app.get('/entry/:entryid', (req, res) => {
+  let entryid = req.params.entryid;
+  console.log('entryid=======', entryid);
+  //let url = getAWSSignedUrl(entryid);
+  let query = {};
+  query.user = req.body.user || '123456789';
+  query.search = req.body.query || 'entries';
+  database.retrieveEntryMedia(query)
+  .then( result => {
+    res.send(result);
+  });
+});
+
 
 app.get('*', (req, res) => {
   res.sendFile( path.resolve(__dirname, '..', 'dist', 'index.html'));
