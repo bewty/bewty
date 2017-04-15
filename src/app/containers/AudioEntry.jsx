@@ -3,14 +3,13 @@ import VoiceRecognition from '../components/VoiceRecognition/VoiceRecognition.js
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { selectSourceUrl } from '../actions/index.js';
+import { setSourceUrl } from '../actions/index.js';
 import { bindActionCreators } from 'redux';
 
 class AudioEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // src: null,
       recordAudio: null,
       blob: null,
       uploading: false,
@@ -57,10 +56,7 @@ class AudioEntry extends Component {
   }
 
   handleAudio(stream) {
-    // this.setState({
-    //   src: window.URL.createObjectURL(stream)
-    // });
-    this.props.selectSourceUrl();
+    this.props.setSourceUrl(window.URL.createObjectURL(stream));
   }
 
   audioError(err) {
@@ -85,10 +81,9 @@ class AudioEntry extends Component {
 
   stopRecord() {
     this.state.recordAudio.stopRecording((audioURL) => {
-      this.props.selectSourceUrl();
+      this.props.setSourceUrl(audioURL);
       this.setState({
         blob: this.state.recordAudio.blob,
-        // src: audioURL,
         stop: true
       });
     });
@@ -151,7 +146,7 @@ var mapStateToProps = (state) => {
 };
 
 var mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({selectSourceUrl: selectSourceUrl}, dispatch);
+  return bindActionCreators({setSourceUrl: setSourceUrl}, dispatch);
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AudioEntry);
