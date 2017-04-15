@@ -48,7 +48,7 @@ exports.saveEntry = (req, res, log) => {
   };
   User.findOneAndUpdate({_id: _id}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
   .then((result) => {
-    console.log('Entry successfully uploaded!');
+    // console.log('Entry successfully uploaded!');
     res.sendStatus(201);
   })
   .error(err => res.sendStatus(500).send(err))
@@ -99,8 +99,8 @@ exports.modifyCall = (callInfo) => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: targetUser })
     .then((user) => {
-      console.log('Found user:', targetUser);
-      console.log('number is:', user.phonenumber);
+      // console.log('Found user:', targetUser);
+      // console.log('number is:', user.phonenumber);
       oldTime = user.scheduled_time;
       user_id = user._id;
       user.scheduled_time = time;
@@ -125,7 +125,7 @@ exports.modifyCall = (callInfo) => {
       return Call.findOne({ time: time });
     })
     .then((call) => {
-      console.log('Found target call:', call);
+      // console.log('Found target call:', call);
       if (!call) {
         let newCall = Call({
           time: time,
@@ -154,7 +154,7 @@ exports.callEntry = (callInfo) => {
   return new Promise((resolve, reject) => {
     newCall.save()
     .then(function(success) {
-      resolve(console.log(`${callInfo.user_id} scheduled call successfully added`));
+      // resolve(console.log(`${callInfo.user_id} scheduled call successfully added`));
     })
     .error(function(err) {
       reject(err);
@@ -212,4 +212,3 @@ exports.findNextCall = (time) => {
     return nextCall;
   });
 };
-
