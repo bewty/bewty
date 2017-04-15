@@ -13,15 +13,12 @@ exports.dialNumbers = (number, message) => {
     url: `https://handler.twilio.com/twiml/EHbfb96ad7bafedf5e02460070a5bae8e7?message=${message}`,
     to: number,
     from: '+19498294984',
-    // record: true,
     transcribe: true
-    // recordingStatusCallbackMethod: 'POST'
-    // transcribeCallback: 'http://446cad30.ngrok.io/transcribe'
   }, (err, call) => {
     if (err) {
       console.log('Error occurred in twilioAPI clientCall:', err);
     } else {
-      console.log('Twilio SID:', call.sid, 'uri:', call.uri, 'else:', call);
+      console.log('Making call to:', call.to, 'Twilio SID:', call.sid, 'uri:', call.uri);
     }
   });
 };

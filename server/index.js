@@ -69,7 +69,18 @@ app.post('/scheduleCall', (req, res) => {
     time: time
   };
 
-  database.modifyCall(req, res, callInfo);
+  database.modifyCall(callInfo)
+  .then((result) => {
+    console.log('Received successful result:', result);
+    return cron.scheduleCall();
+  })
+  .then((time) => {
+    console.log(`Successfully set cron for ${time}`);
+    res.status(200);
+  })
+  .catch((e) => {
+    console.log('Received error:', e);
+  });
 });
 
 app.post('/db/retrieveEntry', (req, res) => {
@@ -125,10 +136,9 @@ app.post('/api/watson', (req, res) => {
 });
 
 app.post('/test', (req, res) => {
-  watson.promisifiedTone('Hello, my name is bob and I like to eat carrots but only on Tuesday')
-  .then((tone) => {
-    console.log('Received get to /test:', tone);
-    res.send(tone);
+  cron.scheduleCall()
+  .then((results) => {
+    res.send(results);
   });
 });
 

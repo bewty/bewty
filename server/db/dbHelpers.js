@@ -66,63 +66,65 @@ exports.retrieveEntry = (query) => {
   });
 };
 
-exports.modifyCall = (req, res, callInfo) => {
+exports.modifyCall = (callInfo) => {
   let targetUser = callInfo.user_id;
   let newMessage = callInfo.message;
   let time = callInfo.time.replace(':', '');
   let oldTime = '';
   let user_id;
-  User.findOne({ user_id: targetUser })
-  .then((user) => {
-    console.log('Found user:', targetUser, 'number is:', user.phonenumber);
-    oldTime = user.scheduled_time;
-    user_id = user._id;
-    user.scheduled_time = time;
-    user.scheduled_message = newMessage;
-    user.save();
-  })
-  .then(() => {
-    return Call.findOne({ time: oldTime });
-  })
-  .then((call) => {
-    if (call) {
-      console.log('Length of call is:', call.user.length);
-      if (call.user.length === 1 && call.user.indexOf(user_id) === 0) {
-        console.log('Entered remove section:', call);
-        call.remove();
-      } else {
-        console.log('Found splice:', call.user.indexOf(user_id));
-        call.user.splice(call.user.indexOf(user_id), 1);
+  return new Promise((resolve, reject) => {
+    User.findOne({ user_id: targetUser })
+    .then((user) => {
+      console.log('Found user:', typeof targetUser, targetUser);
+      console.log('number is:', user.phonenumber);
+      oldTime = user.scheduled_time;
+      user_id = user._id;
+      user.scheduled_time = time;
+      user.scheduled_message = newMessage;
+      user.save();
+    })
+    .then(() => {
+      return Call.findOne({ time: oldTime });
+    })
+    .then((call) => {
+      if (call) {
+        console.log('Length of call is:', call.user.length);
+        if (call.user.length === 1 && call.user.indexOf(user_id) === 0) {
+          console.log('Entered remove section:', call);
+          call.remove();
+        } else {
+          console.log('Found splice:', call.user.indexOf(user_id));
+          call.user.splice(call.user.indexOf(user_id), 1);
+        }
+        call.save();
       }
-      call.save();
-    }
-    return;
-  })
-  .then(() => {
-    return Call.findOne({ time: time });
-  })
-  .then((call) => {
-    console.log('Found target call:', call);
-    if (!call) {
-      let newCall = Call({
-        time: time,
-        user: [user_id]
-      });
-      newCall.save();
-    } else {
-      console.log('Call before push:', user_id, call.user);
-      call.user.push(user_id);
-      console.log('Call after push:', call.user);
-      call.save();
-    }
-    return;
-  })
-  .then((result) => {
-    console.log('Entry successfully uploaded!');
-    res.sendStatus(201);
-  })
-  .error(err => res.sendStatus(500).send(err))
-  .catch(err => res.sendStatus(400).send(err));
+      return;
+    })
+    .then(() => {
+      return Call.findOne({ time: time });
+    })
+    .then((call) => {
+      console.log('Found target call:', call);
+      if (!call) {
+        let newCall = Call({
+          time: time,
+          user: [user_id]
+        });
+        newCall.save();
+      } else {
+        console.log('Call before push:', user_id, call.user);
+        call.user.push(user_id);
+        console.log('Call after push:', call.user);
+        call.save();
+      }
+      return;
+    })
+    .then((result) => {
+      let resolved = 'Successfully modified/saved scheduled call';
+      resolve(resolved);
+    })
+    .catch(err => reject(err));
+  });
 };
 
 exports.callEntry = (callInfo) => {
@@ -152,6 +154,18 @@ exports.retrieveCall = (query) => {
       } else {
         resolve(user);
       }  
+    });
+  });
+};
+
+exports.callList = () => {
+  return new Promise((resolve, reject) => {
+    Call.find(null, null, {sort: {time: 1}})
+    .then((calls) => {
+      resolve(calls);
+    })
+    .catch((err) => {
+      reject(err);
     });
   });
 };
