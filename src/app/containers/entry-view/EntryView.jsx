@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Results from '../../components/results/results.jsx';
+import MediaPlayer from '../../components/mediaplayer/MediaPlayer.jsx';
 import EntryTextDisplay from '../../components/entry-text-display/EntryTextDisplay.jsx';
 
 class EntryView extends Component {
@@ -15,10 +16,11 @@ class EntryView extends Component {
       <div>
         {entrySelected === null ? null :
           <div>
-          <div className="chart-entry">
-            <Results />
-          </div>
+            <div className="chart-entry">
+              <Results />
+            </div>
             <EntryTextDisplay entry={entrySelected}/>
+            <MediaPlayer />
           </div>
         }
       </div>
