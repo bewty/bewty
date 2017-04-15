@@ -10,8 +10,6 @@ class AudioEntry extends Component {
       src: null,
       recordAudio: null,
       blob: null,
-      uploading: false,
-      uploadSuccess: null,
       start: false,
       stop: false,
       transcript: '',
