@@ -7,7 +7,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       idToken: null,
-      profile: null
+      profile: null,
+      phonenumber: '',
     };
     this.getProfile = this.getProfile.bind(this);
     this.userLog = this.userLog.bind(this);
@@ -23,19 +24,25 @@ export default class App extends React.Component {
 
   componentDidMount() {
     this.setState({
-      profile: JSON.parse(localStorage.smsCred).phoneNumber.number
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
     });
   }
 
   userLog() {
     let data = {
-      phonenumber: this.state.profile
+      phonenumber: this.state.phonenumber
     };
-
     axios.post('/db/userentry', data)
-    .then(res => console.log('Userlog sent to server', res))
+    .then((user_id) => {
+      localStorage.setItem('user_id', user_id.data);
+    })
+    .then((res) => {
+      console.log('Userlog sent to server', res);
+    })
     .catch(err => console.log('text upload error...', err));
   }
+
+  setUser
 
   createLock() {
     this.lock = new Auth0LockPasswordless('8Xf5mRZcDDcMo0Dkl7OvMLP7ai9jULsn', 'tungnh91.auth0.com');

@@ -7,7 +7,6 @@ const Call = mongoDatabase.Call;
 
 exports.userEntry = (req, res, userInfo) => {
   let newUser = User({
-    user_id: userInfo.user_id,
     phonenumber: userInfo.phonenumber
   });
   newUser.save((err, results) => {

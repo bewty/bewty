@@ -97,9 +97,9 @@ app.post('/db/retrieveEntry', (req, res) => {
 
 app.post('/db/userentry', (req, res) => {
   let userInfo = {
-    phonenumber: req.body.number || '11234567835'
+    phonenumber: req.body.phonenumber || '11234567835'
   };
-
+  console.log('Received number:', req.body.phonenumber);
   database.userEntry(req, res, userInfo);
 });
 
