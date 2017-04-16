@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { fetchEntry, selectEntry } from '../../actions/index';
+import { fetchEntry, selectEntry, fetchMedia } from '../../actions/index';
 import EntryTextDisplay from '../../components/entry-text-display/EntryTextDisplay';
 import axios from 'axios';
 
@@ -9,6 +9,8 @@ class EntryList extends Component {
   constructor(props) {
     super(props);
     this.props.fetchEntry = this.props.fetchEntry.bind(this);
+    this.onFetchMedia = this.onFetchMedia.bind(this);
+    this.props.fetchMedia = this.props.fetchMedia.bind(this);
   }
 
   componentWillMount() {
@@ -19,10 +21,25 @@ class EntryList extends Component {
     .catch( err => console.error('Fetching Entry Error'));
   }
 
+  onFetchMedia(entryId, entryType) {
+    if (entryType !== 'text') {
+      axios.get(`/entry/${entryId}/${entryType}`)
+      .then( result => {
+        this.props.fetchMedia(result.data);
+      })
+      .catch( err => console.error('Fetching Media Error'));
+    }
+  }
+
   renderList() {
     return this.props.entries.map( (entry, index) => {
       return (
-        <div key={index} onClick={ () => this.props.selectEntry(entry)}>
+        <div
+          key={index}
+          onClick={ () => {
+            this.props.selectEntry(entry);
+            this.onFetchMedia(entry._id, entry.entry_type);
+          }}>
           <EntryTextDisplay
             entry={entry}
             index={index}
@@ -55,6 +72,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     selectEntry: selectEntry,
     fetchEntry: fetchEntry,
+    fetchMedia: fetchMedia,
   }, dispatch);
 }
 

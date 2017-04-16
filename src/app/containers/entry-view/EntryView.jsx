@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Results from '../../components/results/results.jsx';
+import Daily from '../../components/results/daily-chart/Daily.jsx';
+import MediaPlayer from '../../components/mediaplayer/MediaPlayer.jsx';
 import EntryTextDisplay from '../../components/entry-text-display/EntryTextDisplay.jsx';
 
 class EntryView extends Component {
@@ -9,16 +10,17 @@ class EntryView extends Component {
   }
 
   render() {
-    const {match, entrySelected} = this.props;
+    const {match, entrySelected, fetchMedia} = this.props;
 
     return (
       <div>
         {entrySelected === null ? null :
           <div>
-          <div className="chart-entry">
-            <Results />
-          </div>
+            <div className="chart-entry">
+              <Daily data={entrySelected.watson_results}/>
+            </div>
             <EntryTextDisplay entry={entrySelected}/>
+            {entrySelected.entry_type === 'text' ? null : <MediaPlayer mediaSrc={fetchMedia} mediaType={entrySelected.entry_type}/>}
           </div>
         }
       </div>
@@ -28,8 +30,10 @@ class EntryView extends Component {
 
 function mapStateToProps(state) {
   return {
-    entrySelected: state.entrySelected
+    entrySelected: state.entrySelected,
+    fetchMedia: state.fetchMedia
   };
+  console.log('=====fetchMedia', state.fetchMedia);
 }
 
 export default connect(mapStateToProps, null)(EntryView);
