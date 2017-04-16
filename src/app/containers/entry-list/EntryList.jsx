@@ -14,7 +14,11 @@ class EntryList extends Component {
   }
 
   componentWillMount() {
-    axios.post('/db/retrieveEntry')
+    const data = {
+      user_id: localStorage.user_id
+    };
+
+    axios.post('/db/retrieveEntry', data)
     .then( result => {
       this.props.fetchEntry(result.data);
     })

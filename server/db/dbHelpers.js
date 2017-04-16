@@ -56,9 +56,9 @@ exports.saveEntry = (req, res, log) => {
 };
 
 exports.retrieveEntry = (query) => {
-  let user_id = query.user_id || '01';
+  let user_id = query.user_id;
   return new Promise((resolve, reject) => {
-    User.find({ user_id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
+    User.find({ _id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
     .then((results) => {
       if (results[0] === undefined) {
         resolve(JSON.stringify(results));
