@@ -8,26 +8,30 @@ export default class MediaPlayer extends React.Component {
     this.renderAudioPlayer = this.renderAudioPlayer.bind(this);
   }
 
-  renderVideoPlayer() {
-    const video = 'https://mindfit.s3.amazonaws.com/1492196447589?AWSAccessKeyId=AKIAJISRJUHHMSTRVLAA&Expires=1492294390&Signature=Ds%2Fll1o%2Bokr1YSFGaN0J7sCUXAg%3D';
+  renderVideoPlayer(mediaSrc) {
     return (
-      <video src={video} controls></video>
+      <div className='video-player'>
+        <video src={mediaSrc} controls></video>
+      </div>
     );
   }
 
-  renderAudioPlayer() {
-    const audio = 'https://mindfit.s3.amazonaws.com/1492196447589?AWSAccessKeyId=AKIAJISRJUHHMSTRVLAA&Expires=1492294390&Signature=Ds%2Fll1o%2Bokr1YSFGaN0J7sCUXAg%3D';
+  renderAudioPlayer(mediaSrc) {
     return (
-      <audio src={audio} controls></audio>
+      <div className='audio-player'>
+        <audio src={mediaSrc} controls></audio>
+      </div>
     );
   }
 
   render() {
+    const {mediaSrc, mediaType} = this.props;
     return (
-      <div>
-        {this.renderVideoPlayer()}
+      <div className='media-container'>
+        {mediaType === 'video' ? this.renderVideoPlayer(mediaSrc) : this.renderAudioPlayer(mediaSrc) }
       </div>
     );
   }
 }
+
 

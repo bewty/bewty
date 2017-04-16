@@ -163,8 +163,8 @@ const getAWSSignedUrl = (bucket, key) => {
 app.get('/entry/:entryId/:entryType', (req, res) => {
   let query = {};
   query.entryId = req.params.entryId;
-  query.entryType = req.params.entryType || 'video';
-  query.user = req.body.user || '123456789';
+  query.entryType = req.params.entryType;
+  query.user = req.body.user_id || '01';
   database.retrieveEntryMedia(query)
   .then( result => {
     let key;
@@ -172,9 +172,9 @@ app.get('/entry/:entryId/:entryType', (req, res) => {
     query.entryType === 'video' ? key = result[0].video.key : key = result[0].audio.key;
     query.entryType === 'video' ? bucket = result[0].video.bucket : bucket = result[0].audio.bucket;
     let url = getAWSSignedUrl(bucket, key);
-    res.send(url);
+    res.send(JSON.stringify(url));
   })
-  .catch(err => res.sendStatus(400).send(err));
+  .catch( err => res.sendStatus(400).send(err));
 });
 
 

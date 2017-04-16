@@ -67,26 +67,8 @@ exports.retrieveEntry = (query) => {
 };
 
 exports.retrieveEntryMedia = (query) => {
-  let targetUser = query.user || 'Bob Test';
-  let entryId = query.entryId || '58f11c6006ecf40ad10b1c88';
-  return new Promise((resolve, reject) => {
-    User.find({'entries._id': entryId}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
-    .then( (results) => {
-      if (results[0] === undefined) {
-        throw 'no entries found with entryId';
-      } else {
-        resolve(results[0].entries);
-      }
-    })
-    .catch( err => {
-      reject(err);
-    });
-  });
-};
-
-exports.retrieveEntryMedia = (query) => {
-  let targetUser = query.user || 'Bob Test';
-  let entryId = query.entryId || '58f11c6006ecf40ad10b1c88';
+  let targetUser = query.user_id || '01';
+  let entryId = query.entryId;
   return new Promise((resolve, reject) => {
     User.find({'entries._id': entryId}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
     .then( (results) => {

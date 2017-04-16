@@ -10,17 +10,17 @@ class EntryView extends Component {
   }
 
   render() {
-    const {match, entrySelected} = this.props;
+    const {match, entrySelected, fetchMedia} = this.props;
 
     return (
       <div>
         {entrySelected === null ? null :
           <div>
             <div className="chart-entry">
-              <Daily />
+              <Daily data={entrySelected.watson_results}/>
             </div>
             <EntryTextDisplay entry={entrySelected}/>
-            <MediaPlayer />
+            {entrySelected.entry_type === 'text' ? null : <MediaPlayer mediaSrc={fetchMedia} mediaType={entrySelected.entry_type}/>}
           </div>
         }
       </div>
@@ -30,8 +30,10 @@ class EntryView extends Component {
 
 function mapStateToProps(state) {
   return {
-    entrySelected: state.entrySelected
+    entrySelected: state.entrySelected,
+    fetchMedia: state.fetchMedia
   };
+  console.log('=====fetchMedia', state.fetchMedia);
 }
 
 export default connect(mapStateToProps, null)(EntryView);
