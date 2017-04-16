@@ -1,0 +1,548 @@
+There are a lot of points I want to make tonight, but the most important one is that 20 years ago I became the luckiest man on Earth because Michelle Obama agreed to marry me.  And so I just want to wish, Sweetie, you happy anniversary and let you know that a year from now we will not be celebrating it in front of 40 million people.  You know, four years ago we went through the worst financial crisis since the Great Depression. Millions of jobs were lost, the auto industry was on the brink of collapse. The financial system had frozen up.
+------------------------------------
+{
+  "document_tone": {
+    "tone_categories": [
+      {
+        "tones": [
+          {
+            "score": 0.023918,
+            "tone_id": "anger",
+            "tone_name": "Anger"
+          },
+          {
+            "score": 0.081019,
+            "tone_id": "disgust",
+            "tone_name": "Disgust"
+          },
+          {
+            "score": 0.030695,
+            "tone_id": "fear",
+            "tone_name": "Fear"
+          },
+          {
+            "score": 0.069507,
+            "tone_id": "joy",
+            "tone_name": "Joy"
+          },
+          {
+            "score": 0.763062,
+            "tone_id": "sadness",
+            "tone_name": "Sadness"
+          }
+        ],
+        "category_id": "emotion_tone",
+        "category_name": "Emotion Tone"
+      },
+      {
+        "tones": [
+          {
+            "score": 0.237448,
+            "tone_id": "analytical",
+            "tone_name": "Analytical"
+          },
+          {
+            "score": 0,
+            "tone_id": "confident",
+            "tone_name": "Confident"
+          },
+          {
+            "score": 0.767326,
+            "tone_id": "tentative",
+            "tone_name": "Tentative"
+          }
+        ],
+        "category_id": "language_tone",
+        "category_name": "Language Tone"
+      },
+      {
+        "tones": [
+          {
+            "score": 0.343669,
+            "tone_id": "openness_big5",
+            "tone_name": "Openness"
+          },
+          {
+            "score": 0.456098,
+            "tone_id": "conscientiousness_big5",
+            "tone_name": "Conscientiousness"
+          },
+          {
+            "score": 0.527364,
+            "tone_id": "extraversion_big5",
+            "tone_name": "Extraversion"
+          },
+          {
+            "score": 0.752761,
+            "tone_id": "agreeableness_big5",
+            "tone_name": "Agreeableness"
+          },
+          {
+            "score": 0.649556,
+            "tone_id": "emotional_range_big5",
+            "tone_name": "Emotional Range"
+          }
+        ],
+        "category_id": "social_tone",
+        "category_name": "Social Tone"
+      }
+    ]
+  },
+  "sentences_tone": [
+    {
+      "sentence_id": 0,
+      "text": "There are a lot of points I want to make tonight, but the most important one is that 20 years ago I became the luckiest man on Earth because Michelle Obama agreed to marry me.",
+      "input_from": 0,
+      "input_to": 175,
+      "tone_categories": [
+        {
+          "tones": [
+            {
+              "score": 0.035194,
+              "tone_id": "anger",
+              "tone_name": "Anger"
+            },
+            {
+              "score": 0.052956,
+              "tone_id": "disgust",
+              "tone_name": "Disgust"
+            },
+            {
+              "score": 0.020375,
+              "tone_id": "fear",
+              "tone_name": "Fear"
+            },
+            {
+              "score": 0.618867,
+              "tone_id": "joy",
+              "tone_name": "Joy"
+            },
+            {
+              "score": 0.133794,
+              "tone_id": "sadness",
+              "tone_name": "Sadness"
+            }
+          ],
+          "category_id": "emotion_tone",
+          "category_name": "Emotion Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.220621,
+              "tone_id": "analytical",
+              "tone_name": "Analytical"
+            },
+            {
+              "score": 0,
+              "tone_id": "confident",
+              "tone_name": "Confident"
+            },
+            {
+              "score": 0.5687,
+              "tone_id": "tentative",
+              "tone_name": "Tentative"
+            }
+          ],
+          "category_id": "language_tone",
+          "category_name": "Language Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.407782,
+              "tone_id": "openness_big5",
+              "tone_name": "Openness"
+            },
+            {
+              "score": 0.135125,
+              "tone_id": "conscientiousness_big5",
+              "tone_name": "Conscientiousness"
+            },
+            {
+              "score": 0.363327,
+              "tone_id": "extraversion_big5",
+              "tone_name": "Extraversion"
+            },
+            {
+              "score": 0.675259,
+              "tone_id": "agreeableness_big5",
+              "tone_name": "Agreeableness"
+            },
+            {
+              "score": 0.617821,
+              "tone_id": "emotional_range_big5",
+              "tone_name": "Emotional Range"
+            }
+          ],
+          "category_id": "social_tone",
+          "category_name": "Social Tone"
+        }
+      ]
+    },
+    {
+      "sentence_id": 1,
+      "text": "And so I just want to wish, Sweetie, you happy anniversary and let you know that a year from now we will not be celebrating it in front of 40 million people.",
+      "input_from": 176,
+      "input_to": 333,
+      "tone_categories": [
+        {
+          "tones": [
+            {
+              "score": 0.010297,
+              "tone_id": "anger",
+              "tone_name": "Anger"
+            },
+            {
+              "score": 0.055803,
+              "tone_id": "disgust",
+              "tone_name": "Disgust"
+            },
+            {
+              "score": 0.015491,
+              "tone_id": "fear",
+              "tone_name": "Fear"
+            },
+            {
+              "score": 0.698187,
+              "tone_id": "joy",
+              "tone_name": "Joy"
+            },
+            {
+              "score": 0.10016,
+              "tone_id": "sadness",
+              "tone_name": "Sadness"
+            }
+          ],
+          "category_id": "emotion_tone",
+          "category_name": "Emotion Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.004834,
+              "tone_id": "analytical",
+              "tone_name": "Analytical"
+            },
+            {
+              "score": 0,
+              "tone_id": "confident",
+              "tone_name": "Confident"
+            },
+            {
+              "score": 0.26216,
+              "tone_id": "tentative",
+              "tone_name": "Tentative"
+            }
+          ],
+          "category_id": "language_tone",
+          "category_name": "Language Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.278787,
+              "tone_id": "openness_big5",
+              "tone_name": "Openness"
+            },
+            {
+              "score": 0.995386,
+              "tone_id": "conscientiousness_big5",
+              "tone_name": "Conscientiousness"
+            },
+            {
+              "score": 0.588369,
+              "tone_id": "extraversion_big5",
+              "tone_name": "Extraversion"
+            },
+            {
+              "score": 0.999756,
+              "tone_id": "agreeableness_big5",
+              "tone_name": "Agreeableness"
+            },
+            {
+              "score": 0.700682,
+              "tone_id": "emotional_range_big5",
+              "tone_name": "Emotional Range"
+            }
+          ],
+          "category_id": "social_tone",
+          "category_name": "Social Tone"
+        }
+      ]
+    },
+    {
+      "sentence_id": 2,
+      "text": "You know, four years ago we went through the worst financial crisis since the Great Depression.",
+      "input_from": 334,
+      "input_to": 429,
+      "tone_categories": [
+        {
+          "tones": [
+            {
+              "score": 0.017401,
+              "tone_id": "anger",
+              "tone_name": "Anger"
+            },
+            {
+              "score": 0.033563,
+              "tone_id": "disgust",
+              "tone_name": "Disgust"
+            },
+            {
+              "score": 0.117093,
+              "tone_id": "fear",
+              "tone_name": "Fear"
+            },
+            {
+              "score": 0.002721,
+              "tone_id": "joy",
+              "tone_name": "Joy"
+            },
+            {
+              "score": 0.877335,
+              "tone_id": "sadness",
+              "tone_name": "Sadness"
+            }
+          ],
+          "category_id": "emotion_tone",
+          "category_name": "Emotion Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.506763,
+              "tone_id": "analytical",
+              "tone_name": "Analytical"
+            },
+            {
+              "score": 0,
+              "tone_id": "confident",
+              "tone_name": "Confident"
+            },
+            {
+              "score": 0,
+              "tone_id": "tentative",
+              "tone_name": "Tentative"
+            }
+          ],
+          "category_id": "language_tone",
+          "category_name": "Language Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.179949,
+              "tone_id": "openness_big5",
+              "tone_name": "Openness"
+            },
+            {
+              "score": 0.378914,
+              "tone_id": "conscientiousness_big5",
+              "tone_name": "Conscientiousness"
+            },
+            {
+              "score": 0.503908,
+              "tone_id": "extraversion_big5",
+              "tone_name": "Extraversion"
+            },
+            {
+              "score": 0.642794,
+              "tone_id": "agreeableness_big5",
+              "tone_name": "Agreeableness"
+            },
+            {
+              "score": 0.501704,
+              "tone_id": "emotional_range_big5",
+              "tone_name": "Emotional Range"
+            }
+          ],
+          "category_id": "social_tone",
+          "category_name": "Social Tone"
+        }
+      ]
+    },
+    {
+      "sentence_id": 3,
+      "text": "Millions of jobs were lost, the auto industry was on the brink of collapse.",
+      "input_from": 430,
+      "input_to": 505,
+      "tone_categories": [
+        {
+          "tones": [
+            {
+              "score": 0.142154,
+              "tone_id": "anger",
+              "tone_name": "Anger"
+            },
+            {
+              "score": 0.155252,
+              "tone_id": "disgust",
+              "tone_name": "Disgust"
+            },
+            {
+              "score": 0.346572,
+              "tone_id": "fear",
+              "tone_name": "Fear"
+            },
+            {
+              "score": 0.007192,
+              "tone_id": "joy",
+              "tone_name": "Joy"
+            },
+            {
+              "score": 0.490508,
+              "tone_id": "sadness",
+              "tone_name": "Sadness"
+            }
+          ],
+          "category_id": "emotion_tone",
+          "category_name": "Emotion Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0,
+              "tone_id": "analytical",
+              "tone_name": "Analytical"
+            },
+            {
+              "score": 0,
+              "tone_id": "confident",
+              "tone_name": "Confident"
+            },
+            {
+              "score": 0,
+              "tone_id": "tentative",
+              "tone_name": "Tentative"
+            }
+          ],
+          "category_id": "language_tone",
+          "category_name": "Language Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.590395,
+              "tone_id": "openness_big5",
+              "tone_name": "Openness"
+            },
+            {
+              "score": 0.27504,
+              "tone_id": "conscientiousness_big5",
+              "tone_name": "Conscientiousness"
+            },
+            {
+              "score": 0.720004,
+              "tone_id": "extraversion_big5",
+              "tone_name": "Extraversion"
+            },
+            {
+              "score": 0.522074,
+              "tone_id": "agreeableness_big5",
+              "tone_name": "Agreeableness"
+            },
+            {
+              "score": 0.697199,
+              "tone_id": "emotional_range_big5",
+              "tone_name": "Emotional Range"
+            }
+          ],
+          "category_id": "social_tone",
+          "category_name": "Social Tone"
+        }
+      ]
+    },
+    {
+      "sentence_id": 4,
+      "text": "The financial system had frozen up.",
+      "input_from": 506,
+      "input_to": 541,
+      "tone_categories": [
+        {
+          "tones": [
+            {
+              "score": 0.175007,
+              "tone_id": "anger",
+              "tone_name": "Anger"
+            },
+            {
+              "score": 0.067857,
+              "tone_id": "disgust",
+              "tone_name": "Disgust"
+            },
+            {
+              "score": 0.090785,
+              "tone_id": "fear",
+              "tone_name": "Fear"
+            },
+            {
+              "score": 0.037416,
+              "tone_id": "joy",
+              "tone_name": "Joy"
+            },
+            {
+              "score": 0.68485,
+              "tone_id": "sadness",
+              "tone_name": "Sadness"
+            }
+          ],
+          "category_id": "emotion_tone",
+          "category_name": "Emotion Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.182902,
+              "tone_id": "analytical",
+              "tone_name": "Analytical"
+            },
+            {
+              "score": 0,
+              "tone_id": "confident",
+              "tone_name": "Confident"
+            },
+            {
+              "score": 0,
+              "tone_id": "tentative",
+              "tone_name": "Tentative"
+            }
+          ],
+          "category_id": "language_tone",
+          "category_name": "Language Tone"
+        },
+        {
+          "tones": [
+            {
+              "score": 0.529638,
+              "tone_id": "openness_big5",
+              "tone_name": "Openness"
+            },
+            {
+              "score": 0.276243,
+              "tone_id": "conscientiousness_big5",
+              "tone_name": "Conscientiousness"
+            },
+            {
+              "score": 0.595804,
+              "tone_id": "extraversion_big5",
+              "tone_name": "Extraversion"
+            },
+            {
+              "score": 0.300605,
+              "tone_id": "agreeableness_big5",
+              "tone_name": "Agreeableness"
+            },
+            {
+              "score": 0.540316,
+              "tone_id": "emotional_range_big5",
+              "tone_name": "Emotional Range"
+            }
+          ],
+          "category_id": "social_tone",
+          "category_name": "Social Tone"
+        }
+      ]
+    }
+  ]
+}
