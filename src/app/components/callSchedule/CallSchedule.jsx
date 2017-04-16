@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-export default class TextEntry extends React.Component {
+export default class CallSchedule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
