@@ -28,7 +28,7 @@ exports.userEntry = (req, res, userInfo) => {
 };
 
 exports.saveEntry = (req, res, log) => {
-  const userID = log.user_id;
+  const phonenumber = log.phonenumber;
   let logEntry = {
     entry_type: log.entry_type,
     created_at: Date.now(),
@@ -46,9 +46,8 @@ exports.saveEntry = (req, res, log) => {
     watson_results: log.watson_results,
     tags: log.tags
   };
-
-  User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
-
+  console.log('phonnumber:', phonenumber);
+  User.findOneAndUpdate({phonenumber: phonenumber}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
   .then((result) => {
     console.log('Entry successfully uploaded!');
     res.sendStatus(201);
@@ -81,9 +80,9 @@ exports.modifyCall = (callInfo) => {
   let oldTime = '';
   let user_id;
   return new Promise((resolve, reject) => {
-    User.findOne({ user_id: targetUser })
+    User.findOne({ _id: targetUser })
     .then((user) => {
-      console.log('Found user:', typeof targetUser, targetUser);
+      console.log('Found user:', targetUser);
       console.log('number is:', user.phonenumber);
       oldTime = user.scheduled_time;
       user_id = user._id;

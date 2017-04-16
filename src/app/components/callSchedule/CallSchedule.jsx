@@ -7,18 +7,21 @@ export default class TextEntry extends React.Component {
     this.state = {
       question: '',
       time: '',
-      profile: ''
+      phonenumber: '',
+      user_id: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleQuestion = this.handleQuestion.bind(this);
     this.handleTime = this.handleTime.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
   
   componentDidMount() {
     this.setState({
-      profile: JSON.parse(localStorage.smsCred).phoneNumber.number
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
+    });
+    this.setState({
+      user_id: localStorage.user_id
     });
   }
 
@@ -42,7 +45,7 @@ export default class TextEntry extends React.Component {
       body: JSON.stringify({
         time: this.state.time,
         question: this.state.question,
-        user_id: this.state.profile
+        user_id: this.state.user_id
       })
     });
   }

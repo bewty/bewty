@@ -37,7 +37,7 @@ export default class App extends React.Component {
       localStorage.setItem('user_id', user_id.data);
     })
     .then((res) => {
-      console.log('Userlog sent to server', res);
+      console.log('Userlog sent to server');
     })
     .catch(err => console.log('text upload error...', err));
   }

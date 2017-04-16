@@ -58,11 +58,11 @@ AWS.config.update({
 });
 
 app.post('/scheduleCall', (req, res) => {
-  let time = req.body.time;
+  let time = req.body.time.replace(':', '');
   let question = req.body.question;
   console.log('Receiving user_id phonenumber:', req.body.user_id);
-  let user_id = '01' || req.body.user_id;
-  console.log('User_id:', user_id, 'Received scheduleCall post:', time.replace(':', ''), question);
+  let user_id = req.body.user_id || '01';
+  console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
   
   let callInfo = {
     user_id: user_id,
@@ -104,14 +104,12 @@ app.post('/db/userentry', (req, res) => {
 });
 
 app.post('/transcribe', (req, res) => {
-  console.log('Within /transcribe with:', req.body.TranscriptionText);
   let text = req.body.TranscriptionText || 'Test123123';
-  let user_id = req.body.user_id || '01';
+  let phonenumber = req.body.Called.slice(1) || '01';
   watson.promisifiedTone(text)
   .then((tone) => {
-    console.log('Received tone entry:', tone);
     let log = {
-      user_id: user_id,
+      phonenumber: phonenumber,
       text: text,
       watson_results: tone
     };
