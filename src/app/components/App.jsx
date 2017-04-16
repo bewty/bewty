@@ -1,15 +1,20 @@
 import React, { PropTypes } from 'react';
 import UserProfile from '../UserProfile.jsx';
 import config from '../../../config.js'
+import axios from 'axios';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       idToken: null,
-      profile: null
+      profile: null,
+      phonenumber: '',
     };
     this.getProfile = this.getProfile.bind(this);
+    this.userLog = this.userLog.bind(this);
   }
+
   componentWillMount() {
     this.createLock();
     this.setState({
@@ -17,6 +22,29 @@ export default class App extends React.Component {
     });
     this.getProfile();
   }
+
+  componentDidMount() {
+    this.setState({
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
+    });
+  }
+
+  userLog() {
+    let data = {
+      phonenumber: this.state.phonenumber
+    };
+    axios.post('/db/userentry', data)
+    .then((user_id) => {
+      localStorage.setItem('user_id', user_id.data);
+    })
+    .then((res) => {
+      console.log('Userlog sent to server');
+    })
+    .catch(err => console.log('text upload error...', err));
+  }
+
+  setUser
+
   createLock() {
     this.lock = new Auth0LockPasswordless(config.auth0_clientId, config.auth0_domain);
     this.getIdToken();
@@ -61,6 +89,8 @@ export default class App extends React.Component {
   }
 
   render() {
+    this.userLog();
+
     if (this.state.idToken && this.loggedIn()) {
       return (
         <div className="container">

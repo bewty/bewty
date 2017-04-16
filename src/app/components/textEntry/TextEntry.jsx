@@ -20,7 +20,8 @@ export default class TextEntry extends React.Component {
     event.preventDefault();
     const data = {
       text: this.state.value,
-      entryType: 'text'
+      entryType: 'text',
+      user_id: localStorage.user_id
     };
 
     axios.post('/entry', data)

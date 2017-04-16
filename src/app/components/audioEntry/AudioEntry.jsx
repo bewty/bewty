@@ -94,6 +94,7 @@ class AudioEntry extends Component {
     fd.append('media', blob);
     fd.append('entryType', 'audio');
     fd.append('text', this.state.transcript);
+    fd.append('user_id', localStorage.user_id);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
