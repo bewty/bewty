@@ -130,10 +130,11 @@ app.post('/api/watson', (req, res) => {
 });
 
 app.post('/entry', upload.single('media'), (req, res) => {
+  console.log('req.body.user_id', req.body.user_id);
   watson.promisifiedTone(req.body.text)
   .then(tone => {
     let log = {
-      user_id: '01', // NOTE: hardcode user id
+      user_id: req.body.user_id,
       entry_type: req.body.entryType,
       video: {
         bucket: req.file ? req.file.bucket : null,
