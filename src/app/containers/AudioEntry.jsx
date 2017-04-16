@@ -10,7 +10,6 @@ class AudioEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      recordAudio: null,
       blob: null,
       uploading: false,
       uploadSuccess: null,
@@ -28,6 +27,7 @@ class AudioEntry extends Component {
     this.uploadAudio = this.uploadAudio.bind(this);
     this.onEnd = this.onEnd.bind(this);
     this.onResult = this.onResult.bind(this);
+    this.recordAudio = null;
   }
 
   componentDidMount() {
@@ -67,8 +67,8 @@ class AudioEntry extends Component {
   startRecord() {
     this.getUserMedia();
     this.captureUserMedia( stream => {
-      this.state.recordAudio = RecordRTC(stream, {type: 'audio'});
-      this.state.recordAudio.startRecording();
+      this.recordAudio = RecordRTC(stream, {type: 'audio'});
+      this.recordAudio.startRecording();
     });
 
     setTimeout( () => {
@@ -80,10 +80,10 @@ class AudioEntry extends Component {
   }
 
   stopRecord() {
-    this.state.recordAudio.stopRecording((audioURL) => {
+    this.recordAudio.stopRecording((audioURL) => {
       this.props.setSourceUrl(audioURL);
       this.setState({
-        blob: this.state.recordAudio.blob,
+        blob: this.recordAudio.blob,
         stop: true
       });
     });
