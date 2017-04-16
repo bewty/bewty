@@ -7,20 +7,28 @@ const Call = mongoDatabase.Call;
 
 exports.userEntry = (req, res, userInfo) => {
   let newUser = User({
-    user_id: userInfo.user_id,
     phonenumber: userInfo.phonenumber
   });
   newUser.save((err, results) => {
+    console.log('User info in userEntry is:', userInfo);
     if (err) {
-      res.sendStatus(400).send(err);
+      User.findOne({'phonenumber': userInfo.phonenumber})
+      .then((user) => {
+        console.log('Found user:', user._id);
+        res.status(201).send(user._id);
+      })
+      .catch((err) => {
+        res.sendStatus(400);
+      });
     } else {
-      res.sendStatus(201);
+      console.log('Created user');
+      res.status(201).send(results._id);
     }
   });
 };
 
 exports.saveEntry = (req, res, log) => {
-  const userID = log.user_id;
+  const _id = log.user_id;
   let logEntry = {
     entry_type: log.entry_type,
     created_at: Date.now(),
@@ -38,9 +46,7 @@ exports.saveEntry = (req, res, log) => {
     watson_results: log.watson_results,
     tags: log.tags
   };
-
-  User.findOneAndUpdate({user_id: userID}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
-
+  User.findOneAndUpdate({_id: _id}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
   .then((result) => {
     console.log('Entry successfully uploaded!');
     res.sendStatus(201);
@@ -50,9 +56,9 @@ exports.saveEntry = (req, res, log) => {
 };
 
 exports.retrieveEntry = (query) => {
-  let user_id = query.user_id || '01';
+  let user_id = query.user_id;
   return new Promise((resolve, reject) => {
-    User.find({ user_id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
+    User.find({ _id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
     .then((results) => {
       if (results[0] === undefined) {
         resolve(JSON.stringify(results));
@@ -67,10 +73,10 @@ exports.retrieveEntry = (query) => {
 };
 
 exports.retrieveEntryMedia = (query) => {
-  let targetUser = query.user_id || '01';
+  let user_id = query.user_id;
   let entryId = query.entryId;
   return new Promise((resolve, reject) => {
-    User.find({'entries._id': entryId}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
+    User.find({_id: user_id}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
     .then( (results) => {
       if (results[0] === undefined) {
         throw 'no entries found with entryId';
@@ -91,9 +97,9 @@ exports.modifyCall = (callInfo) => {
   let oldTime = '';
   let user_id;
   return new Promise((resolve, reject) => {
-    User.findOne({ user_id: targetUser })
+    User.findOne({ _id: targetUser })
     .then((user) => {
-      console.log('Found user:', typeof targetUser, targetUser);
+      console.log('Found user:', targetUser);
       console.log('number is:', user.phonenumber);
       oldTime = user.scheduled_time;
       user_id = user._id;
@@ -106,12 +112,9 @@ exports.modifyCall = (callInfo) => {
     })
     .then((call) => {
       if (call) {
-        console.log('Length of call is:', call.user.length);
         if (call.user.length === 1 && call.user.indexOf(user_id) === 0) {
-          console.log('Entered remove section:', call);
           call.remove();
         } else {
-          console.log('Found splice:', call.user.indexOf(user_id));
           call.user.splice(call.user.indexOf(user_id), 1);
         }
         call.save();
@@ -130,9 +133,7 @@ exports.modifyCall = (callInfo) => {
         });
         newCall.save();
       } else {
-        console.log('Call before push:', user_id, call.user);
         call.user.push(user_id);
-        console.log('Call after push:', call.user);
         call.save();
       }
       return;

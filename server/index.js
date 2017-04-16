@@ -50,10 +50,12 @@ AWS.config.update({
 });
 
 app.post('/scheduleCall', (req, res) => {
-  let time = req.body.time;
+  let time = req.body.time.replace(':', '');
   let question = req.body.question;
+  console.log('Receiving user_id phonenumber:', req.body.user_id);
   let user_id = req.body.user_id || '01';
-  console.log('Received scheduleCall post:', time.replace(':', ''), question);
+
+  console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
 
   let callInfo = {
     user_id: user_id,
@@ -76,11 +78,8 @@ app.post('/scheduleCall', (req, res) => {
 });
 
 app.post('/db/retrieveEntry', (req, res) => {
-  ///db/retrieveEntry/:user?query=entries
-
   let query = {};
-  query.user_id = req.body.user_id || '01';
-  query.search = req.body.search;
+  query.user_id = req.body.user_id;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
@@ -89,22 +88,20 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
-  let userInfo = req.body.userInfo || {
-    user_id: '01', //hardcoded
-    phonenumber: '11234567835'
+  let userInfo = {
+    phonenumber: req.body.phonenumber || '11234567835'
   };
+
   database.userEntry(req, res, userInfo);
 });
 
 app.post('/transcribe', (req, res) => {
-  console.log('Within /transcribe with:', req.body.TranscriptionText);
   let text = req.body.TranscriptionText || 'Test123123';
-  let user_id = req.body.user_id || '01';
+  let phonenumber = req.body.Called.slice(1) || '01';
   watson.promisifiedTone(text)
   .then((tone) => {
-    console.log('Received tone entry:', tone);
     let log = {
-      user_id: user_id,
+      phonenumber: phonenumber,
       text: text,
       watson_results: tone
     };
@@ -133,7 +130,7 @@ app.post('/entry', upload.single('media'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
     let log = {
-      user_id: '01', // NOTE: hardcode user id
+      user_id: req.body.user_id,
       entry_type: req.body.entryType,
       video: {
         bucket: req.file ? req.file.bucket : null,
@@ -160,11 +157,11 @@ const getAWSSignedUrl = (bucket, key) => {
   return s3.getSignedUrl('getObject', params);
 };
 
-app.get('/entry/:entryId/:entryType', (req, res) => {
+app.get('/entry/:entryId/:entryType/:user_id', (req, res) => {
   let query = {};
   query.entryId = req.params.entryId;
   query.entryType = req.params.entryType;
-  query.user = req.body.user_id || '01';
+  query.user_id = req.params.user_id;
   database.retrieveEntryMedia(query)
   .then( result => {
     let key;

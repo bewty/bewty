@@ -1,20 +1,30 @@
 import React from 'react';
 
 
-export default class TextEntry extends React.Component {
+export default class CallSchedule extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       question: '',
-      time: ''
+      time: '',
+      phonenumber: '',
+      user_id: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleQuestion = this.handleQuestion.bind(this);
     this.handleTime = this.handleTime.bind(this);
-    this.handleClick = this.handleClick.bind(this);
   }
   
+  componentDidMount() {
+    this.setState({
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
+    });
+    this.setState({
+      user_id: localStorage.user_id
+    });
+  }
+
   handleQuestion(event) {
     this.setState({question: event.target.value});
   }
@@ -34,19 +44,17 @@ export default class TextEntry extends React.Component {
       method: 'POST',
       body: JSON.stringify({
         time: this.state.time,
-        question: this.state.question
+        question: this.state.question,
+        user_id: this.state.user_id
       })
     });
   }
 
-  handleClick() {
-    console.log('state:', this.state);
-  }
 
   render() {
     return (
       <div className="container">
-        <h1 onClick={this.handleClick}>What question would you like to be asked?</h1>
+        <h1>What question would you like to be asked?</h1>
         <form onSubmit={this.handleSubmit}>
           <label>
             <input type="text" value={this.state.question} onChange={this.handleQuestion} />
