@@ -18,7 +18,6 @@ export function selectEntry(entry) {
 }
 
 export function fetchMedia(url) {
-  console.log('action=====fetchMedia===url', url);
   return {
     type: FETCH_MEDIA,
     payload: url
