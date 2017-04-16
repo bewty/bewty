@@ -14,7 +14,11 @@ class EntryList extends Component {
   }
 
   componentWillMount() {
-    axios.post('/db/retrieveEntry')
+    const data = {
+      user_id: localStorage.user_id
+    };
+
+    axios.post('/db/retrieveEntry', data)
     .then( result => {
       this.props.fetchEntry(result.data);
     })
@@ -23,7 +27,7 @@ class EntryList extends Component {
 
   onFetchMedia(entryId, entryType) {
     if (entryType !== 'text') {
-      axios.get(`/entry/${entryId}/${entryType}`)
+      axios.get(`/entry/${entryId}/${entryType}/${localStorage.user_id}`)
       .then( result => {
         this.props.fetchMedia(result.data);
       })

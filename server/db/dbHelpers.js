@@ -19,7 +19,7 @@ exports.userEntry = (req, res, userInfo) => {
       })
       .catch((err) => {
         res.sendStatus(400);
-      }); 
+      });
     } else {
       console.log('Created user');
       res.status(201).send(results._id);
@@ -28,7 +28,7 @@ exports.userEntry = (req, res, userInfo) => {
 };
 
 exports.saveEntry = (req, res, log) => {
-  const phonenumber = log.phonenumber;
+  const _id = log.user_id;
   let logEntry = {
     entry_type: log.entry_type,
     created_at: Date.now(),
@@ -46,8 +46,7 @@ exports.saveEntry = (req, res, log) => {
     watson_results: log.watson_results,
     tags: log.tags
   };
-  console.log('phonnumber:', phonenumber);
-  User.findOneAndUpdate({phonenumber: phonenumber}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
+  User.findOneAndUpdate({_id: _id}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
   .then((result) => {
     console.log('Entry successfully uploaded!');
     res.sendStatus(201);
@@ -57,9 +56,9 @@ exports.saveEntry = (req, res, log) => {
 };
 
 exports.retrieveEntry = (query) => {
-  let user_id = query.user_id || '01';
+  let user_id = query.user_id;
   return new Promise((resolve, reject) => {
-    User.find({ user_id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
+    User.find({ _id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
     .then((results) => {
       if (results[0] === undefined) {
         resolve(JSON.stringify(results));
@@ -74,10 +73,10 @@ exports.retrieveEntry = (query) => {
 };
 
 exports.retrieveEntryMedia = (query) => {
-  let targetUser = query.user_id || '01';
+  let user_id = query.user_id;
   let entryId = query.entryId;
   return new Promise((resolve, reject) => {
-    User.find({'entries._id': entryId}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
+    User.find({_id: user_id}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
     .then( (results) => {
       if (results[0] === undefined) {
         throw 'no entries found with entryId';

@@ -78,11 +78,8 @@ app.post('/scheduleCall', (req, res) => {
 });
 
 app.post('/db/retrieveEntry', (req, res) => {
-  ///db/retrieveEntry/:user?query=entries
-
   let query = {};
-  query.user_id = req.body.user_id || '01';
-  query.search = req.body.search;
+  query.user_id = req.body.user_id;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
@@ -133,7 +130,7 @@ app.post('/entry', upload.single('media'), (req, res) => {
   watson.promisifiedTone(req.body.text)
   .then(tone => {
     let log = {
-      user_id: '01', // NOTE: hardcode user id
+      user_id: req.body.user_id,
       entry_type: req.body.entryType,
       video: {
         bucket: req.file ? req.file.bucket : null,
@@ -160,11 +157,11 @@ const getAWSSignedUrl = (bucket, key) => {
   return s3.getSignedUrl('getObject', params);
 };
 
-app.get('/entry/:entryId/:entryType', (req, res) => {
+app.get('/entry/:entryId/:entryType/:user_id', (req, res) => {
   let query = {};
   query.entryId = req.params.entryId;
   query.entryType = req.params.entryType;
-  query.user = req.body.user_id || '01';
+  query.user_id = req.params.user_id;
   database.retrieveEntryMedia(query)
   .then( result => {
     let key;
