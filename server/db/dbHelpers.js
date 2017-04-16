@@ -11,10 +11,19 @@ exports.userEntry = (req, res, userInfo) => {
     phonenumber: userInfo.phonenumber
   });
   newUser.save((err, results) => {
+    console.log('User info in userEntry is:', userInfo);
     if (err) {
-      res.sendStatus(400).send(err);
+      User.findOne({'phonenumber': userInfo.phonenumber})
+      .then((user) => {
+        console.log('Found user:', user._id);
+        res.status(201).send(user._id);
+      })
+      .catch((err) => {
+        res.sendStatus(400);
+      }); 
     } else {
-      res.sendStatus(201);
+      console.log('Created user');
+      res.status(201).send(results._id);
     }
   });
 };
@@ -88,12 +97,9 @@ exports.modifyCall = (callInfo) => {
     })
     .then((call) => {
       if (call) {
-        console.log('Length of call is:', call.user.length);
         if (call.user.length === 1 && call.user.indexOf(user_id) === 0) {
-          console.log('Entered remove section:', call);
           call.remove();
         } else {
-          console.log('Found splice:', call.user.indexOf(user_id));
           call.user.splice(call.user.indexOf(user_id), 1);
         }
         call.save();
@@ -112,9 +118,7 @@ exports.modifyCall = (callInfo) => {
         });
         newCall.save();
       } else {
-        console.log('Call before push:', user_id, call.user);
         call.user.push(user_id);
-        console.log('Call after push:', call.user);
         call.save();
       }
       return;

@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
 import UserProfile from '../UserProfile.jsx';
+import axios from 'axios';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -7,8 +9,10 @@ export default class App extends React.Component {
       idToken: null,
       profile: null
     };
-    this.getProfile = this.getProfile.bind(this)
+    this.getProfile = this.getProfile.bind(this);
+    this.userLog = this.userLog.bind(this);
   }
+
   componentWillMount() {
     this.createLock();
     this.setState({
@@ -16,22 +20,38 @@ export default class App extends React.Component {
     });
     this.getProfile();
   }
+
+  componentDidMount() {
+    this.setState({
+      profile: JSON.parse(localStorage.smsCred).phoneNumber.number
+    });
+  }
+
+  userLog() {
+    let data = {
+      phonenumber: this.state.profile
+    };
+
+    axios.post('/db/userentry', data)
+    .then(res => console.log('Userlog sent to server', res))
+    .catch(err => console.log('text upload error...', err));
+  }
+
   createLock() {
     this.lock = new Auth0LockPasswordless('8Xf5mRZcDDcMo0Dkl7OvMLP7ai9jULsn', 'tungnh91.auth0.com');
-    this.getIdToken()
+    this.getIdToken();
   }
 
   getProfile(profile, id_token) {
-      this.setState({
-       profile: profile
-      })
-      localStorage.setItem('id_token', id_token)
+    this.setState({
+     profile: profile
+    });
+    localStorage.setItem('id_token', id_token);
       //TODO: SAVE USERS NUMBER TO DB RIGHT HERE
   }
 
 
   getIdToken() {
-    console.log('this da lock', this.lock)
     //check if there's a token already
     var idToken = localStorage.getItem('id_token');
     var authHash = this.lock.parseHash(window.location.hash);
@@ -41,17 +61,17 @@ export default class App extends React.Component {
         idToken = authHash.id_token
         localStorage.setItem('id_token', authHash.id_token);
       }
-      if(authHash.error) {
+      if (authHash.error) {
         console.log('error from parseHash yo', authHash);
       }
     }
     return idToken;
   }
 
-   loggedIn(){
+   loggedIn() {
     // Checks if there is a saved token and it's still valid
     const token = localStorage.getItem('id_token');
-    return !!token
+    return !!token;
   }
 
   logOut() {
@@ -61,8 +81,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.idToken, 'token')
-    console.log(this.loggedIn(), 'isLoggedIn')
+    this.userLog();
     if (this.state.idToken && this.loggedIn()) {
       return (
           <div>

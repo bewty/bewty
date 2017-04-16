@@ -6,7 +6,8 @@ export default class TextEntry extends React.Component {
     super(props);
     this.state = {
       question: '',
-      time: ''
+      time: '',
+      profile: ''
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -15,6 +16,12 @@ export default class TextEntry extends React.Component {
     this.handleClick = this.handleClick.bind(this);
   }
   
+  componentDidMount() {
+    this.setState({
+      profile: JSON.parse(localStorage.smsCred).phoneNumber.number
+    });
+  }
+
   handleQuestion(event) {
     this.setState({question: event.target.value});
   }
@@ -34,19 +41,17 @@ export default class TextEntry extends React.Component {
       method: 'POST',
       body: JSON.stringify({
         time: this.state.time,
-        question: this.state.question
+        question: this.state.question,
+        user_id: this.state.profile
       })
     });
   }
 
-  handleClick() {
-    console.log('state:', this.state);
-  }
 
   render() {
     return (
       <div className="container">
-        <h1 onClick={this.handleClick}>What question would you like to be asked?</h1>
+        <h1>What question would you like to be asked?</h1>
         <form onSubmit={this.handleSubmit}>
           <label>
             <input type="text" value={this.state.question} onChange={this.handleQuestion} />

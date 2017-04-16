@@ -60,8 +60,9 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time;
   let question = req.body.question;
-  let user_id = req.body.user_id || '01';
-  console.log('Received scheduleCall post:', time.replace(':', ''), question);
+  console.log('Receiving user_id phonenumber:', req.body.user_id);
+  let user_id = '01' || req.body.user_id;
+  console.log('User_id:', user_id, 'Received scheduleCall post:', time.replace(':', ''), question);
   
   let callInfo = {
     user_id: user_id,
@@ -95,10 +96,10 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
-  let userInfo = req.body.userInfo || {
-    user_id: '05',
-    phonenumber: '11234567835'
+  let userInfo = {
+    phonenumber: req.body.number || '11234567835'
   };
+
   database.userEntry(req, res, userInfo);
 });
 
