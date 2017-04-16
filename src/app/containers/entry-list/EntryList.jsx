@@ -27,7 +27,7 @@ class EntryList extends Component {
 
   onFetchMedia(entryId, entryType) {
     if (entryType !== 'text') {
-      axios.get(`/entry/${entryId}/${entryType}`)
+      axios.get(`/entry/${entryId}/${entryType}/${localStorage.user_id}`)
       .then( result => {
         this.props.fetchMedia(result.data);
       })

@@ -73,10 +73,10 @@ exports.retrieveEntry = (query) => {
 };
 
 exports.retrieveEntryMedia = (query) => {
-  let targetUser = query.user_id || '01';
+  let user_id = query.user_id;
   let entryId = query.entryId;
   return new Promise((resolve, reject) => {
-    User.find({'entries._id': entryId}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
+    User.find({_id: user_id}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
     .then( (results) => {
       if (results[0] === undefined) {
         throw 'no entries found with entryId';
