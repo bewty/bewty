@@ -43,14 +43,6 @@ const upload = multer({
   })
 });
 
-const getAWSSignedUrl = (req) => {
-  const params = {
-    Bucket: 'smartdiarybewt',
-    Key: req.file.key
-  };
-  return s3.getSignedUrl('getObject', params);
-};
-
 AWS.config.update({
   accessKeyId: process.env.AWS_S3_ACCESS_KEY,
   secretAccessKey: process.env.AWS_S3_SECRET_KEY,
@@ -62,8 +54,9 @@ app.post('/scheduleCall', (req, res) => {
   let question = req.body.question;
   console.log('Receiving user_id phonenumber:', req.body.user_id);
   let user_id = req.body.user_id || '01';
+
   console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
-  
+
   let callInfo = {
     user_id: user_id,
     message: question,
@@ -86,20 +79,22 @@ app.post('/scheduleCall', (req, res) => {
 
 app.post('/db/retrieveEntry', (req, res) => {
   ///db/retrieveEntry/:user?query=entries
+
   let query = {};
   query.user_id = req.body.user_id || '01';
   query.search = req.body.search;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
-  });
+  })
+  .catch( err => console.error(err));
 });
 
 app.post('/db/userentry', (req, res) => {
   let userInfo = {
     phonenumber: req.body.phonenumber || '11234567835'
   };
-  console.log('Received number:', req.body.phonenumber);
+
   database.userEntry(req, res, userInfo);
 });
 
@@ -156,6 +151,32 @@ app.post('/entry', upload.single('media'), (req, res) => {
     database.saveEntry(req, res, log);
   });
 });
+
+const getAWSSignedUrl = (bucket, key) => {
+  const params = {
+    Bucket: bucket,
+    Key: key
+  };
+  return s3.getSignedUrl('getObject', params);
+};
+
+app.get('/entry/:entryId/:entryType', (req, res) => {
+  let query = {};
+  query.entryId = req.params.entryId;
+  query.entryType = req.params.entryType;
+  query.user = req.body.user_id || '01';
+  database.retrieveEntryMedia(query)
+  .then( result => {
+    let key;
+    let bucket;
+    query.entryType === 'video' ? key = result[0].video.key : key = result[0].audio.key;
+    query.entryType === 'video' ? bucket = result[0].video.bucket : bucket = result[0].audio.bucket;
+    let url = getAWSSignedUrl(bucket, key);
+    res.send(JSON.stringify(url));
+  })
+  .catch( err => res.sendStatus(400).send(err));
+});
+
 
 app.get('*', (req, res) => {
   res.sendFile( path.resolve(__dirname, '..', 'dist', 'index.html'));

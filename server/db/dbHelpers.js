@@ -59,15 +59,33 @@ exports.saveEntry = (req, res, log) => {
 exports.retrieveEntry = (query) => {
   let user_id = query.user_id || '01';
   return new Promise((resolve, reject) => {
-    User.find({ user_id: user_id })
+    User.find({ user_id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
     .then((results) => {
-      if (query.search === undefined) {
+      if (results[0] === undefined) {
         resolve(JSON.stringify(results));
       } else {
-        resolve(JSON.stringify(results[0][query.search]));
+        resolve(JSON.stringify(results[0].entries));
       }
     })
     .error((err) => {
+      reject(err);
+    });
+  });
+};
+
+exports.retrieveEntryMedia = (query) => {
+  let targetUser = query.user_id || '01';
+  let entryId = query.entryId;
+  return new Promise((resolve, reject) => {
+    User.find({'entries._id': entryId}, { entries: {$elemMatch: {_id: entryId}}, 'entries.audio': 1, 'entries.video.bucket': 1, 'entries.video.key': 1, 'entries._id': 1} )
+    .then( (results) => {
+      if (results[0] === undefined) {
+        throw 'no entries found with entryId';
+      } else {
+        resolve(results[0].entries);
+      }
+    })
+    .catch( err => {
       reject(err);
     });
   });
@@ -149,13 +167,13 @@ exports.retrieveCall = (query) => {
   let time = query.time;
   return new Promise((resolve, reject) => {
     Call.findOne({time: time})
-    .populate('user') 
+    .populate('user')
     .exec((err, user) => {
       if (err) {
         reject(err);
       } else {
         resolve(user);
-      }  
+      }
     });
   });
 };
@@ -176,13 +194,13 @@ exports.findNextCall = (time) => {
   time = '' + time;
   return new Promise((resolve, reject) => {
     Call.find(null, null, {sort: {time: 1}})
-    .populate('user') 
+    .populate('user')
     .exec((err, calls) => {
       if (err) {
         reject(err);
       } else {
         resolve(calls);
-      }  
+      }
     });
   })
   .then((calls) => {
