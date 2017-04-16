@@ -50,7 +50,7 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time.replace(':', '');
   let question = req.body.question;
-  console.log('Receiving user_id phonenumber:', req.body.user_id);
+  // console.log('Receiving user_id phonenumber:', req.body.user_id);
   let user_id = req.body.user_id || '01';
   // console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
   let callInfo = {
