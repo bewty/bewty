@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
   entries: FetchEntry,
   entrySelected: EntrySelected,
   fetchMedia: FetchMedia,
-  src: AudioReducer
+  audio: AudioReducer
 });
 
 export default rootReducer;

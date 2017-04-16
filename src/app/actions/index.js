@@ -31,4 +31,11 @@ export const setSourceUrl = (url) => {
   };
 };
 
-// export const set
+export const stopRecordAndSet = (blob, stop, url) => {
+  return {
+    type: 'STOP_RECORD_AND_SET',
+    blob,
+    stop,
+    url
+  };
+};
