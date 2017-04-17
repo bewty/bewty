@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import UserProfile from '../UserProfile.jsx';
 import axios from 'axios';
-import config from '../../../config.js';
+// import config from '../../../config.js';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -44,7 +44,7 @@ export default class App extends React.Component {
   }
 
   createLock() {
-    this.lock = new Auth0LockPasswordless(config.auth0_clientId, config.auth0_domain);
+    this.lock = new Auth0LockPasswordless(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN);
     this.getIdToken();
   }
 
