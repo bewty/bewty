@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import UserProfile from '../UserProfile.jsx';
 import axios from 'axios';
-// import config from '../../../config.js';
 
 export default class App extends React.Component {
   constructor(props) {
