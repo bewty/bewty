@@ -44,7 +44,7 @@ export default class App extends React.Component {
   }
 
   createLock() {
-    this.lock = new Auth0LockPasswordless(process.env.AUTH0_CLIENT_ID, process.env.AUTH0_DOMAIN);
+    this.lock = new Auth0LockPasswordless('8Xf5mRZcDDcMo0Dkl7OvMLP7ai9jULsn', 'tungnh91.auth0.com');
     this.getIdToken();
   }
 
