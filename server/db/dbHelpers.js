@@ -162,6 +162,11 @@ exports.callEntry = (callInfo) => {
   });
 };
 
+exports.callEntry({
+  time: '0000',
+  user: 'placeholder'
+});
+
 exports.retrieveCall = (query) => {
   let time = query.time;
   return new Promise((resolve, reject) => {
