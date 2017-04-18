@@ -39,3 +39,10 @@ export const stopRecordAndSet = (blob, stop, url) => {
     url
   };
 };
+
+export const setStartState = (start) => {
+  return {
+    type: 'SET_START_STATE',
+    start
+  };
+};
