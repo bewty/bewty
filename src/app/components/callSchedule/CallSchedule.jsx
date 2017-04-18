@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 export default class CallSchedule extends React.Component {
   constructor(props) {
@@ -45,17 +46,14 @@ export default class CallSchedule extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     let currentScope = this;
-    fetch('/scheduleCall', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        time: this.state.scheduled_time,
-        question: this.state.scheduled_message,
-        user_id: this.state.user_id
-      })
+    let data = {
+      time: this.state.scheduled_time,
+      question: this.state.scheduled_message,
+      user_id: this.state.user_id
+    };
+    axios.post('/scheduleCall', data)
+    .then(() => {
+      console.log('Successfully sent data');
     });
     this.setState({
       scheduled: true,

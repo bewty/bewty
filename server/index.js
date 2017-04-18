@@ -65,13 +65,13 @@ app.post('/scheduleCall', (req, res) => {
     return cron.scheduleCall();
   })
   .then(() => {
-    return callEntry(callInfo);
+    return database.callEntry(callInfo);
   })
   .then((time) => {
     res.status(200);
   })
   .catch((e) => {
-    // console.log('Received error:', e);
+    console.log('Received error:', e);
   });
 });
 

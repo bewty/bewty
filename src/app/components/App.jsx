@@ -8,7 +8,6 @@ export default class App extends React.Component {
     this.state = {
       idToken: null,
       profile: null,
-      phonenumber: '',
     };
     this.getProfile = this.getProfile.bind(this);
     this.userLog = this.userLog.bind(this);
@@ -19,9 +18,6 @@ export default class App extends React.Component {
     this.setState({
       idToken: this.getIdToken()
     });
-    this.setState({
-      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
-    });
     this.getProfile();
   }
 
@@ -31,7 +27,7 @@ export default class App extends React.Component {
 
   userLog() {
     let data = {
-      phonenumber: this.state.phonenumber
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
     };
     axios.post('/db/userentry', data)
     .then((user_id) => {
@@ -54,7 +50,6 @@ export default class App extends React.Component {
       profile: profile
     });
     localStorage.setItem('id_token', id_token);
-      //TODO: SAVE USERS NUMBER TO DB RIGHT HERE
   }
 
 
