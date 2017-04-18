@@ -46,3 +46,11 @@ export const setStartState = (start) => {
     start
   };
 };
+
+export const resetStartStop = (start, stop) => {
+  return {
+    type: 'RESET_START_STOP',
+    start,
+    stop
+  };
+};
