@@ -48,7 +48,6 @@ exports.saveEntry = (req, res, log) => {
   };
   User.findOneAndUpdate({_id: _id}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
   .then((result) => {
-    // console.log('Entry successfully uploaded!');
     res.sendStatus(201);
   })
   .error(err => res.sendStatus(500).send(err))
@@ -99,8 +98,6 @@ exports.modifyCall = (callInfo) => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: targetUser })
     .then((user) => {
-      // console.log('Found user:', targetUser);
-      // console.log('number is:', user.phonenumber);
       oldTime = user.scheduled_time;
       user_id = user._id;
       user.scheduled_time = time;
@@ -151,7 +148,9 @@ exports.modifyCall = (callInfo) => {
       }
       resolve(resolved);
     })
-    .catch(err => reject(err));
+    .catch((err) => {
+      reject(err);
+    });
   });
 };
 

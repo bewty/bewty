@@ -56,7 +56,6 @@ app.post('/scheduleCall', (req, res) => {
     message: question,
     time: time
   };
-
   database.modifyCall(callInfo)
   .then((result) => {
     if (result === 'skip') {

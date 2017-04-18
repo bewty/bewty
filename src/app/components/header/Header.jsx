@@ -24,7 +24,7 @@ const Header = () => (
           <Link to="/results">Results</Link>
         </li>
         <li>
-          <Link to="/call-schedule">Call Schedule</Link>
+          <Link to="/call-home">Call Schedule</Link>
         </li>
       </ul>
     </nav>

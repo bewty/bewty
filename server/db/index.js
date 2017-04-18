@@ -31,6 +31,15 @@ const userSchema = new mongoose.Schema({
     text: String,
     watson_results: String,
     tags: Array
+  }],
+  call_entries: [{
+    question: String,
+    date_set: {type: Date, default: Date.now},    
+    responses: [{
+      text: String,
+      time: {type: Date, default: Date.now},
+      watson_results: String
+    }]
   }]
 });
 

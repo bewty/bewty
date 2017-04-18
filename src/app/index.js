@@ -14,7 +14,7 @@ import EntryList from './containers/entry-list/EntryList';
 import EntryView from './containers/entry-view/EntryView';
 import Results from './components/results/Results';
 import CallSchedule from './components/callSchedule/CallSchedule';
-
+import CallHome from './components/callSchedule/CallHome';
 import reducers from './reducers';
 
 import './styles/variables.scss';
@@ -36,7 +36,7 @@ ReactDOM.render(
         <Route path="/entries" component={EntryList} />
         <Route path="/entry/:id" component={EntryView} />
         <Route path="/results" component={Results} />
-        <Route path="/call-schedule" component={CallSchedule} />
+        <Route path="/call-home" component={CallHome} />
       </div>
     </Router>
   </Provider>
