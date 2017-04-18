@@ -54,3 +54,11 @@ export const resetStartStop = (start, stop) => {
     stop
   };
 };
+
+export const setStartAndTranscript = (start, transcript) => {
+  return {
+    type: 'SET_START_AND_TRANSCRIPT',
+    start,
+    transcript
+  };
+};
