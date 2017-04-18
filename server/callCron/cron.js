@@ -22,7 +22,9 @@ exports.setCron = (time) => {
       });
     })
     .then(() => {
-      exports.scheduleCall();
+      setTimeout(() => {
+        exports.scheduleCall();
+      }, 5000);
     })
     .catch((err) => {
       console.log('Received err in cron/setCron:', err);

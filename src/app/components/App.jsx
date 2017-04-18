@@ -20,13 +20,14 @@ export default class App extends React.Component {
     this.setState({
       idToken: this.getIdToken()
     });
+    this.setState({
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
+    });
     this.getProfile();
   }
 
   componentDidMount() {
-    this.setState({
-      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
-    });
+    this.userLog();
   }
 
   userLog() {
@@ -35,12 +36,13 @@ export default class App extends React.Component {
     };
     axios.post('/db/userentry', data)
     .then((user_id) => {
-      localStorage.setItem('user_id', user_id.data);
+      localStorage.setItem('user_id', user_id.data._id);
+      localStorage.setItem('scheduled_message', user_id.data.scheduled_message);
+      localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
     })
-    .then((res) => {
-      console.log('Userlog sent to server');
-    })
-    .catch(err => console.log('text upload error...', err));
+    .catch((err) => {
+      console.log('text upload error...', err);
+    });
   }
 
   createLock() {
@@ -87,7 +89,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    this.userLog();
     if (this.state.idToken && this.loggedIn()) {
       return (
         <div className="container">

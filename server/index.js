@@ -61,6 +61,9 @@ app.post('/scheduleCall', (req, res) => {
 
   database.modifyCall(callInfo)
   .then((result) => {
+    if (result === 'skip') {
+      return;
+    }
     // console.log('Received successful result:', result);
     return cron.scheduleCall();
   })
@@ -84,8 +87,9 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
+  console.log('Received userEntry phonenumber:', req.body.phonenumber);
   let userInfo = {
-    phonenumber: req.body.phonenumber || '11234567835'
+    phonenumber: req.body.phonenumber 
   };
 
   database.userEntry(req, res, userInfo);
