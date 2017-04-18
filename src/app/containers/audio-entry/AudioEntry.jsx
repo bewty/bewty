@@ -3,7 +3,11 @@ import VoiceRecognition from '../../components/VoiceRecognition/VoiceRecognition
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { setSourceUrl, stopRecordAndSet, setStartState } from '../../actions/index.js';
+import { setSourceUrl,
+          stopRecordAndSet,
+          setStartState,
+          resetStartStop,
+          setStartAndTranscript } from '../../actions/index.js';
 import { bindActionCreators } from 'redux';
 
 class AudioEntry extends Component {
@@ -102,12 +106,14 @@ class AudioEntry extends Component {
   }
 
   onEnd() {
-    this.setState({ start: false, stop: false });
+    // this.setState({ start: false, stop: false });
+    this.props.resetStartStop(false, false);
   }
 
   onResult ({ finalTranscript }) {
-    this.setState({ start: false,
-                    transcript: finalTranscript });
+    // this.setState({ start: false,
+    //                 transcript: finalTranscript });
+    this.props.setStartAndTranscript(false, finalTranscript);
   }
 
   render() {
@@ -144,7 +150,9 @@ var mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     setSourceUrl: setSourceUrl,
     stopRecordAndSet: stopRecordAndSet,
-    setStartState: setStartState
+    setStartState: setStartState,
+    resetStartStop: resetStartStop,
+    setStartAndTranscript: setStartAndTranscript
   }, dispatch);
 };
 
