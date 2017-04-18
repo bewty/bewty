@@ -42,17 +42,15 @@ const upload = multer({
 });
 
 AWS.config.update({
-  accessKeyId: process.env.AWS_S3_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_S3_SECRET_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'us-west-1'
 });
 
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time.replace(':', '');
   let question = req.body.question;
-  // console.log('Receiving user_id phonenumber:', req.body.user_id);
   let user_id = req.body.user_id || '01';
-  // console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
   let callInfo = {
     user_id: user_id,
     message: question,
@@ -64,11 +62,9 @@ app.post('/scheduleCall', (req, res) => {
     if (result === 'skip') {
       return;
     }
-    // console.log('Received successful result:', result);
     return cron.scheduleCall();
   })
   .then((time) => {
-    // console.log(`Successfully set cron for ${time}`);
     res.status(200);
   })
   .catch((e) => {
@@ -122,8 +118,7 @@ app.post('/api/watson', (req, res) => {
     res.status(200).send(results);
   })
   .error(function(e) {
-    // TODO: HANDLE ERROR
-    // console.log('Error received within post to /api/watson', e);
+    console.log('Error received within post to /api/watson', e);
   });
 });
 

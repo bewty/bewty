@@ -10,10 +10,10 @@ const EntryText = ({entry, index, type}) => {
   entry.text.length > 220 && type === 'snippet' ? text = `${entry.text.slice(0, 220)}...` : text = entry.text;
 
   return (
-    <div>
+    <div className="entry-container">
      {entry.length === 0 ? null :
       <Link to={`/entry/${entry._id}`}>
-        <div className="entry-container">
+        <div>
           <div className="entry-meta">
             <span className="date">{entry.created_at.slice(0, 10)}</span>
             <span className={`${entry.entry_type}-entry`}></span>
