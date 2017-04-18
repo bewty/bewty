@@ -55,7 +55,7 @@ class AudioEntry extends Component {
   }
 
   audioError(err) {
-    alert('Your browser cannot stream from your webcam. Please switch to Chrome or Firefox.');
+    alert('Your browser cannot stream from your microphone. Please switch to Chrome or Firefox.');
   }
 
 
