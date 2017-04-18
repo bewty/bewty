@@ -24,3 +24,41 @@ export function fetchMedia(url) {
   };
 }
 
+export const setSourceUrl = (url) => {
+  return {
+    type: 'SET_SOURCE_URL',
+    url
+  };
+};
+
+export const stopRecordAndSet = (blob, stop, url) => {
+  return {
+    type: 'STOP_RECORD_AND_SET',
+    blob,
+    stop,
+    url
+  };
+};
+
+export const setStartState = (start) => {
+  return {
+    type: 'SET_START_STATE',
+    start
+  };
+};
+
+export const resetStartStop = (start, stop) => {
+  return {
+    type: 'RESET_START_STOP',
+    start,
+    stop
+  };
+};
+
+export const setStartAndTranscript = (start, transcript) => {
+  return {
+    type: 'SET_START_AND_TRANSCRIPT',
+    start,
+    transcript
+  };
+};
