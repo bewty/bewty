@@ -85,8 +85,7 @@ class AudioEntry extends Component {
   }
 
   uploadAudio() {
-    let self = this;
-    let blob = this.state.blob;
+    let blob = this.props.audio.blob;
     let fd = new FormData();
     fd.append('media', blob);
     fd.append('entryType', 'audio');
