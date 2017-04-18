@@ -26,7 +26,7 @@ export default class BarChart extends Component {
   }
 
   render() {
-    const {avg_data, raw_data} = this.props;
+    const {avg_data} = this.props;
     const praseAvgData = JSON.parse(avg_data);
     let avgChartData = [];
 
