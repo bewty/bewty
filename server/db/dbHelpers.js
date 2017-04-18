@@ -22,7 +22,7 @@ exports.userEntry = (req, res, userInfo) => {
         res.sendStatus(400);
       });
     } else {
-      res.status(201).send(user);
+      user !== undefined ? res.status(201).send(user) : '';
     }
   });
 };
@@ -219,4 +219,19 @@ exports.findNextCall = (time) => {
     }
     return nextCall;
   });
+};
+
+exports.callEntry = (log) => {
+  const _id = log.user_id;
+  const question = log.schduled_message;
+  let logEntry = {
+    question: question,
+    responses: []
+  };
+  User.findOneAndUpdate({_id: _id}, {$push: {'call_entries': logEntry}}, {safe: true, upsert: false, new: true})
+  .then((result) => {
+    res.sendStatus(201);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
 };

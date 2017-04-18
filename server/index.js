@@ -48,6 +48,7 @@ AWS.config.update({
 });
 
 app.post('/scheduleCall', (req, res) => {
+  console.log('Received schedule call');
   let time = req.body.time.replace(':', '');
   let question = req.body.question;
   let user_id = req.body.user_id || '01';
@@ -62,6 +63,9 @@ app.post('/scheduleCall', (req, res) => {
       return;
     }
     return cron.scheduleCall();
+  })
+  .then(() => {
+    return callEntry(callInfo);
   })
   .then((time) => {
     res.status(200);
