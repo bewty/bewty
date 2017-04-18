@@ -4,7 +4,7 @@ import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
 import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
 
-class VideoEntry extends Component {
+export default class VideoEntry extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,6 +46,7 @@ class VideoEntry extends Component {
     this.getAverage = this.getAverage.bind(this);
     this.onEnd = this.onEnd.bind(this);
     this.onResult = this.onResult.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -225,22 +226,21 @@ class VideoEntry extends Component {
     for (let key in this.state.avgData) {
       key === 'emoji' ? null : this.state.avgData[key] = this.state.avgData[key] / length;
     }
+    return this.state.avgData;
   }
 
-  uploadVideo() {
+  uploadVideo(avgData) {
     this.setState({
       uploading: true,
       uploadError: false,
     });
-
-    this.getAverage();
 
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('media', blob);
     fd.append('entryType', 'video');
     fd.append('rawData', JSON.stringify(this.state.rawData));
-    fd.append('avgData', JSON.stringify(this.state.avgData));
+    fd.append('avgData', JSON.stringify(avgData));
     fd.append('text', this.state.transcript);
     fd.append('user_id', localStorage.user_id);
 
@@ -262,6 +262,14 @@ class VideoEntry extends Component {
     });
   }
 
+  onSubmit() {
+    return new Promise( (resolve, reject) => {
+      resolve(this.getAverage());
+    })
+    .then( avgData => this.uploadVideo(avgData))
+    .catch( err => console.error('Error on submit', err));
+  }
+
   onEnd() {
     this.setState({ start: false, stop: false });
   }
@@ -270,6 +278,7 @@ class VideoEntry extends Component {
     this.setState({ start: false,
                     transcript: finalTranscript });
   }
+
   render() {
     return (
       <div className='container'>
@@ -293,7 +302,7 @@ class VideoEntry extends Component {
           <div className='controls'>
             {this.state.okayToRecord ? <button onClick={this.onRecord}>Record</button> : null}
             {this.state.recording ? <button onClick={this.onStop}>Stop</button> : null}
-            {this.state.uploadable ? <button onClick={this.uploadVideo}>Upload</button> : null }
+            {this.state.uploadable ? <button onClick={this.onSubmit}>Upload</button> : null }
             <button onClick={this.onReset}>Reset</button>
           </div>
           <div id='affdex_elements' ref='affdex_elements'> </div>
@@ -302,5 +311,3 @@ class VideoEntry extends Component {
     );
   }
 }
-
-export default VideoEntry;
