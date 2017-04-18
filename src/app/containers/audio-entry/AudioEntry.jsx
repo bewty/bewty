@@ -13,14 +13,6 @@ import { bindActionCreators } from 'redux';
 class AudioEntry extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    //   uploading: false,
-    //   uploadSuccess: null,
-    //   start: false,
-    //   stop: false,
-    //   transcript: '',
-    //   result: ''
-    // };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
     this.handleAudio = this.handleAudio.bind(this);
@@ -77,9 +69,6 @@ class AudioEntry extends Component {
     setTimeout( () => {
       this.stopRecord();
     }, 30000);
-    // this.setState({
-    //   start: true
-    // });
     this.props.setStartState(true);
   }
 
@@ -106,13 +95,10 @@ class AudioEntry extends Component {
   }
 
   onEnd() {
-    // this.setState({ start: false, stop: false });
     this.props.resetStartStop(false, false);
   }
 
   onResult ({ finalTranscript }) {
-    // this.setState({ start: false,
-    //                 transcript: finalTranscript });
     this.props.setStartAndTranscript(false, finalTranscript);
   }
 
