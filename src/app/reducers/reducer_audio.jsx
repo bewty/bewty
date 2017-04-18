@@ -14,6 +14,16 @@ export default (state = {}, action) => {
     return {
       start: action.start
     };
+  case 'RESET_START_STOP':
+    return {
+      start: action.start,
+      stop: action.stop
+    };
+  case 'SET_START_AND_TRANSCRIPT':
+    return {
+      start: action.start,
+      transcript: action.transcript
+    };
   default:
     return state;
   }
