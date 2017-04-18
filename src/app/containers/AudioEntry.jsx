@@ -90,11 +90,11 @@ class AudioEntry extends Component {
     fd.append('media', blob);
     fd.append('entryType', 'audio');
     fd.append('text', this.state.transcript);
+    fd.append('user_id', localStorage.user_id);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
     };
-
     axios.post('/entry', fd, config)
     .then( res => console.log('audio upload to server done', res))
     .catch(err => console.log('audio upload error...', err));
