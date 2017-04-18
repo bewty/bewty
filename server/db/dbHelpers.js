@@ -6,24 +6,25 @@ const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
 
 exports.userEntry = (req, res, userInfo) => {
-  let newUser = User({
-    phonenumber: userInfo.phonenumber,
-    scheduled_time: '',
-    scheduled_message: ''
-  });
-  newUser.save((err, results) => {
-    if (err) {
-      console.log('Received err:', err);
-      User.findOne({'phonenumber': userInfo.phonenumber})
+
+  User.findOne({'phonenumber': userInfo.phonenumber})
+  .then((user) => {
+    if (user === null) {
+      let newUser = User({
+        phonenumber: userInfo.phonenumber,
+        scheduled_time: '',
+        scheduled_message: ''
+      });
+      newUser.save()
       .then((user) => {
         res.status(201).send(user);
-      })
-      .catch((err) => {
-        res.sendStatus(400);
       });
     } else {
-      user !== undefined ? res.status(201).send(user) : '';
+      res.status(201).send(user);
     }
+  })
+  .catch((err) => {
+    res.sendStatus(400);
   });
 };
 
