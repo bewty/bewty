@@ -13,14 +13,14 @@ import { bindActionCreators } from 'redux';
 class AudioEntry extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      uploading: false,
-      uploadSuccess: null,
-      start: false,
-      stop: false,
-      transcript: '',
-      result: ''
-    };
+    // this.state = {
+    //   uploading: false,
+    //   uploadSuccess: null,
+    //   start: false,
+    //   stop: false,
+    //   transcript: '',
+    //   result: ''
+    // };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
     this.handleAudio = this.handleAudio.bind(this);
@@ -94,7 +94,7 @@ class AudioEntry extends Component {
     let fd = new FormData();
     fd.append('media', blob);
     fd.append('entryType', 'audio');
-    fd.append('text', this.state.transcript);
+    fd.append('text', this.props.audio.transcript);
     fd.append('user_id', localStorage.user_id);
 
     const config = {
@@ -124,15 +124,14 @@ class AudioEntry extends Component {
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
         <button onClick={this.uploadAudio}>Upload</button>
-        <p>{this.state.transcript}</p>
-        <p>{this.state.result}</p>
-        {this.state.start && (
+        <p>{this.props.audio.transcript}</p>
+        {this.props.audio.start && (
           <VoiceRecognition
             onEnd={this.onEnd}
             onResult={this.onResult}
             continuous={true}
             lang="en-US"
-            stop={this.state.stop}
+            stop={this.props.audio.stop}
           />
         )}
       </div>
