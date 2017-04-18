@@ -32,7 +32,6 @@ export default class CallSchedule extends React.Component {
         scheduled: true
       });
     }
-    console.log('State of callSchedule:', this.state);
   }
 
   handleQuestion(event) {
@@ -71,11 +70,9 @@ export default class CallSchedule extends React.Component {
       scheduled_message: '',
       scheduled_time: ''
     });
-    console.log('This was clicked');
   }
 
   endCall(event) {
-    console.log('Ending call');
     let currentScope = this;
     fetch('/scheduleCall', {
       headers: {
@@ -100,7 +97,7 @@ export default class CallSchedule extends React.Component {
         <div>
           <h1>All scheduled calls have been stopped.</h1>
           <h3>Create new scheduled call:</h3>
-          <input onClick={this.revise} type="submit" value="Revise" />
+          <input onClick={this.revise} type="submit" value="Schedule" />
         </div>
       );
     }
