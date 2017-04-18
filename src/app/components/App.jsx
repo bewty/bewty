@@ -88,7 +88,7 @@ export default class App extends React.Component {
 
   render() {
     this.userLog();
-    if (this.state.idToken && this.loggedIn()) {
+    if (this.state.idToken !== 'undefined' && this.loggedIn()) {
       return (
         <div className="container">
           <h2 className="profileName">Welcome!</h2>
