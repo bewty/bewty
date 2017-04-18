@@ -10,6 +10,10 @@ export default (state = {}, action) => {
       stop: action.stop,
       src: action.url
     };
+  case 'SET_START_STATE':
+    return {
+      start: action.start
+    };
   default:
     return state;
   }
