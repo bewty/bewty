@@ -73,9 +73,10 @@ class AudioEntry extends Component {
     setTimeout( () => {
       this.stopRecord();
     }, 30000);
-    this.setState({
-      start: true
-    });
+    // this.setState({
+    //   start: true
+    // });
+    this.props.setStartState(true);
   }
 
   stopRecord() {
