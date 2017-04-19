@@ -92,6 +92,14 @@ app.post('/db/userentry', (req, res) => {
   database.userEntry(req, res, userInfo);
 });
 
+app.get('/callentry/:user/:search', (req, res) => {
+  let query = {};
+  query.user = req.params.user;
+  query.search = req.params.search;
+
+  database.retrievePhoneEntry(req, res, query);
+});
+
 app.post('/transcribe', (req, res) => {
   let text = req.body.TranscriptionText;
   let phonenumber = req.body.Called.slice(1);

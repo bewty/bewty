@@ -6,7 +6,6 @@ const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
 
 exports.userEntry = (req, res, userInfo) => {
-
   User.findOne({'phonenumber': userInfo.phonenumber})
   .then((user) => {
     if (user === null) {
@@ -240,7 +239,6 @@ exports.callEntry = (req, res, log) => {
 };
 
 exports.saveCall = (req, res, log) => {
-
   let phonenumber = log.phonenumber;
   logEntry = {
     text: log.text,
@@ -254,6 +252,18 @@ exports.saveCall = (req, res, log) => {
   })
   .then(() => {
     res.sendStatus(200);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
+};
+
+exports.retrievePhoneEntry = (req, res, log) => {
+  let user = log.user;
+  let query = log.search;
+  User.findOne({_id: user})
+  .then((user) => {
+    console.log('Found user:', user.call_entries);
+    res.status(200).send(JSON.stringify(user.call_entries));
   })
   .error(err => res.sendStatus(500).send(err))
   .catch(err => res.sendStatus(400).send(err));
