@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import TextEntry from '../textEntry/TextEntry';
 import VideoEntry from '../videoEntry/VideoEntry';
 import AudioEntry from '../audioEntry/AudioEntry';
-import NewEntryNav from '../newEntryNav/NewEntryNav';
 
 export default class NewEntry extends Component {
   constructor(props) {
