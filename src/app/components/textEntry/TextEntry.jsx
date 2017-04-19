@@ -34,10 +34,15 @@ export default class TextEntry extends React.Component {
   render() {
     return (
       <div className="container">
-        <h1>Text Entry</h1>
         <form onSubmit={this.handleSubmit}>
         <label>
-          <input type="text" value={this.state.value} onChange={this.handleChange} />
+          <textarea
+            type="text"
+            value={this.state.value}
+            onChange={this.handleChange}
+            rows="10"
+            cols="50"
+          />
         </label>
         <input type="submit" value="Submit" />
       </form>

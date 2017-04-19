@@ -10,6 +10,7 @@ export default class VideoEntry extends Component {
     this.state = {
       src: null,
       recordVideo: null,
+      stream: null,
       blob: null,
       detector: null,
       playback: false,
@@ -136,7 +137,7 @@ export default class VideoEntry extends Component {
   }
 
   handleVideo(stream) {
-    this.setState({ src: window.URL.createObjectURL(stream) });
+    this.setState({ src: window.URL.createObjectURL(stream), stream: stream });
   }
 
   videoError(err) {
@@ -290,7 +291,6 @@ export default class VideoEntry extends Component {
           lang="en-US"
           stop={this.state.stop}
         />)}
-        <h1 className='title'>Video Entry</h1>
           { this.state.playback
             ? <video autoPlay='true' src={this.state.src} controls></video>
             : <video autoPlay='true' src={this.state.src} muted></video>
@@ -309,5 +309,11 @@ export default class VideoEntry extends Component {
           {this.state.uploading ? <Loader /> : null }
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    this.state.stream.stop();
+    this.state.detector.stop();
+    this.state.detector.removeEventListener();
   }
 }
