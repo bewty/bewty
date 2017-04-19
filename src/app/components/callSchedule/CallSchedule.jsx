@@ -7,10 +7,9 @@ export default class CallSchedule extends React.Component {
     this.state = {
       scheduled_message: '',
       scheduled_time: '',
-      phonenumber: '',
-      user_id: '',
-      stop: false,
-      scheduled: false
+      user_id: localStorage.user_id,
+      stop: localStorage.stopCalls,
+      scheduled: localStorage.scheduled
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -18,21 +17,37 @@ export default class CallSchedule extends React.Component {
     this.handleTime = this.handleTime.bind(this);
     this.revise = this.revise.bind(this);
     this.endCall = this.endCall.bind(this);
+    this.retrieveUserState = this.retrieveUserState.bind(this);
   }
   componentWillMount() {
-    this.setState({
-      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number,
-      user_id: localStorage.user_id,
-      scheduled_time: localStorage.scheduled_time,
-      scheduled_message: localStorage.scheduled_message
-    }); 
+    this.retrieveUserState();
   }
   componentDidMount() {
-    if (this.state.scheduled_time !== '') {
+    if (localStorage.scheduled_time === '') {
       this.setState({
-        scheduled: true
+        scheduled: false
       });
     }
+    this.setState({
+      scheduled_time: localStorage.scheduled_time,
+      scheduled_message: localStorage.scheduled_message,
+      stop: localStorage.stopCalls
+    });
+  }
+
+  retrieveUserState() {
+    let data = {
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
+    };
+    axios.post('/db/userentry', data)
+    .then((user_id) => {
+      console.log('Successfully retrieved user state:', user_id);
+      localStorage.setItem('scheduled_message', user_id.data.scheduled_message);
+      localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
+    })
+    .catch((err) => {
+      console.log('Received error in retrieving state:', err);
+    });
   }
 
   handleQuestion(event) {
@@ -45,7 +60,6 @@ export default class CallSchedule extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    let currentScope = this;
     let data = {
       time: this.state.scheduled_time,
       question: this.state.scheduled_message,
@@ -53,44 +67,52 @@ export default class CallSchedule extends React.Component {
     };
     axios.post('/scheduleCall', data)
     .then(() => {
+      this.retrieveUserState();
       console.log('Successfully sent data');
     });
     this.setState({
-      scheduled: true,
-      scheduled_time: this.state.scheduled_time.replace(':', '')
+      scheduled_time: this.state.scheduled_time,
+      scheduled_message: this.state.scheduled_message,
+      scheduled: true
     });
+    localStorage.setItem('scheduled', true);
+    localStorage.setItem('scheduled_time', this.state.scheduled_time);
+    localStorage.setItem('stopCalls', false);
   }
 
   revise(event) {
+    localStorage.setItem('stopCalls', false);
+    localStorage.setItem('scheduled', false);
     this.setState({
       scheduled: false,
-      stop: false,
       scheduled_message: '',
       scheduled_time: ''
     });
   }
 
   endCall(event) {
-    let currentScope = this;
-    fetch('/scheduleCall', {
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-      body: JSON.stringify({
-        time: '',
-        question: '',
-        user_id: this.state.user_id
-      })
+    let data = {
+      time: '',
+      question: '',
+      user_id: localStorage.user_id
+    };
+    axios.post('/scheduleCall', data)
+    .then(() => {
+      this.retrieveUserState();
+    })
+    .catch((err) => {
+      console.log('Received err', err);
     });
+    localStorage.setItem('scheduled', false);
+    localStorage.setItem('stopCalls', true);
     this.setState({
-      stop: true
+      stopCalls: true,
+      scheduled: false
     });
   }
 
   render() {
-    if (this.state.stop === true) {
+    if (this.state.stopCalls === true) {
       return (
         <div>
           <h1>All scheduled calls have been stopped.</h1>
@@ -117,7 +139,7 @@ export default class CallSchedule extends React.Component {
     } else {
       return (
         <div>
-          <h2>You currently have a call scheduled for {this.state.scheduled_time.slice(0, 2) + ':' + this.state.scheduled_time.slice(2)}</h2> 
+          <h2>You currently have a call scheduled for {this.state.scheduled_time.replace(':', '')}</h2> 
           <h2>With the question:</h2>
           <h1>{this.state.scheduled_message}</h1>
           <h4>Would you like to revise your message or time?</h4>

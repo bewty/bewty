@@ -65,10 +65,7 @@ app.post('/scheduleCall', (req, res) => {
     return cron.scheduleCall();
   })
   .then(() => {
-    return database.callEntry(callInfo);
-  })
-  .then((time) => {
-    res.status(200);
+    return database.callEntry(req, res, callInfo);
   })
   .catch((e) => {
     console.log('Received error:', e);

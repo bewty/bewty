@@ -128,7 +128,7 @@ exports.modifyCall = (callInfo) => {
     })
     .then((call) => {
       if (call === 'skip') {
-        return skip;
+        return call;
       }
       if (!call) {
         let newCall = Call({
@@ -222,7 +222,7 @@ exports.findNextCall = (time) => {
   });
 };
 
-exports.callEntry = (log) => {
+exports.callEntry = (req, res, log) => {
   const _id = log.user_id;
   const question = log.schduled_message;
   let logEntry = {
