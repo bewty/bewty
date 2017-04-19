@@ -52,7 +52,7 @@ export default class TextEntry extends React.Component {
             fullWidth={true}
             label="Submit"
             onTouchTap={this.handleSubmit}
-            style={{fontFamily: 'Lato, san-serif'}}
+            labelStyle={{fontFamily: 'Lato, san-serif'}}
           />
         </MuiThemeProvider>
       </div>
