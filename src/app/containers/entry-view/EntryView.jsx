@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Daily from '../../components/results/daily-chart/Daily.jsx';
+import BarChart from '../../components/results/video-bar-chart/BarChart';
+import LineChart from '../../components/results/video-line-chart/LineChart';
 import MediaPlayer from '../../components/mediaplayer/MediaPlayer.jsx';
 import EntryTextDisplay from '../../components/entry-text-display/EntryTextDisplay.jsx';
 
@@ -35,7 +37,6 @@ function mapStateToProps(state) {
     entrySelected: state.entrySelected,
     fetchMedia: state.fetchMedia
   };
-  console.log('=====fetchMedia', state.fetchMedia);
 }
 
 export default connect(mapStateToProps, null)(EntryView);
