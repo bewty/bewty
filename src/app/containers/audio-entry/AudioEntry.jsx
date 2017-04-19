@@ -105,7 +105,6 @@ class AudioEntry extends Component {
   render() {
     return (
       <div className="container">
-        <h1>Audio Entry</h1>
         <audio autoPlay='true' src={this.props.audio.src} muted="muted" controls></audio>
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>

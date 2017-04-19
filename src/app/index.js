@@ -7,9 +7,7 @@ import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import App from './components/App';
 import Home from './components/home/Home';
 import Header from './components/header/Header';
-import TextEntry from './components/textEntry/TextEntry';
-import AudioEntry from './containers/audio-entry/AudioEntry.jsx';
-import VideoEntry from './components/videoEntry/VideoEntry';
+import NewEntry from './components/newEntry/NewEntry';
 import EntryList from './containers/entry-list/EntryList';
 import EntryView from './containers/entry-view/EntryView';
 import Results from './components/results/Results';
@@ -30,9 +28,7 @@ ReactDOM.render(
       <div>
         <Header />
         <Route exact path="/" component={App} />
-        <Route path="/text-entry" component={TextEntry} />
-        <Route path="/audio-entry" component={AudioEntry} />
-        <Route path="/video-entry" component={VideoEntry} />
+        <Route path="/new-entry" component={NewEntry} />
         <Route path="/entries" component={EntryList} />
         <Route path="/entry/:id" component={EntryView} />
         <Route path="/results" component={Results} />
