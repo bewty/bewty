@@ -14,34 +14,32 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 
 injectTapEventPlugin();
 
-class Login extends React.Component {
-  static muiName = 'FlatButton';
+// class Login extends React.Component {
+//   static muiName = 'FlatButton';
 
-  render() {
-    return (
-      <FlatButton {...this.props} label="Login" />
-    );
-  }
-}
-const Logged = (props) => (
-  <IconMenu
-    {...props}
-    iconButtonElement={
-      <IconButton><MoreVertIcon /></IconButton>
-    }
-    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-  >
-    <MenuItem primaryText="Refresh" />
-    <MenuItem primaryText="Help" />
-    <MenuItem primaryText="Sign out" />
-  </IconMenu>
-);
+//   render() {
+//     return (
+//       <FlatButton {...this.props} label="Login" />
+//     );
+//   }
+// }
+// const Logged = (props) => (
+//   <IconMenu
+//     {...props}
+//     iconButtonElement={
+//       <IconButton><MoreVertIcon /></IconButton>
+//     }
+//     targetOrigin={{horizontal: 'right', vertical: 'top'}}
+//     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+//   >
+//     <MenuItem primaryText="Refresh" />
+//     <MenuItem primaryText="Help" />
+//     <MenuItem primaryText="Sign out" />
+//   </IconMenu>
+// );
 
-Logged.muiName = 'IconMenu';
-const style = {
-  'background-color': '#EB5424'
-};
+// Logged.muiName = 'IconMenu';
+
 export default class AppDrawer extends React.Component {
 
   constructor(props) {
@@ -50,12 +48,9 @@ export default class AppDrawer extends React.Component {
     this.handleToggle = this.handleToggle.bind(this);
   }
 
-
-
   handleToggle() {
     this.setState({open: !this.state.open});
   }
-
 
   render() {
     return (
