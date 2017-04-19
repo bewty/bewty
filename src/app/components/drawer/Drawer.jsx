@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar';
@@ -33,9 +34,15 @@ export default class AppDrawer extends React.Component {
           style={{'background-color': '#EB5424'}}
         />
           <MenuItem>New Entry</MenuItem>
-          <MenuItem>Saved Entries</MenuItem>
-          <MenuItem>Results</MenuItem>
-          <MenuItem>Call Schedule</MenuItem>
+          <MenuItem>
+            <Link to="/entries">Saved Entries</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/results">Results</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/call-schedule">Call Schedule</Link>
+          </MenuItem>
           <Divider />
           <MenuItem>Logout</MenuItem>
         </Drawer>
