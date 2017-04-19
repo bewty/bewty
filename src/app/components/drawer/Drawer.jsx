@@ -32,9 +32,10 @@ export default class AppDrawer extends React.Component {
         <AppBar
           title="MindFit"
           onLeftIconButtonTouchTap={this.handleToggle}
-          style={{'backgroundColor': '#EB5424'}}
+          style={{'backgroundColor': '#EB5424',
+                  fontFamily: 'Lato, san-serif'}}
         />
-
+          <Menu menuItemStyle={{fontFamily: 'Lato, san-serif'}}>
           <MenuItem
             containerElement={<Link to="/new-entry" />}
             primaryText="New Entry"
@@ -53,7 +54,7 @@ export default class AppDrawer extends React.Component {
           />
           <Divider />
           <MenuItem>Logout</MenuItem>
-
+          </Menu>
         </Drawer>
       </div>
     );
