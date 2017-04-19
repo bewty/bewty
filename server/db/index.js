@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema({
   }],
   call_entries: [{
     question: String,
+    call_time: String,
     date_set: {type: Date, default: Date.now},    
     responses: [{
       text: String,

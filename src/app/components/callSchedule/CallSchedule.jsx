@@ -139,7 +139,7 @@ export default class CallSchedule extends React.Component {
     } else {
       return (
         <div>
-          <h2>You currently have a call scheduled for {this.state.scheduled_time.replace(':', '')}</h2> 
+          <h2>You currently have a call scheduled for {this.state.scheduled_time}</h2> 
           <h2>With the question:</h2>
           <h1>{this.state.scheduled_message}</h1>
           <h4>Would you like to revise your message or time?</h4>

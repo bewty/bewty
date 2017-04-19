@@ -50,7 +50,7 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time.replace(':', '');
   let question = req.body.question;
-  let user_id = req.body.user_id || '01';
+  let user_id = req.body.user_id;
   let callInfo = {
     user_id: user_id,
     message: question,
@@ -64,6 +64,9 @@ app.post('/scheduleCall', (req, res) => {
     return cron.scheduleCall();
   })
   .then(() => {
+    if (callInfo.time === '') {
+      return;
+    }
     return database.callEntry(req, res, callInfo);
   })
   .catch((e) => {
@@ -90,8 +93,8 @@ app.post('/db/userentry', (req, res) => {
 });
 
 app.post('/transcribe', (req, res) => {
-  let text = req.body.TranscriptionText || 'Test123123';
-  let phonenumber = req.body.Called.slice(1) || '01';
+  let text = req.body.TranscriptionText;
+  let phonenumber = req.body.Called.slice(1);
   watson.promisifiedTone(text)
   .then((tone) => {
     let log = {
@@ -99,7 +102,7 @@ app.post('/transcribe', (req, res) => {
       text: text,
       watson_results: tone
     };
-    database.saveEntry(req, res, log);
+    database.saveCall(req, res, log);
   });
 });
 

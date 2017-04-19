@@ -223,15 +223,39 @@ exports.findNextCall = (time) => {
 };
 
 exports.callEntry = (req, res, log) => {
-  const _id = log.user_id;
-  const question = log.message;
+  let _id = log.user_id;
+  let question = log.message;
+  let time = log.time;
   let logEntry = {
     question: question,
-    responses: []
+    responses: [],
+    call_time: time
   };
   User.findOneAndUpdate({_id: _id}, {$push: {'call_entries': logEntry}}, {safe: true, upsert: false, new: true})
   .then((result) => {
     res.sendStatus(201);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
+};
+
+exports.saveCall = (req, res, log) => {
+
+  let phonenumber = log.phonenumber;
+  logEntry = {
+    text: log.text,
+    watson_results: log.watson_results
+  };
+  User.findOne({phonenumber: phonenumber})
+  .then((user) => {
+    let lastIndex = user.call_entries.length - 1;
+    console.log('last index found:', lastIndex);
+    console.log('User call entries after:', user.call_entries[user.call_entries.length - 1]);
+    user.call_entries[lastIndex].responses.push(logEntry);
+    user.save();
+  })
+  .then(() => {
+    res.sendStatus(200);
   })
   .error(err => res.sendStatus(500).send(err))
   .catch(err => res.sendStatus(400).send(err));
