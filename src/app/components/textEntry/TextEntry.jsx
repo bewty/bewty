@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import TextField from 'material-ui/TextField';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class TextEntry extends React.Component {
   constructor(props) {
@@ -16,8 +19,7 @@ export default class TextEntry extends React.Component {
     this.setState({value: event.target.value});
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
+  handleSubmit() {
     const data = {
       text: this.state.value,
       entryType: 'text',
@@ -34,18 +36,25 @@ export default class TextEntry extends React.Component {
   render() {
     return (
       <div className="container">
-        <form onSubmit={this.handleSubmit}>
-        <label>
-          <textarea
-            type="text"
+        <MuiThemeProvider>
+          <TextField
             value={this.state.value}
             onChange={this.handleChange}
-            rows="10"
-            cols="50"
+            multiLine={true}
+            rows={10}
+            fullWidth={true}
+            underlineFocusStyle={{borderColor: '#EB5424'}}
+            style={{fontFamily: 'Lato, san-serif'}}
           />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
+        </MuiThemeProvider>
+        <MuiThemeProvider>
+          <RaisedButton
+            fullWidth={true}
+            label="Submit"
+            onTouchTap={this.handleSubmit}
+            style={{fontFamily: 'Lato, san-serif'}}
+          />
+        </MuiThemeProvider>
       </div>
     );
   }
