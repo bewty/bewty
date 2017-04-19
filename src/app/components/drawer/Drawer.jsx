@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
+import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar';
 import Divider from 'material-ui/Divider';
@@ -33,27 +34,26 @@ export default class AppDrawer extends React.Component {
           onLeftIconButtonTouchTap={this.handleToggle}
           style={{'backgroundColor': '#EB5424'}}
         />
-          <MenuItem>New Entry</MenuItem>
-          <MenuItem>
-            <Link to="/text-entry">Text</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/audio-entry">Audio</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/video-entry">Video</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/entries">Saved Entries</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/results">Results</Link>
-          </MenuItem>
-          <MenuItem>
-            <Link to="/call-schedule">Call Schedule</Link>
-          </MenuItem>
+
+          <MenuItem
+            containerElement={<Link to="/new-entry" />}
+            primaryText="New Entry"
+          />
+          <MenuItem
+            containerElement={<Link to="/entries" />}
+            primaryText="Saved Entries"
+          />
+          <MenuItem
+            containerElement={<Link to="/results" />}
+            primaryText="Results"
+          />
+          <MenuItem
+            containerElement={<Link to="/call-schedule" />}
+            primaryText="Call Schedule"
+          />
           <Divider />
           <MenuItem>Logout</MenuItem>
+
         </Drawer>
       </div>
     );
