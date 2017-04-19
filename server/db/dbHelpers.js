@@ -224,7 +224,7 @@ exports.findNextCall = (time) => {
 
 exports.callEntry = (req, res, log) => {
   const _id = log.user_id;
-  const question = log.schduled_message;
+  const question = log.message;
   let logEntry = {
     question: question,
     responses: []
