@@ -15,14 +15,18 @@ class CustomPie extends React.Component {
   }
 
   takeOnePieceOfPieData() {
-   return this.props.datum.children.map((obj)=>
+   //  console.log('bizniz outside datum', this.props)
+   //  console.log('bizniz in piedata', this.props.datum)
+   return this.props.pieData.map((obj)=>
        {
+         console.log('obj inside bizniz', obj)
        return {
-         x:" ",
-         y: obj.percentile * 100,
-         name:  obj.name +"\n "+ Math.floor(obj.percentile *100) + "%"
+         x:null,
+         y: obj.x,
+         name:  obj.x +"\n "+ Math.floor(obj.y) + "%"
        }
-      })}
+      })
+  }
   render() {
     // console.log(this.getPieData().forEach(el => el.map(x => console.log(x))), 'pie mofo')
     const {x, y} = this.props;
@@ -80,34 +84,34 @@ export default class Chart extends React.Component {
       data: this.getScatterData(),
       children: window.exampleData.personality.children,
     }
+    this.getScatterData = this.getScatterData.bind(this);
   }
 
   getScatterData() {
-    return window.exampleData.personality.map((index) => {
+    return this.props.scatterData[0].tones.map((index) => {
       return {
-        y: index.name,
-        x: index.percentile*100,
-        label: Math.floor(index.percentile*100),
-        children: index.children
+        y: index.tone_name,
+        x: index.score*100,
+        label: Math.floor(index.score*100),
       };
     });
   }
 
   getPieData() {
-    window.exampleData.personality.map((bigTrait) =>{
-    bigTrait.children.map((trait) => {
+    console.log('bizniz passed down', this.props.pieData[0])
+    return this.props.pieData[0].tones.map((index) => {
+      console.log(index)
       return {
-        x: trait.name,
-        y: trait.percentile * 100
-      }
-    })
-  })
+        x: index.tone_name,
+        y: index.score*100
+      };
+    });
   }
 
 
   render() {
     const pieData =  this.getPieData();
-    // console.log( 'THIS IS THE STATE YO ', this.state)
+    console.log( 'scatter data get', this.getScatterData())
     return (
       <div
         ref="container"
