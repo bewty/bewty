@@ -39,6 +39,9 @@ const Logged = (props) => (
 );
 
 Logged.muiName = 'IconMenu';
+const style = {
+  'background-color': '#EB5424'
+};
 export default class AppDrawer extends React.Component {
 
   constructor(props) {
@@ -53,11 +56,13 @@ export default class AppDrawer extends React.Component {
     this.setState({open: !this.state.open});
   }
 
+
   render() {
     return (
       <div>
         <AppBar
           onLeftIconButtonTouchTap={this.handleToggle}
+          style={{'background-color': '#EB5424'}}
         />
         <Drawer
           open={this.state.open}
@@ -65,6 +70,7 @@ export default class AppDrawer extends React.Component {
         <AppBar
           title="MindFit"
           onLeftIconButtonTouchTap={this.handleToggle}
+          style={{'background-color': '#EB5424'}}
         />
           <MenuItem>New Entry</MenuItem>
           <MenuItem>Saved Entries</MenuItem>
