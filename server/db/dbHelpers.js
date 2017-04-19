@@ -249,8 +249,6 @@ exports.saveCall = (req, res, log) => {
   User.findOne({phonenumber: phonenumber})
   .then((user) => {
     let lastIndex = user.call_entries.length - 1;
-    console.log('last index found:', lastIndex);
-    console.log('User call entries after:', user.call_entries[user.call_entries.length - 1]);
     user.call_entries[lastIndex].responses.push(logEntry);
     user.save();
   })
