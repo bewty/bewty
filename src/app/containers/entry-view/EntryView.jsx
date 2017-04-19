@@ -14,6 +14,8 @@ class EntryView extends Component {
   render() {
     const {match, entrySelected, fetchMedia} = this.props;
 
+    console.log('LETS GO', this.props.entrySelected)
+    const barData =  JSON.parse(this.props.entrySelected.watson_results).document_tone.tone_categories
     return (
       <div>
         {entrySelected === null ? null :
@@ -23,8 +25,9 @@ class EntryView extends Component {
             <div>
               <BarChart avg_data={entrySelected.video.avg_data}/>
               <LineChart raw_data={entrySelected.video.raw_data}/>
+              <Daily barData={barData}/>
             </div>
-            : <Daily data={entrySelected.watson_results}/> }
+            : <Daily barData={barData}/> }
             </div>
             <EntryTextDisplay entry={entrySelected}/>
             {entrySelected.entry_type === 'text' ? null : <MediaPlayer mediaSrc={fetchMedia} mediaType={entrySelected.entry_type}/>}

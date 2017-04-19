@@ -21,7 +21,7 @@ class Daily extends Component {
    this.props.barData.map((obj) => {obj.tones.map((tone)=> {
       data.push({
           y: tone.score *100,
-          x: tone.tone_name.split(' ')[0].split('')[0] ,
+          x: tone.tone_name.split('')[0] + tone.tone_name.split('')[1],
           name: tone.tone_name
          })
      // console.log('count', index)
@@ -53,7 +53,7 @@ class Daily extends Component {
       data={this.state.barData}
       eventKey={(datum) => datum.name}
       labelComponent={
-        <VictoryLabel angle={300} textAnchor="start"/>
+        <VictoryLabel  textAnchor="middle"/>
       }
       events={[
         {
