@@ -23,7 +23,7 @@ export default class AppDrawer extends React.Component {
       <div>
         <AppBar
           onLeftIconButtonTouchTap={this.handleToggle}
-          style={{'background-color': '#EB5424'}}
+          style={{'backgroundColor': '#EB5424'}}
         />
         <Drawer
           open={this.state.open}
@@ -31,9 +31,18 @@ export default class AppDrawer extends React.Component {
         <AppBar
           title="MindFit"
           onLeftIconButtonTouchTap={this.handleToggle}
-          style={{'background-color': '#EB5424'}}
+          style={{'backgroundColor': '#EB5424'}}
         />
           <MenuItem>New Entry</MenuItem>
+          <MenuItem>
+            <Link to="/text-entry">Text</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/audio-entry">Audio</Link>
+          </MenuItem>
+          <MenuItem>
+            <Link to="/video-entry">Video</Link>
+          </MenuItem>
           <MenuItem>
             <Link to="/entries">Saved Entries</Link>
           </MenuItem>

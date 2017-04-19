@@ -33,7 +33,7 @@ ReactDOM.render(
         <MuiThemeProvider>
           <AppDrawer />
         </MuiThemeProvider>
-        <Header />
+
         <Route exact path="/" component={App} />
         <Route path="/new-entry" component={NewEntry} />
         <Route path="/entries" component={EntryList} />
