@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+import RecordButton from 'material-ui/svg-icons/av/fiber-manual-record';
+import StopButton from 'material-ui/svg-icons/av/stop';
+import UploadButton from 'material-ui/svg-icons/file/cloud-upload';
 
 class AudioEntry extends Component {
   constructor(props) {
@@ -118,9 +123,46 @@ class AudioEntry extends Component {
     return (
       <div className="container">
         <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
-        <button onClick={this.startRecord}>Record</button>
+        <div>
+        <MuiThemeProvider>
+          <RaisedButton
+            icon={
+               (!this.state.start && !this.state.stop) ?
+                <RecordButton
+                  color="red"
+                  onTouchTap={this.startRecord}
+                  style={{paddingLeft: '0'}}
+                />
+                :
+                <StopButton
+                  color="#565a5c"
+                  onTouchTap={this.stopRecord}
+                  style={{paddingLeft: '0'}}
+                />
+
+              }
+            style={{marginRight: '12px'}}
+
+
+
+
+          />
+          </MuiThemeProvider>
+          <MuiThemeProvider>
+          <RaisedButton
+            icon={<UploadButton
+                    color="#565a5c"
+                    onTouchTap={this.uploadAudio}
+                    style={{paddingLeft: '0'}}
+                  />}
+
+
+          />
+        </MuiThemeProvider>
+        </div>
+        {/*<button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
-        <button onClick={this.uploadAudio}>Upload</button>
+        <button onClick={this.uploadAudio}>Upload</button>*/}
         <p>{this.state.transcript}</p>
         <p>{this.state.result}</p>
         {this.state.start && (
