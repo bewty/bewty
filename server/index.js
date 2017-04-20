@@ -96,6 +96,7 @@ app.get('/callentry/:user/:search', (req, res) => {
   let query = {};
   query.user = req.params.user;
   query.search = req.params.search;
+  console.log('Received call to call entry with:', query);
 
   database.retrievePhoneEntry(req, res, query);
 });

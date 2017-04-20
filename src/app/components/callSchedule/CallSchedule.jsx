@@ -41,7 +41,6 @@ export default class CallSchedule extends React.Component {
     };
     axios.post('/db/userentry', data)
     .then((user_id) => {
-      console.log('Successfully retrieved user state:', user_id);
       localStorage.setItem('scheduled_message', user_id.data.scheduled_message);
       localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
     })
