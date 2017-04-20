@@ -7,22 +7,22 @@ const Call = mongoDatabase.Call;
 
 exports.userEntry = (req, res, userInfo) => {
   let newUser = User({
-    phonenumber: userInfo.phonenumber
+    phonenumber: userInfo.phonenumber,
+    scheduled_time: '',
+    scheduled_message: ''
   });
   newUser.save((err, results) => {
-    console.log('User info in userEntry is:', userInfo);
     if (err) {
+      console.log('Received err:', err);
       User.findOne({'phonenumber': userInfo.phonenumber})
       .then((user) => {
-        console.log('Found user:', user._id);
-        res.status(201).send(user._id);
+        res.status(201).send(user);
       })
       .catch((err) => {
         res.sendStatus(400);
       });
     } else {
-      console.log('Created user');
-      res.status(201).send(results._id);
+      res.status(201).send(user);
     }
   });
 };
@@ -122,10 +122,16 @@ exports.modifyCall = (callInfo) => {
       return;
     })
     .then(() => {
+      if (time === '') {
+        let skip = 'skip';
+        return skip;
+      }
       return Call.findOne({ time: time });
     })
     .then((call) => {
-      // console.log('Found target call:', call);
+      if (call === 'skip') {
+        return skip;
+      }
       if (!call) {
         let newCall = Call({
           time: time,
@@ -140,6 +146,9 @@ exports.modifyCall = (callInfo) => {
     })
     .then((result) => {
       let resolved = 'Successfully modified/saved scheduled call';
+      if (result === 'skip') {
+        resolved = 'skip';
+      }
       resolve(resolved);
     })
     .catch(err => reject(err));

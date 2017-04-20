@@ -50,9 +50,7 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time.replace(':', '');
   let question = req.body.question;
-  // console.log('Receiving user_id phonenumber:', req.body.user_id);
   let user_id = req.body.user_id || '01';
-  // console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
   let callInfo = {
     user_id: user_id,
     message: question,
@@ -61,11 +59,12 @@ app.post('/scheduleCall', (req, res) => {
 
   database.modifyCall(callInfo)
   .then((result) => {
-    // console.log('Received successful result:', result);
+    if (result === 'skip') {
+      return;
+    }
     return cron.scheduleCall();
   })
   .then((time) => {
-    // console.log(`Successfully set cron for ${time}`);
     res.status(200);
   })
   .catch((e) => {
@@ -84,8 +83,9 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
+  console.log('Received userEntry phonenumber:', req.body.phonenumber);
   let userInfo = {
-    phonenumber: req.body.phonenumber || '11234567835'
+    phonenumber: req.body.phonenumber 
   };
 
   database.userEntry(req, res, userInfo);
@@ -118,8 +118,7 @@ app.post('/api/watson', (req, res) => {
     res.status(200).send(results);
   })
   .error(function(e) {
-    // TODO: HANDLE ERROR
-    // console.log('Error received within post to /api/watson', e);
+    console.log('Error received within post to /api/watson', e);
   });
 });
 
