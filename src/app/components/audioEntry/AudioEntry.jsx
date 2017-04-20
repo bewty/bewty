@@ -18,7 +18,6 @@ class AudioEntry extends Component {
       start: false,
       stop: false,
       transcript: '',
-      result: ''
     };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
@@ -139,32 +138,23 @@ class AudioEntry extends Component {
                   onTouchTap={this.stopRecord}
                   style={{paddingLeft: '0'}}
                 />
-
               }
+            onTouchTap={(!this.state.start && !this.state.stop) ?
+                        this.startRecord : this.stopRecord}
             style={{marginRight: '12px'}}
-
-
-
-
           />
           </MuiThemeProvider>
           <MuiThemeProvider>
           <RaisedButton
             icon={<UploadButton
                     color="#565a5c"
-                    onTouchTap={this.uploadAudio}
                     style={{paddingLeft: '0'}}
                   />}
-
-
+            onTouchTap={this.uploadAudio}
           />
         </MuiThemeProvider>
         </div>
-        {/*<button onClick={this.startRecord}>Record</button>
-        <button onClick={this.stopRecord}>Stop</button>
-        <button onClick={this.uploadAudio}>Upload</button>*/}
         <p>{this.state.transcript}</p>
-        <p>{this.state.result}</p>
         {this.state.start && (
           <VoiceRecognition
             onEnd={this.onEnd}
