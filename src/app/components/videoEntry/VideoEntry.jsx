@@ -3,6 +3,11 @@ import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
 import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+import RecordButton from 'material-ui/svg-icons/av/fiber-manual-record';
+import StopButton from 'material-ui/svg-icons/av/stop';
+import UploadButton from 'material-ui/svg-icons/file/cloud-upload';
 
 export default class VideoEntry extends Component {
   constructor(props) {
@@ -300,10 +305,46 @@ export default class VideoEntry extends Component {
             {this.state.loadingRecordMsg ? <p>Loading and starting the emotions detector, this may take few minutes ...</p> : null }
           </div>
           <div className='controls'>
-            {this.state.okayToRecord ? <button onClick={this.onRecord}>Record</button> : null}
-            {this.state.recording ? <button onClick={this.onStop}>Stop</button> : null}
-            {this.state.uploadable ? <button onClick={this.onSubmit}>Upload</button> : null }
-            <button onClick={this.onReset}>Reset</button>
+            {this.state.okayToRecord ?
+              <MuiThemeProvider>
+                <RaisedButton
+                  icon={<RecordButton
+                          color="red"
+                          style={{paddingLeft: '0'}}
+                        />}
+                  onTouchTap={this.onRecord}
+                  style={{marginRight: '12px'}}
+                />
+              </MuiThemeProvider>
+              : null}
+            {this.state.recording ?
+              <MuiThemeProvider>
+                <RaisedButton
+                  icon={<StopButton
+                          color="#565a5c"
+                          style={{paddingLeft: '0'}}
+                        />}
+                  onTouchTap={this.onStop}
+                />
+              </MuiThemeProvider>
+              : null}
+            {this.state.uploadable ?
+              <MuiThemeProvider>
+                <RaisedButton
+                  icon={<UploadButton
+                          color="#565a5c"
+                          style={{paddingLeft: '0'}}
+                        />}
+                  onTouchTap={this.onSubmit}
+                />
+              </MuiThemeProvider>
+              : null }
+            <MuiThemeProvider>
+              <RaisedButton
+                label="Reset"
+                onTouchTap={this.onReset}
+              />
+            </MuiThemeProvider>
           </div>
           <div id='affdex_elements' ref='affdex_elements'> </div>
           {this.state.uploading ? <Loader /> : null }
