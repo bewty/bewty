@@ -21,9 +21,11 @@ export default class TextEntry extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({value: event.target.value,
-                    uploadError: false,
-                    uploadSuccess: false});
+    this.setState({
+      value: event.target.value,
+      uploadError: false,
+      uploadSuccess: false
+    });
   }
 
   handleSubmit() {
