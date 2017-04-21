@@ -21,39 +21,41 @@ export default class AppDrawer extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={{paddingTop: '56px'}}>
         <AppBar
           onLeftIconButtonTouchTap={this.handleToggle}
-          style={{'backgroundColor': '#EB5424'}}
+          style={{backgroundColor: '#EB5424',
+                  position: 'fixed',
+                  top: 0}}
         />
         <Drawer
           open={this.state.open}
         >
-        <AppBar
-          title="MindFit"
-          onLeftIconButtonTouchTap={this.handleToggle}
-          style={{'backgroundColor': '#EB5424',
-                  fontFamily: 'Lato, san-serif'}}
-        />
+          <AppBar
+            title="MindFit"
+            onLeftIconButtonTouchTap={this.handleToggle}
+            style={{'backgroundColor': '#EB5424',
+                    fontFamily: 'Lato, san-serif'}}
+          />
           <Menu menuItemStyle={{fontFamily: 'Lato, san-serif'}}>
-          <MenuItem
-            containerElement={<Link to="/new-entry" />}
-            primaryText="New Entry"
-          />
-          <MenuItem
-            containerElement={<Link to="/entries" />}
-            primaryText="Saved Entries"
-          />
-          <MenuItem
-            containerElement={<Link to="/results" />}
-            primaryText="Results"
-          />
-          <MenuItem
-            containerElement={<Link to="/call-schedule" />}
-            primaryText="Call Schedule"
-          />
-          <Divider />
-          <MenuItem>Logout</MenuItem>
+            <MenuItem
+              containerElement={<Link to="/new-entry" />}
+              primaryText="New Entry"
+            />
+            <MenuItem
+              containerElement={<Link to="/entries" />}
+              primaryText="Saved Entries"
+            />
+            <MenuItem
+              containerElement={<Link to="/results" />}
+              primaryText="Results"
+            />
+            <MenuItem
+              containerElement={<Link to="/call-schedule" />}
+              primaryText="Call Schedule"
+            />
+            <Divider />
+            <MenuItem>Logout</MenuItem>
           </Menu>
         </Drawer>
       </div>
