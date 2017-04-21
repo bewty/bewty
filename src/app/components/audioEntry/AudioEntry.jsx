@@ -7,6 +7,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import RecordButton from 'material-ui/svg-icons/av/fiber-manual-record';
 import StopButton from 'material-ui/svg-icons/av/stop';
 import UploadButton from 'material-ui/svg-icons/file/cloud-upload';
+import Loader from '../loader/Loader.jsx';
+import { Link } from 'react-router-dom';
 
 class AudioEntry extends Component {
   constructor(props) {
@@ -20,7 +22,8 @@ class AudioEntry extends Component {
       transcript: '',
       uploading: false,
       uploadError: false,
-      uploadSuccess: false
+      uploadSuccess: false,
+      noTranscript: false
     };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
@@ -80,11 +83,16 @@ class AudioEntry extends Component {
       this.stopRecord();
     }, 30000);
     this.setState({
-      start: true
+      start: true,
+      transcript: '',
+      uploadError: false,
+      uploadSuccess: false,
+      noTranscript: false
     });
   }
 
   stopRecord() {
+    console.log('stop');
     this.state.recordAudio.stopRecording((audioURL) => {
       this.setState({
         blob: this.state.recordAudio.blob,
@@ -131,12 +139,26 @@ class AudioEntry extends Component {
   }
 
   onEnd() {
-    this.setState({ start: false, stop: false });
+    console.log('end');
+    if (this.state.transcript.length > 0) {
+      this.setState({
+        start: false,
+        stop: false
+      });
+    } else {
+      this.setState({
+        start: false,
+        stop: false,
+        noTranscript: true
+      });
+    }
   }
 
   onResult ({ finalTranscript }) {
-    this.setState({ start: false,
-                    transcript: finalTranscript });
+    this.setState({
+      start: false,
+      transcript: finalTranscript
+    });
   }
 
   render() {
@@ -187,9 +209,9 @@ class AudioEntry extends Component {
           />
         )}
         {this.state.uploading ? <Loader /> : null }
-        <br/>
         <div>
           {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+          {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
           {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
         </div>
       </div>
