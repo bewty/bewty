@@ -40,9 +40,10 @@ export default class TextEntry extends React.Component {
 
     axios.post('/entry', data)
     .then(res => {
-      this.setState({ uploading: false,
-                      uploadSuccess: true,
-                      uploadError: false });
+      this.setState({
+        uploading: false,
+        uploadSuccess: true,
+        uploadError: false });
       console.log('text upload to server done');
     })
     .catch(err => {
