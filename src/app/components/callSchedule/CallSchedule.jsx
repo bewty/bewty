@@ -1,5 +1,15 @@
 import React from 'react';
 import axios from 'axios';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import TimePicker from 'material-ui/TimePicker';
+
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: '#EB5424',
+    pickerHeaderColor: '#EB5424'
+  },
+});
 
 export default class CallSchedule extends React.Component {
   constructor(props) {
@@ -18,6 +28,7 @@ export default class CallSchedule extends React.Component {
     this.revise = this.revise.bind(this);
     this.endCall = this.endCall.bind(this);
     this.retrieveUserState = this.retrieveUserState.bind(this);
+    this.defaultTime = new Date();
   }
   componentWillMount() {
     this.retrieveUserState();
@@ -53,8 +64,13 @@ export default class CallSchedule extends React.Component {
     this.setState({scheduled_message: event.target.value});
   }
 
-  handleTime(event) {
-    this.setState({scheduled_time: event.target.value});
+  handleTime(event, date) {
+    console.log(date);
+    console.log(event && event.target.value);
+    // console.log(date && date.getHours() + ':' + date.getMinutes());
+    let time = (('00' + date.getHours()).slice(-2)) + ':' + (('00' + date.getMinutes()).slice(-2));
+    console.log(time);
+    this.setState({time: time});
   }
 
   handleSubmit(event) {
@@ -139,15 +155,39 @@ export default class CallSchedule extends React.Component {
     } else {
       return (
         <div>
-          <h2>You currently have a call scheduled for {this.state.scheduled_time}</h2> 
+          <h2>You currently have a call scheduled for {this.state.scheduled_time}</h2>
           <h2>With the question:</h2>
           <h1>{this.state.scheduled_message}</h1>
           <h4>Would you like to revise your message or time?</h4>
-          <input onClick={this.revise} type="submit" value="Revise" /> 
+          <input onClick={this.revise} type="submit" value="Revise" />
           <h4>Or stop current call schedule?</h4>
-          <input onClick={this.endCall} type="submit" value="End Schedule" /> 
+          <input onClick={this.endCall} type="submit" value="End Schedule" />
         </div>
       );
     }
+// =======
+//     return (
+//       <div className="container">
+//         <h1>What question would you like to be asked?</h1>
+//         <form onSubmit={this.handleSubmit}>
+//           <label>
+//             <input type="text" value={this.state.question} onChange={this.handleQuestion} />
+//           </label>
+//           <h2>When would you like your call?</h2>
+//           <input type="time" step="900" value={this.state.time} onChange={this.handleTime} />
+//           <p></p>
+//           <input type="submit" value="Submit" />
+//         </form>
+//         <MuiThemeProvider muiTheme={muiTheme}>
+//           <TimePicker
+//             onChange={this.handleTime}
+//             defaultTime={this.defaultTime}
+//             textFieldStyle={{fontFamily: 'Lato, san-serif'}}
+
+//           />
+//         </MuiThemeProvider>
+//       </div>
+//     );
+// >>>>>>> [Style] Style time picker
   }
 }
