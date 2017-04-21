@@ -361,7 +361,7 @@ export default class VideoEntry extends Component {
                         />}
                   onTouchTap={() => {
                     console.log(this.state.transcript.length);
-                    this.state.transcript.length > 0 && this.uploadAudio();
+                    this.state.transcript.length > 0 && this.onSubmit();
                   }}
                 />
               </MuiThemeProvider>
