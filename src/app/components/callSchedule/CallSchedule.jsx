@@ -174,33 +174,16 @@ export default class CallSchedule extends React.Component {
       );
     }
 // =======
-//   handleQuestionSubmit() {
-//     this.setState({hasQuestion: !this.state.hasQuestion})
-//   }
-//         /*
-//         <form onSubmit={this.handleSubmit}>
-//           <label>
-//             <input type="text" value={this.state.question} onChange={this.handleQuestion} />
-//           </label>
-//           <h2>When would you like your call?</h2>
-//           <input type="time" step="900" value={this.state.time} onChange={this.handleTime} />
-//           <p></p>
-//           <input type="submit" value="Submit" />
-//         </form>*/
-
-
-//   render() {
 //     return (
 //       <div className="container">
-//       {this.state.hasQuestion ? <h2>What question would you like to be asked?</h2> : <h2>When would you like your call?</h2>}
-
-//       {this.state.hasQuestion ?
+//         <div>
+//           {!this.state.hasQuestion ? <h2>What question would you like to be asked?</h2> : <h2>When would you like your call?</h2>}
+//         </div>
+//       {!this.state.hasQuestion ?
 //         <MuiThemeProvider>
 //           <TextField
 //             value={this.state.question}
 //             onChange={this.handleQuestion}
-//             multiLine={true}
-//             rows={10}
 //             fullWidth={true}
 //             underlineFocusStyle={{borderColor: '#EB5424'}}
 //             style={{fontFamily: 'Lato, san-serif'}}
@@ -218,14 +201,17 @@ export default class CallSchedule extends React.Component {
 
 //       }
 
-//         <MuiThemeProvider>
-//           <RaisedButton
-//             label="Submit"
-//             onTouchTap={this.state.hasQuestion ? this.handleQuestionSubmit : this.handleSubmit}
-//           />
-//         </MuiThemeProvider>
+//       <MuiThemeProvider>
+//         <RaisedButton
+//           fullWidth={true}
+//           label="Submit"
+
+//           labelStyle={{fontFamily: 'Lato, san-serif'}}
+//           onTouchTap={!this.state.hasQuestion ? this.handleQuestionSubmit : this.handleSubmit}
+//         />
+//       </MuiThemeProvider>
 //       </div>
 //     );
-// >>>>>>> [Style] Implement conditional render of call schedule procedure
+// >>>>>>> [Style] Properly renders based on conditions of questions
   }
 }
