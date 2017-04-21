@@ -3,12 +3,15 @@ import axios from 'axios';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
+import Loader from '../loader/Loader.jsx';
 
 export default class TextEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ''
+      value: '',
+      uploading: false,
+      uploadError: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -16,10 +19,15 @@ export default class TextEntry extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({value: event.target.value,
+                    uploadError: false});
   }
 
   handleSubmit() {
+    this.setState({
+      uploading: true,
+      uploadError: false,
+    });
     const data = {
       text: this.state.value,
       entryType: 'text',
@@ -27,8 +35,17 @@ export default class TextEntry extends React.Component {
     };
 
     axios.post('/entry', data)
-    .then(res => console.log('text upload to server done'))
-    .catch(err => console.log('text upload error...', err));
+    .then(res => {
+      this.setState({ uploading: false });
+      console.log('text upload to server done');
+    })
+    .catch(err => {
+      this.setState({
+        uploadError: true,
+        uploading: false
+      });
+      console.log('text upload error...', err);
+    });
 
     this.setState({value: ''});
   }
@@ -58,6 +75,8 @@ export default class TextEntry extends React.Component {
             labelStyle={{fontFamily: 'Lato, san-serif'}}
           />
         </MuiThemeProvider>
+        {this.state.uploading ? <Loader /> : null }
+        {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
       </div>
     );
   }
