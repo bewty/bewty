@@ -47,9 +47,9 @@ export default class TextEntry extends React.Component {
     })
     .catch(err => {
       this.setState({
-        uploadError: true,
         uploading: false,
-        uploadSuccess: false
+        uploadSuccess: false,
+        uploadError: true
       });
       console.log('text upload error...', err);
     });
