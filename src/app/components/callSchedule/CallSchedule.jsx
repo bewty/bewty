@@ -74,8 +74,6 @@ export default class CallSchedule extends React.Component {
 
   handleTime(event, date) {
     console.log(date);
-    console.log(event && event.target.value);
-    // console.log(date && date.getHours() + ':' + date.getMinutes());
     let time = (('00' + date.getHours()).slice(-2)) + ':' + (('00' + date.getMinutes()).slice(-2));
     console.log(time);
     this.setState({time: time});
@@ -174,11 +172,14 @@ export default class CallSchedule extends React.Component {
       );
     }
 // =======
+//   handleQuestionSubmit() {
+//     this.setState({hasQuestion: !this.state.hasQuestion});
+//   }
+
+//   render() {
 //     return (
 //       <div className="container">
-//         <div>
-//           {!this.state.hasQuestion ? <h2>What question would you like to be asked?</h2> : <h2>When would you like your call?</h2>}
-//         </div>
+//         {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
 //       {!this.state.hasQuestion ?
 //         <MuiThemeProvider>
 //           <TextField
@@ -195,23 +196,19 @@ export default class CallSchedule extends React.Component {
 //             onChange={this.handleTime}
 //             defaultTime={this.defaultTime}
 //             textFieldStyle={{fontFamily: 'Lato, san-serif'}}
-
 //           />
 //         </MuiThemeProvider>
-
 //       }
-
 //       <MuiThemeProvider>
 //         <RaisedButton
 //           fullWidth={true}
 //           label="Submit"
-
 //           labelStyle={{fontFamily: 'Lato, san-serif'}}
 //           onTouchTap={!this.state.hasQuestion ? this.handleQuestionSubmit : this.handleSubmit}
 //         />
 //       </MuiThemeProvider>
 //       </div>
 //     );
-// >>>>>>> [Style] Properly renders based on conditions of questions
+// >>>>>>> [Style] Clean up code
   }
 }
