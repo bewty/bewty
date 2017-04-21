@@ -22,7 +22,7 @@ export default class VideoEntry extends Component {
       recording: false,
       uploadable: false,
       uploading: false,
-      uploadSuccess: null,
+      uploadSuccess: false,
       uploadError: false,
       emotionable: false,
       okayToRecord: false,
@@ -38,7 +38,8 @@ export default class VideoEntry extends Component {
       },
       start: false,
       stop: false,
-      transcript: ''
+      transcript: '',
+      noTranscript: false
     };
 
     this.getUserMedia = this.getUserMedia.bind(this);
@@ -168,7 +169,11 @@ export default class VideoEntry extends Component {
         sadness: 0,
         surprise: 0,
       },
-      start: true
+      start: true,
+      transcript: '',
+      uploadError: false,
+      uploadSuccess: false,
+      noTranscript: false
     });
 
     this.captureUserMedia( stream => {
@@ -239,6 +244,7 @@ export default class VideoEntry extends Component {
     this.setState({
       uploading: true,
       uploadError: false,
+      uploadSuccess: false
     });
 
     let blob = this.state.blob;
@@ -256,13 +262,18 @@ export default class VideoEntry extends Component {
 
     axios.post('/entry', fd, config)
     .then( res => {
-      this.setState({ uploading: false });
+      this.setState({
+        uploading: false,
+        uploadSuccess: true,
+        uploadError: false,
+        transcript: '' });
       console.log('video upload to server COMPLETE:', res);
     })
     .catch( err => {
       this.setState({
-        uploadError: true,
-        uploading: false
+        uploading: false,
+        uploadSuccess: false,
+        uploadError: true
       });
       console.log('video upload to server ERROR:', err);
     });
@@ -277,12 +288,26 @@ export default class VideoEntry extends Component {
   }
 
   onEnd() {
-    this.setState({ start: false, stop: false });
+    console.log('end');
+    if (this.state.transcript.length > 0) {
+      this.setState({
+        start: false,
+        stop: false
+      });
+    } else {
+      this.setState({
+        start: false,
+        stop: false,
+        noTranscript: true
+      });
+    }
   }
 
   onResult ({ finalTranscript }) {
-    this.setState({ start: false,
-                    transcript: finalTranscript });
+    this.setState({
+      start: false,
+      transcript: finalTranscript
+    });
   }
 
   render() {
@@ -301,8 +326,7 @@ export default class VideoEntry extends Component {
             : <video autoPlay='true' src={this.state.src} muted></video>
           }
           <div className='flash-message'>
-            {this.state.uploadError ? <p>Error Uploading Video, Please Try Again</p> : null }
-            {this.state.loadingRecordMsg ? <p>Loading and starting the emotions detector, this may take few minutes ...</p> : null }
+            {this.state.loadingRecordMsg ? <p>Loading and starting the emotions detector, this may take a moment.</p> : null }
           </div>
           <div className='controls'>
             {this.state.okayToRecord ?
@@ -335,7 +359,10 @@ export default class VideoEntry extends Component {
                           color="#565a5c"
                           style={{paddingLeft: '0'}}
                         />}
-                  onTouchTap={this.onSubmit}
+                  onTouchTap={() => {
+                    console.log(this.state.transcript.length);
+                    this.state.transcript.length > 0 && this.uploadAudio();
+                  }}
                 />
               </MuiThemeProvider>
               : null }
@@ -348,6 +375,11 @@ export default class VideoEntry extends Component {
           </div>
           <div id='affdex_elements' ref='affdex_elements'> </div>
           {this.state.uploading ? <Loader /> : null }
+          <div>
+            {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+            {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
+            {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+          </div>
       </div>
     );
   }
