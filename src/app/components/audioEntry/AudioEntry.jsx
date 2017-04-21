@@ -194,7 +194,10 @@ class AudioEntry extends Component {
                     color="#565a5c"
                     style={{paddingLeft: '0'}}
                   />}
-            onTouchTap={this.uploadAudio}
+            onTouchTap={() => {
+              console.log(this.state.transcript.length);
+              this.state.transcript.length > 0 && this.uploadAudio();
+            }}
           />
         </MuiThemeProvider>
         </div>
