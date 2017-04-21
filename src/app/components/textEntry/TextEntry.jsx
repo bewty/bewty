@@ -4,6 +4,7 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Loader from '../loader/Loader.jsx';
+import { Link } from 'react-router-dom';
 
 export default class TextEntry extends React.Component {
   constructor(props) {
@@ -11,7 +12,8 @@ export default class TextEntry extends React.Component {
     this.state = {
       value: '',
       uploading: false,
-      uploadError: false
+      uploadError: false,
+      uploadSuccess: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -20,13 +22,15 @@ export default class TextEntry extends React.Component {
 
   handleChange(event) {
     this.setState({value: event.target.value,
-                    uploadError: false});
+                    uploadError: false,
+                    uploadSuccess: false});
   }
 
   handleSubmit() {
     this.setState({
       uploading: true,
       uploadError: false,
+      uploadSuccess: false
     });
     const data = {
       text: this.state.value,
@@ -36,13 +40,16 @@ export default class TextEntry extends React.Component {
 
     axios.post('/entry', data)
     .then(res => {
-      this.setState({ uploading: false });
+      this.setState({ uploading: false,
+                      uploadSuccess: true,
+                      uploadError: false });
       console.log('text upload to server done');
     })
     .catch(err => {
       this.setState({
         uploadError: true,
-        uploading: false
+        uploading: false,
+        uploadSuccess: false
       });
       console.log('text upload error...', err);
     });
@@ -76,7 +83,11 @@ export default class TextEntry extends React.Component {
           />
         </MuiThemeProvider>
         {this.state.uploading ? <Loader /> : null }
-        {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+        <br/>
+        <div>
+          {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+          {this.state.uploadSuccess ? <Link className="success" to="/entries">Success! You can view your submissions here!</Link> : null}
+        </div>
       </div>
     );
   }
