@@ -172,13 +172,8 @@ export default class CallSchedule extends React.Component {
       );
     }
 // =======
-//   handleQuestionSubmit() {
-//     this.setState({hasQuestion: !this.state.hasQuestion});
-//   }
-
-//   render() {
 //     return (
-//       <div className="container">
+//       <div className="new-entry-container">
 //         {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
 //       {!this.state.hasQuestion ?
 //         <MuiThemeProvider>
@@ -209,6 +204,6 @@ export default class CallSchedule extends React.Component {
 //       </MuiThemeProvider>
 //       </div>
 //     );
-// >>>>>>> [Style] Clean up code
+// >>>>>>> [Style] change class name to not mess with original containers
   }
 }
