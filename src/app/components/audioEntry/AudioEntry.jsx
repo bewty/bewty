@@ -125,7 +125,8 @@ class AudioEntry extends Component {
       this.setState({
         uploading: false,
         uploadSuccess: true,
-        uploadError: false });
+        uploadError: false,
+        transcript: '' });
       console.log('audio upload to server done', res);
     })
     .catch(err => {
