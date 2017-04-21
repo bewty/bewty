@@ -3,6 +3,8 @@ import axios from 'axios';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TimePicker from 'material-ui/TimePicker';
+import RaisedButton from 'material-ui/RaisedButton';
+import TextField from 'material-ui/TextField';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -19,7 +21,12 @@ export default class CallSchedule extends React.Component {
       scheduled_time: '',
       user_id: localStorage.user_id,
       stopCalls: localStorage.stopCalls,
-      scheduled: localStorage.scheduled
+      scheduled: localStorage.scheduled,
+      question: '',
+      time: '',
+      phonenumber: '',
+      user_id: '',
+      hasQuestion: false
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,6 +36,7 @@ export default class CallSchedule extends React.Component {
     this.endCall = this.endCall.bind(this);
     this.retrieveUserState = this.retrieveUserState.bind(this);
     this.defaultTime = new Date();
+    this.handleQuestionSubmit = this.handleQuestionSubmit.bind(this);
   }
   componentWillMount() {
     this.retrieveUserState();
@@ -166,9 +174,10 @@ export default class CallSchedule extends React.Component {
       );
     }
 // =======
-//     return (
-//       <div className="container">
-//         <h1>What question would you like to be asked?</h1>
+//   handleQuestionSubmit() {
+//     this.setState({hasQuestion: !this.state.hasQuestion})
+//   }
+//         /*
 //         <form onSubmit={this.handleSubmit}>
 //           <label>
 //             <input type="text" value={this.state.question} onChange={this.handleQuestion} />
@@ -177,7 +186,27 @@ export default class CallSchedule extends React.Component {
 //           <input type="time" step="900" value={this.state.time} onChange={this.handleTime} />
 //           <p></p>
 //           <input type="submit" value="Submit" />
-//         </form>
+//         </form>*/
+
+
+//   render() {
+//     return (
+//       <div className="container">
+//       {this.state.hasQuestion ? <h2>What question would you like to be asked?</h2> : <h2>When would you like your call?</h2>}
+
+//       {this.state.hasQuestion ?
+//         <MuiThemeProvider>
+//           <TextField
+//             value={this.state.question}
+//             onChange={this.handleQuestion}
+//             multiLine={true}
+//             rows={10}
+//             fullWidth={true}
+//             underlineFocusStyle={{borderColor: '#EB5424'}}
+//             style={{fontFamily: 'Lato, san-serif'}}
+//           />
+//         </MuiThemeProvider>
+//         :
 //         <MuiThemeProvider muiTheme={muiTheme}>
 //           <TimePicker
 //             onChange={this.handleTime}
@@ -186,8 +215,17 @@ export default class CallSchedule extends React.Component {
 
 //           />
 //         </MuiThemeProvider>
+
+//       }
+
+//         <MuiThemeProvider>
+//           <RaisedButton
+//             label="Submit"
+//             onTouchTap={this.state.hasQuestion ? this.handleQuestionSubmit : this.handleSubmit}
+//           />
+//         </MuiThemeProvider>
 //       </div>
 //     );
-// >>>>>>> [Style] Style time picker
+// >>>>>>> [Style] Implement conditional render of call schedule procedure
   }
 }
