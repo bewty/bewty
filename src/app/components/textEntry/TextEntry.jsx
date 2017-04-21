@@ -45,13 +45,16 @@ export default class TextEntry extends React.Component {
             fullWidth={true}
             underlineFocusStyle={{borderColor: '#EB5424'}}
             style={{fontFamily: 'Lato, san-serif'}}
+            errorText={!this.state.value.length > 0 && 'This field is required'}
           />
         </MuiThemeProvider>
         <MuiThemeProvider>
           <RaisedButton
             fullWidth={true}
             label="Submit"
-            onTouchTap={this.handleSubmit}
+            onTouchTap={() => {
+              this.state.value.length > 0 && this.handleSubmit();
+            }}
             labelStyle={{fontFamily: 'Lato, san-serif'}}
           />
         </MuiThemeProvider>
