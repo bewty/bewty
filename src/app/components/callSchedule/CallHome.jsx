@@ -6,7 +6,9 @@ import CallEntryList from './CallEntryList.jsx';
 export default class CallHome extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      call_data: ''
+    };
     this.fetchEntries = this.fetchEntries.bind(this);
   }
   componentDidMount() {
@@ -15,8 +17,10 @@ export default class CallHome extends React.Component {
   fetchEntries(query) {
     query = query || 'all';
     axios.get(`/callentry/${localStorage.user_id}/${query}`)
-    .then((call_entries) => {
-      localStorage.setItem('call_data', JSON.stringify(call_entries.data));
+    .then((call_data) => {
+      this.setState({
+        call_data: call_data.data
+      });
     });
   }
   
@@ -25,7 +29,7 @@ export default class CallHome extends React.Component {
       <div>
         <h1>Call Scheduler</h1>
         <CallSchedule />
-        <CallEntryList />        
+        <CallEntryList call_data={this.state.call_data} />        
       </div>
     );
   }

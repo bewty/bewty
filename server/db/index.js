@@ -37,9 +37,9 @@ const userSchema = new mongoose.Schema({
     call_time: String,
     date_set: {type: Date, default: Date.now},    
     responses: [{
-      entry_type: { type: String, default: 'phone'},
       text: String,
       created_at: {type: Date, default: Date.now},
+      entry_type: {type: String, default: 'audio'},
       watson_results: String
     }]
   }]

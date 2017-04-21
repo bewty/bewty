@@ -18,17 +18,16 @@ export default class App extends React.Component {
     this.setState({
       idToken: this.getIdToken()
     });
-    this.getProfile();
   }
 
   componentDidMount() {
-    this.userLog();
   }
 
   userLog() {
-    let data = {
-      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
-    };
+    let data = {};
+    if (localStorage.smsCred) {
+      data.phonenumber = JSON.parse(localStorage.smsCred).phoneNumber.number;
+    }
     axios.post('/db/userentry', data)
     .then((user_id) => {
       localStorage.setItem('user_id', user_id.data._id);
@@ -84,6 +83,7 @@ export default class App extends React.Component {
 
   render() {
     if (this.state.idToken !== 'undefined' && this.loggedIn()) {
+      this.userLog();
       return (
         <div className="container">
           <h2 className="profileName">Welcome!</h2>

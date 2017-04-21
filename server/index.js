@@ -85,6 +85,9 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
+  if (req.body.phonenumber[0] !== '1') {
+    req.body.phonenumber = '1' + req.body.phonenumber;
+  }
   let userInfo = {
     phonenumber: req.body.phonenumber 
   };
@@ -179,7 +182,6 @@ app.get('/entry/:entryId/:entryType/:user_id', (req, res) => {
   })
   .catch( err => res.sendStatus(400).send(err));
 });
-
 
 app.get('*', (req, res) => {
   res.sendFile( path.resolve(__dirname, '..', 'dist', 'index.html'));

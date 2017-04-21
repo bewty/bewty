@@ -5,26 +5,27 @@ export default class CallEntryList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      call_entries: ''
+      call_data: ''
     };
   }
 
-  componentDidMount() {
-    console.log('Current state:', localStorage.call_entries);
-    this.setState({
-      call_data: localStorage.call_entries
-    });
-  }
-
-
   render() {
-    return (
-      <div>
-      <h1>Call Entry List</h1>
-      {JSON.parse(localStorage.call_entries).map((call) => {
-        return <CallEntry call={call}/>
-      })}
-      </div>
+    if (this.props.call_data.length > 0) {
+      return (
+        <div>
+          <h1>Call Entry List</h1>
+          {this.props.call_data.map((call) => {
+            return <CallEntry call={call} />;
+          })}
+        </div>
     );
+    } else {
+      return (
+        <div>
+          <h1>Call Entry List</h1>
+          No entries yet
+        </div>
+      );
+    }
   }
 }

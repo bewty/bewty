@@ -8,7 +8,6 @@ import {
 const EntryText = ({entry, index, type}) => {
   let text;
   entry.text.length > 220 && type === 'snippet' ? text = `${entry.text.slice(0, 220)}...` : text = entry.text;
-
   return (
     <div className="entry-container">
      {entry.length === 0 ? null :
