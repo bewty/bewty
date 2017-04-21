@@ -76,7 +76,7 @@ app.post('/scheduleCall', (req, res) => {
 
 app.post('/db/retrieveEntry', (req, res) => {
   let query = {};
-  query.user_id = req.body.user_id;
+  query.user_id = req.body.user_id
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);

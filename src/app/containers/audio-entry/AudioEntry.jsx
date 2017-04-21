@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
+import VoiceRecognition from '../../components/VoiceRecognition/VoiceRecognition.jsx';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { setSourceUrl,
+          stopRecordAndSet,
+          setStartState,
+          resetStartStop,
+          setStartAndTranscript } from '../../actions/index.js';
+import { bindActionCreators } from 'redux';
 
 class AudioEntry extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      src: null,
-      recordAudio: null,
-      blob: null,
-      start: false,
-      stop: false,
-      transcript: '',
-      result: ''
-    };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
     this.handleAudio = this.handleAudio.bind(this);
@@ -24,6 +22,7 @@ class AudioEntry extends Component {
     this.uploadAudio = this.uploadAudio.bind(this);
     this.onEnd = this.onEnd.bind(this);
     this.onResult = this.onResult.bind(this);
+    this.recordAudio = null;
   }
 
   componentDidMount() {
@@ -52,84 +51,72 @@ class AudioEntry extends Component {
   }
 
   handleAudio(stream) {
-    this.setState({
-      src: window.URL.createObjectURL(stream)
-    });
+    this.props.setSourceUrl(window.URL.createObjectURL(stream));
   }
 
   audioError(err) {
-    alert('Your browser cannot stream from your webcam. Please switch to Chrome or Firefox.');
+    alert('Your browser cannot stream from your microphone. Please switch to Chrome or Firefox.');
   }
 
 
   startRecord() {
     this.getUserMedia();
     this.captureUserMedia( stream => {
-      this.state.recordAudio = RecordRTC(stream, {type: 'audio'});
-      this.state.recordAudio.startRecording();
+      this.recordAudio = RecordRTC(stream, {type: 'audio'});
+      this.recordAudio.startRecording();
     });
 
     setTimeout( () => {
       this.stopRecord();
     }, 30000);
-    this.setState({
-      start: true
-    });
+    this.props.setStartState(true);
   }
 
   stopRecord() {
-    this.state.recordAudio.stopRecording((audioURL) => {
-      this.setState({
-        blob: this.state.recordAudio.blob,
-        src: audioURL,
-        stop: true
-      });
+    this.recordAudio.stopRecording((audioURL) => {
+      this.props.stopRecordAndSet(this.recordAudio.blob, true, audioURL);
     });
   }
 
   uploadAudio() {
-    let self = this;
-    let blob = this.state.blob;
+    let blob = this.props.audio.blob;
     let fd = new FormData();
     fd.append('media', blob);
     fd.append('entryType', 'audio');
-    fd.append('text', this.state.transcript);
+    fd.append('text', this.props.audio.transcript);
     fd.append('user_id', localStorage.user_id);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
     };
-
     axios.post('/entry', fd, config)
     .then( res => console.log('audio upload to server done', res))
     .catch(err => console.log('audio upload error...', err));
   }
 
   onEnd() {
-    this.setState({ start: false, stop: false });
+    this.props.resetStartStop(false, false);
   }
 
   onResult ({ finalTranscript }) {
-    this.setState({ start: false,
-                    transcript: finalTranscript });
+    this.props.setStartAndTranscript(false, finalTranscript);
   }
 
   render() {
     return (
       <div className="container">
-        <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
+        <audio autoPlay='true' src={this.props.audio.src} muted="muted" controls></audio>
         <button onClick={this.startRecord}>Record</button>
         <button onClick={this.stopRecord}>Stop</button>
         <button onClick={this.uploadAudio}>Upload</button>
-        <p>{this.state.transcript}</p>
-        <p>{this.state.result}</p>
-        {this.state.start && (
+        <p>{this.props.audio.transcript}</p>
+        {this.props.audio.start && (
           <VoiceRecognition
             onEnd={this.onEnd}
             onResult={this.onResult}
             continuous={true}
             lang="en-US"
-            stop={this.state.stop}
+            stop={this.props.audio.stop}
           />
         )}
       </div>
@@ -137,4 +124,20 @@ class AudioEntry extends Component {
   }
 }
 
-export default AudioEntry;
+var mapStateToProps = (state) => {
+  return {
+    audio: state.audio
+  };
+};
+
+var mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({
+    setSourceUrl: setSourceUrl,
+    stopRecordAndSet: stopRecordAndSet,
+    setStartState: setStartState,
+    resetStartStop: resetStartStop,
+    setStartAndTranscript: setStartAndTranscript
+  }, dispatch);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AudioEntry);

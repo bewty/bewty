@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { VictoryScatter,VictoryPie, VictoryZoomContainer, VictoryBar, VictoryLabel, VictoryTheme, VictoryChart } from 'victory';
 import exampleToneData from '../../../../../static/exampleToneData.js'
+import {connect} from 'react-redux';
 
-
-export default class Daily extends Component {
+class Daily extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,10 +18,10 @@ export default class Daily extends Component {
   getBarData() {
    var data = [];
    var index = 1
-   window.exampleToneData.document_tone.tone_categories.map((obj) => {obj.tones.map((tone)=> {
+   this.props.barData.map((obj) => {obj.tones.map((tone)=> {
       data.push({
           y: tone.score *100,
-          x: index++,
+          x: tone.tone_name.split('')[0] + tone.tone_name.split('')[1],
           name: tone.tone_name
          })
      // console.log('count', index)
@@ -47,14 +47,13 @@ export default class Daily extends Component {
       }}
         width = {500}
         height ={500}
-      theme={VictoryTheme.material}
     >
       <VictoryBar
       name ='bar'
       data={this.state.barData}
       eventKey={(datum) => datum.name}
       labelComponent={
-        <VictoryLabel angle={300} textAnchor="start"/>
+        <VictoryLabel  textAnchor="middle"/>
       }
       events={[
         {
@@ -93,3 +92,13 @@ export default class Daily extends Component {
     );
   }
 }
+
+
+function mapStateToProps(state){
+  console.log('entrySelected', state.entrySelected)
+  return {
+    entrySelected: state.entrySelected
+  };
+}
+
+export default connect(mapStateToProps, null)(Daily);
