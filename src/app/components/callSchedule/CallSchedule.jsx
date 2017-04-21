@@ -8,7 +8,7 @@ export default class CallSchedule extends React.Component {
       scheduled_message: '',
       scheduled_time: '',
       user_id: localStorage.user_id,
-      stop: localStorage.stopCalls,
+      stopCalls: localStorage.stopCalls,
       scheduled: localStorage.scheduled
     };
 
@@ -84,6 +84,7 @@ export default class CallSchedule extends React.Component {
     localStorage.setItem('scheduled', false);
     this.setState({
       scheduled: false,
+      stopCalls: false,
       scheduled_message: '',
       scheduled_time: ''
     });
