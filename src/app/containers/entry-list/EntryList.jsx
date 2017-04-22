@@ -22,7 +22,7 @@ class EntryList extends Component {
     .then( result => {
       this.props.fetchEntry(result.data);
     })
-    .catch( err => console.error('Fetching Entry Error'));
+    .catch( err => console.error('Fetching Entry Error', err.message));
   }
 
   onFetchMedia(entryId, entryType) {
