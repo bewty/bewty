@@ -50,26 +50,27 @@ AWS.config.update({
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time.replace(':', '');
   let question = req.body.question;
-  // console.log('Receiving user_id phonenumber:', req.body.user_id);
-  let user_id = req.body.user_id || '01';
-  // console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
+  let user_id = req.body.user_id;
   let callInfo = {
     user_id: user_id,
     message: question,
     time: time
   };
-
   database.modifyCall(callInfo)
   .then((result) => {
-    // console.log('Received successful result:', result);
+    if (result === 'skip') {
+      return;
+    }
     return cron.scheduleCall();
   })
-  .then((time) => {
-    // console.log(`Successfully set cron for ${time}`);
-    res.status(200);
+  .then(() => {
+    if (callInfo.time === '') {
+      return;
+    }
+    return database.callEntry(req, res, callInfo);
   })
   .catch((e) => {
-    // console.log('Received error:', e);
+    console.log('Received error:', e);
   });
 });
 
@@ -84,24 +85,36 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
+  if (req.body.phonenumber[0] !== '1') {
+    req.body.phonenumber = '1' + req.body.phonenumber;
+  }
   let userInfo = {
-    phonenumber: req.body.phonenumber || '11234567835'
+    phonenumber: req.body.phonenumber
   };
 
   database.userEntry(req, res, userInfo);
 });
 
+app.get('/callentry/:user/:search', (req, res) => {
+  let query = {};
+  query.user = req.params.user;
+  query.search = req.params.search;
+  console.log('Received call to call entry with:', query);
+
+  database.retrievePhoneEntry(req, res, query);
+});
+
 app.post('/transcribe', (req, res) => {
-  let text = req.body.TranscriptionText || 'Test123123';
-  let phonenumber = req.body.Called.slice(1) || '01';
+  let text = req.body.TranscriptionText;
+  let phonenumber = req.body.Called.slice(1);
   watson.promisifiedTone(text)
   .then((tone) => {
     let log = {
       phonenumber: phonenumber,
       text: text,
-      watson_results: tone
+      watson_results: JSON.stringify(JSON.parse(tone).document_tone)
     };
-    database.saveEntry(req, res, log);
+    database.saveCall(req, res, log);
   });
 });
 
@@ -119,7 +132,7 @@ app.post('/api/watson', (req, res) => {
   })
   .error(function(e) {
     // TODO: HANDLE ERROR
-    // console.log('Error received within post to /api/watson', e);
+    console.log('Error received within post to /api/watson', e);
   });
 });
 
@@ -170,7 +183,6 @@ app.get('/entry/:entryId/:entryType/:user_id', (req, res) => {
   })
   .catch( err => res.sendStatus(400).send(err));
 });
-
 
 app.get('*', (req, res) => {
   res.sendFile( path.resolve(__dirname, '..', 'dist', 'index.html'));

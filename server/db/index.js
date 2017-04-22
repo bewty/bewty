@@ -31,6 +31,17 @@ const userSchema = new mongoose.Schema({
     text: String,
     watson_results: String,
     tags: Array
+  }],
+  call_entries: [{
+    question: String,
+    call_time: String,
+    date_set: {type: Date, default: Date.now},
+    responses: [{
+      text: String,
+      created_at: {type: Date, default: Date.now},
+      entry_type: {type: String, default: 'audio'},
+      watson_results: String
+    }]
   }]
 });
 

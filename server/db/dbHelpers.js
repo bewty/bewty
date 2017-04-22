@@ -6,24 +6,24 @@ const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
 
 exports.userEntry = (req, res, userInfo) => {
-  let newUser = User({
-    phonenumber: userInfo.phonenumber
-  });
-  newUser.save((err, results) => {
-    console.log('User info in userEntry is:', userInfo);
-    if (err) {
-      User.findOne({'phonenumber': userInfo.phonenumber})
+  User.findOne({'phonenumber': userInfo.phonenumber})
+  .then((user) => {
+    if (user === null) {
+      let newUser = User({
+        phonenumber: userInfo.phonenumber,
+        scheduled_time: '',
+        scheduled_message: ''
+      });
+      newUser.save()
       .then((user) => {
-        console.log('Found user:', user._id);
-        res.status(201).send(user._id);
-      })
-      .catch((err) => {
-        res.sendStatus(400);
+        res.status(201).send(user);
       });
     } else {
-      console.log('Created user');
-      res.status(201).send(results._id);
+      res.status(201).send(user);
     }
+  })
+  .catch((err) => {
+    res.sendStatus(400);
   });
 };
 
@@ -48,7 +48,6 @@ exports.saveEntry = (req, res, log) => {
   };
   User.findOneAndUpdate({_id: _id}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
   .then((result) => {
-    // console.log('Entry successfully uploaded!');
     res.sendStatus(201);
   })
   .error(err => res.sendStatus(500).send(err))
@@ -99,8 +98,6 @@ exports.modifyCall = (callInfo) => {
   return new Promise((resolve, reject) => {
     User.findOne({ _id: targetUser })
     .then((user) => {
-      // console.log('Found user:', targetUser);
-      // console.log('number is:', user.phonenumber);
       oldTime = user.scheduled_time;
       user_id = user._id;
       user.scheduled_time = time;
@@ -122,10 +119,16 @@ exports.modifyCall = (callInfo) => {
       return;
     })
     .then(() => {
+      if (time === '') {
+        let skip = 'skip';
+        return skip;
+      }
       return Call.findOne({ time: time });
     })
     .then((call) => {
-      // console.log('Found target call:', call);
+      if (call === 'skip') {
+        return call;
+      }
       if (!call) {
         let newCall = Call({
           time: time,
@@ -140,9 +143,14 @@ exports.modifyCall = (callInfo) => {
     })
     .then((result) => {
       let resolved = 'Successfully modified/saved scheduled call';
+      if (result === 'skip') {
+        resolved = 'skip';
+      }
       resolve(resolved);
     })
-    .catch(err => reject(err));
+    .catch((err) => {
+      reject(err);
+    });
   });
 };
 
@@ -211,4 +219,52 @@ exports.findNextCall = (time) => {
     }
     return nextCall;
   });
+};
+
+exports.callEntry = (req, res, log) => {
+  let _id = log.user_id;
+  let question = log.message;
+  let time = log.time;
+  let logEntry = {
+    question: question,
+    responses: [],
+    call_time: time
+  };
+  User.findOneAndUpdate({_id: _id}, {$push: {'call_entries': logEntry}}, {safe: true, upsert: false, new: true})
+  .then((result) => {
+    res.sendStatus(201);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
+};
+
+exports.saveCall = (req, res, log) => {
+  let phonenumber = log.phonenumber;
+  logEntry = {
+    text: log.text,
+    watson_results: log.watson_results
+  };
+  User.findOne({phonenumber: phonenumber})
+  .then((user) => {
+    let lastIndex = user.call_entries.length - 1;
+    user.call_entries[lastIndex].responses.push(logEntry);
+    user.save();
+  })
+  .then(() => {
+    res.sendStatus(200);
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
+};
+
+exports.retrievePhoneEntry = (req, res, log) => {
+  let user = log.user;
+  let query = log.search;
+  User.findOne({_id: user})
+  .then((user) => {
+    console.log('Found user:', user.call_entries);
+    res.status(200).send(JSON.stringify(user.call_entries));
+  })
+  .error(err => res.sendStatus(500).send(err))
+  .catch(err => res.sendStatus(400).send(err));
 };
