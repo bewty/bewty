@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
+
 mongoose.Promise = require('bluebird');
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/bewty');
-
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -49,6 +50,8 @@ const callSchema = new mongoose.Schema({
   time: {type: String},
   user: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
+
+userSchema.plugin(mongoosastic);
 
 const Call = mongoose.model('Call', callSchema);
 const User = mongoose.model('User', userSchema);

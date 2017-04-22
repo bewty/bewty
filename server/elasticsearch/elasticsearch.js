@@ -8,7 +8,6 @@ const esClient = new elasticsearch.Client({
 
 const bulkIndex = (index, type, data) => {
   let bulkBody = [];
-
   data.forEach(item => {
     bulkBody.push({
       index: {
@@ -17,7 +16,7 @@ const bulkIndex = (index, type, data) => {
         _id: item._id
       }
     });
-
+    delete item._id;
     bulkBody.push(item);
   });
 
@@ -53,4 +52,5 @@ const indexUsers = () => {
   });
 };
 
+indexUsers();
 
