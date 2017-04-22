@@ -89,7 +89,7 @@ app.post('/db/userentry', (req, res) => {
     req.body.phonenumber = '1' + req.body.phonenumber;
   }
   let userInfo = {
-    phonenumber: req.body.phonenumber 
+    phonenumber: req.body.phonenumber
   };
 
   database.userEntry(req, res, userInfo);
@@ -131,6 +131,7 @@ app.post('/api/watson', (req, res) => {
     res.status(200).send(results);
   })
   .error(function(e) {
+    // TODO: HANDLE ERROR
     console.log('Error received within post to /api/watson', e);
   });
 });

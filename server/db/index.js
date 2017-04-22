@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
   call_entries: [{
     question: String,
     call_time: String,
-    date_set: {type: Date, default: Date.now},    
+    date_set: {type: Date, default: Date.now},
     responses: [{
       text: String,
       created_at: {type: Date, default: Date.now},
@@ -57,5 +57,3 @@ module.exports = {
   User: User,
   Call: Call
 };
-
-
