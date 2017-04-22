@@ -63,7 +63,7 @@ exports.retrieveEntry = (query) => {
       {$unwind: '$entries'},
       {$sort: {'entries.created_at': -1}},
       {$limit: 20 },
-      {$project: {'entries.watson_results': 1, 'entries.text': 1, 'entries.entry_type': 1, 'entries.tags': 1, 'entries.video.avg_data': 1, 'entries.video.raw_data': 1, 'entries.created_at': 1}},
+      {$project: {'entries.watson_results': 1, 'entries._id': 1, 'entries.text': 1, 'entries.entry_type': 1, 'entries.tags': 1, 'entries.video.avg_data': 1, 'entries.video.raw_data': 1, 'entries.created_at': 1}},
       {$group: {_id: '$_id', 'entries': {$push: '$entries'}}},
       {$project: {'entries': '$entries'}},
     ])
