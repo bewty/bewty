@@ -8,6 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import RecordButton from 'material-ui/svg-icons/av/fiber-manual-record';
 import StopButton from 'material-ui/svg-icons/av/stop';
 import UploadButton from 'material-ui/svg-icons/file/cloud-upload';
+import { Link } from 'react-router-dom';
 
 export default class VideoEntry extends Component {
   constructor(props) {
@@ -69,10 +70,12 @@ export default class VideoEntry extends Component {
 
     //onInitialize
     this.state.detector.addEventListener('onInitializeSuccess', () => {
-      this.setState({
-        okayToRecord: true,
-        loadingRecordMsg: false
-      });
+      if (!this.state.uploadable && !this.state.recording) {
+        this.setState({
+          okayToRecord: true,
+          loadingRecordMsg: false
+        });
+      }
       console.log('onInitializeSuccess');
     });
     this.state.detector.addEventListener('onInitializeFailure', (err) => console.log('onInitializeFailure', err));
@@ -228,7 +231,12 @@ export default class VideoEntry extends Component {
         joy: 0,
         sadness: 0,
         surprise: 0,
-      }
+      },
+      uploadable: false,
+      noTranscript: false,
+      uploadError: false,
+      uploadSuccess: false,
+      transcript: ''
     });
   }
 
@@ -266,14 +274,21 @@ export default class VideoEntry extends Component {
         uploading: false,
         uploadSuccess: true,
         uploadError: false,
-        transcript: '' });
+        transcript: '',
+        okayToRecord: true,
+        uploadable: false,
+        recording: false
+      });
       console.log('video upload to server COMPLETE:', res);
     })
     .catch( err => {
       this.setState({
         uploading: false,
         uploadSuccess: false,
-        uploadError: true
+        uploadError: true,
+        okayToRecord: true,
+        uploadable: false,
+        recording: false
       });
       console.log('video upload to server ERROR:', err);
     });
@@ -292,18 +307,22 @@ export default class VideoEntry extends Component {
     if (this.state.transcript.length > 0) {
       this.setState({
         start: false,
-        stop: false
+        stop: false,
       });
     } else {
       this.setState({
         start: false,
         stop: false,
-        noTranscript: true
+        noTranscript: true,
+        okayToRecord: true,
+        uploadable: false,
+        recording: false
       });
     }
   }
 
   onResult ({ finalTranscript }) {
+    console.log(finalTranscript);
     this.setState({
       start: false,
       transcript: finalTranscript
@@ -326,7 +345,7 @@ export default class VideoEntry extends Component {
             : <video autoPlay='true' src={this.state.src} muted></video>
           }
           <div className='flash-message'>
-            {this.state.loadingRecordMsg ? <p>Loading and starting the emotions detector, this may take a moment.</p> : null }
+            {this.state.loadingRecordMsg ? <p>Loading and starting the emotions detector.<br/>This may take a moment.</p> : null }
           </div>
           <div className='controls'>
             {this.state.okayToRecord ?
