@@ -20,7 +20,7 @@ const EntryText = ({entry, index, type}) => {
             <span className="date">{moment(entry.created_at).format('MM-DD-YYYY')}</span>
             <span className={`${entry.entry_type}-entry`}></span>
           </div>
-          <div>
+          <div className="time-container">
             <span className="time">{moment(entry.created_at).format('h:mm a')}</span>
           </div>
           <p>{text}</p>
