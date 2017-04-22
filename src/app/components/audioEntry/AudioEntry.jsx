@@ -23,7 +23,8 @@ class AudioEntry extends Component {
       uploading: false,
       uploadError: false,
       uploadSuccess: false,
-      noTranscript: false
+      noTranscript: false,
+      stream: null
     };
     this.getUserMedia = this.getUserMedia.bind(this);
     this.captureUserMedia = this.captureUserMedia.bind(this);
@@ -63,7 +64,8 @@ class AudioEntry extends Component {
 
   handleAudio(stream) {
     this.setState({
-      src: window.URL.createObjectURL(stream)
+      src: window.URL.createObjectURL(stream),
+      stream: stream
     });
   }
 
@@ -220,6 +222,10 @@ class AudioEntry extends Component {
         </div>
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    this.state.stream.stop();
   }
 }
 
