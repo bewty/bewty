@@ -4,6 +4,7 @@ mongoose.Promise = require('bluebird');
 const mongoDatabase = require('./index.js');
 const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.userEntry = (req, res, userInfo) => {
   User.findOne({'phonenumber': userInfo.phonenumber})
@@ -57,12 +58,20 @@ exports.saveEntry = (req, res, log) => {
 exports.retrieveEntry = (query) => {
   let user_id = query.user_id;
   return new Promise((resolve, reject) => {
-    User.find({ _id: user_id }, '-entries.audio -entries.video.bucket -entries.video.key')
-    .then((results) => {
+    User.aggregate([
+      {$match: {_id: ObjectId(user_id)} },
+      {$unwind: '$entries'},
+      {$sort: {'entries.created_at': -1}},
+      {$limit: 20 },
+      {$project: {'entries.watson_results': 1, 'entries._id': 1, 'entries.text': 1, 'entries.entry_type': 1, 'entries.tags': 1, 'entries.video.avg_data': 1, 'entries.video.raw_data': 1, 'entries.created_at': 1}},
+      {$group: {_id: '$_id', 'entries': {$push: '$entries'}}},
+      {$project: {'entries': '$entries'}},
+    ])
+    .then( results => {
       if (results[0] === undefined) {
-        resolve(JSON.stringify(results));
+        resolve(results);
       } else {
-        resolve(JSON.stringify(results[0].entries));
+        resolve(results[0].entries);
       }
     })
     .error((err) => {
