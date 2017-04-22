@@ -84,6 +84,8 @@
     "dimple": "git+https://github.com/PMSI-AlignAlytics/dimple.git",
     "dimple-js": "^2.1.4",
     "dotenv": "^4.0.0",
+    "elastics": "^0.3.0",
+    "elasticsearch": "^13.0.0-rc2",
     "express": "^4.13.4",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-system": "^2.2.2",

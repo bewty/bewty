@@ -268,3 +268,15 @@ exports.retrievePhoneEntry = (req, res, log) => {
   .error(err => res.sendStatus(500).send(err))
   .catch(err => res.sendStatus(400).send(err));
 };
+
+exports.retrieveUsers = () => {
+  return new Promise((resolve, reject) => {
+    User.find({})
+    .then((users) => {
+      resolve(users);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+  });
+};
