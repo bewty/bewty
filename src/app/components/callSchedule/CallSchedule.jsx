@@ -53,7 +53,6 @@ export default class CallSchedule extends React.Component {
       scheduled_message: localStorage.scheduled_message,
       stop: localStorage.stopCalls
     });
-    this.handleTime(null, this.defaultTime);
   }
 
   retrieveUserState() {
@@ -72,6 +71,7 @@ export default class CallSchedule extends React.Component {
 
   handleQuestion(event) {
     this.setState({scheduled_message: event.target.value});
+    this.handleTime(null, this.defaultTime);
   }
 
   handleTime(event, date) {
