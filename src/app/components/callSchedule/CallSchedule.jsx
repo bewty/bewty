@@ -6,7 +6,10 @@ import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+<<<<<<< HEAD
 import Dialog from 'material-ui/Dialog';
+=======
+>>>>>>> [Style] Change disabled color to normal color
 
 const muiTheme = getMuiTheme({
   palette: {
