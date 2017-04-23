@@ -198,14 +198,9 @@ export default class CallSchedule extends React.Component {
       //     </form>
       //   </div>
       // );
-<<<<<<< HEAD
       console.log('testing');
       return (
         <div className="new-entry-container call-home">
-=======
-      return (
-        <div className="new-entry-container">
->>>>>>> [Style] Add new matui to merged changes
         {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
         {!this.state.hasQuestion ?
           <MuiThemeProvider>
