@@ -133,6 +133,10 @@ export default class CallSchedule extends React.Component {
     });
   }
 
+  handleQuestionSubmit() {
+    this.setState({hasQuestion: !this.state.hasQuestion});
+  }
+
   render() {
     if (this.state.stopCalls === true) {
       return (
@@ -144,18 +148,50 @@ export default class CallSchedule extends React.Component {
       );
     }
     if (this.state.scheduled === false) {
+      // return (
+      //   <div className="container">
+      //     <h1>What question would you like to be asked?</h1>
+      //     <form onSubmit={this.handleSubmit}>
+      //       <label>
+      //         <input type="text" value={this.state.scheduled_message} onChange={this.handleQuestion} />
+      //       </label>
+      //       <h2>When would you like your call?</h2>
+      //       <input type="time" step="900" value={this.state.scheduled_time} onChange={this.handleTime} />
+      //       <p></p>
+      //       <input type="submit" value="Submit" />
+      //     </form>
+      //   </div>
+      // );
       return (
-        <div className="container">
-          <h1>What question would you like to be asked?</h1>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              <input type="text" value={this.state.scheduled_message} onChange={this.handleQuestion} />
-            </label>
-            <h2>When would you like your call?</h2>
-            <input type="time" step="900" value={this.state.scheduled_time} onChange={this.handleTime} />
-            <p></p>
-            <input type="submit" value="Submit" />
-          </form>
+        <div className="new-entry-container">
+        {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
+        {!this.state.hasQuestion ?
+          <MuiThemeProvider>
+            <TextField
+              value={this.state.scheduled_message}
+              onChange={this.handleQuestion}
+              fullWidth={true}
+              underlineFocusStyle={{borderColor: '#EB5424'}}
+              style={{fontFamily: 'Lato, san-serif'}}
+            />
+          </MuiThemeProvider>
+          :
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <TimePicker
+              onChange={this.handleTime}
+              defaultTime={this.defaultTime}
+              textFieldStyle={{fontFamily: 'Lato, san-serif'}}
+            />
+          </MuiThemeProvider>
+        }
+        <MuiThemeProvider>
+          <RaisedButton
+            fullWidth={true}
+            label="Submit"
+            labelStyle={{fontFamily: 'Lato, san-serif'}}
+            onTouchTap={!this.state.hasQuestion ? this.handleQuestionSubmit : this.handleSubmit}
+          />
+        </MuiThemeProvider>
         </div>
       );
     } else {
