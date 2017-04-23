@@ -56,6 +56,7 @@ export default class CallSchedule extends React.Component {
       //stop: localStorage.stopCalls,
       stopCalls: localStorage.stopCalls
     });
+    this.handleTime(null, this.defaultTime);
   }
 
   retrieveUserState() {
