@@ -5,12 +5,12 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
-import moment from 'moment';
 
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: '#EB5424',
-    pickerHeaderColor: '#EB5424'
+    pickerHeaderColor: '#EB5424',
+    disabledColor: '#333',
   },
 });
 
@@ -208,12 +208,12 @@ export default class CallSchedule extends React.Component {
       return (
         <div className="new-entry-container">
           <h3>You currently have a call scheduled!</h3>
-          <MuiThemeProvider>
+          <MuiThemeProvider muiTheme={muiTheme}>
             <TextField
+
               value={this.state.scheduled_message}
-              onChange={this.handleQuestion}
               fullWidth={true}
-              underlineFocusStyle={{borderColor: '#EB5424'}}
+              underlineDisabledStyle={{borderColor: '#EB5424'}}
               style={{fontFamily: 'Lato, san-serif'}}
               disabled={true}
             />
@@ -221,8 +221,10 @@ export default class CallSchedule extends React.Component {
 
           <MuiThemeProvider muiTheme={muiTheme}>
             <TimePicker
+
               defaultTime={this.state.time}
               textFieldStyle={{fontFamily: 'Lato, san-serif'}}
+              underlineDisabledStyle={{borderColor: '#EB5424'}}
               disabled={true}
             />
           </MuiThemeProvider>
