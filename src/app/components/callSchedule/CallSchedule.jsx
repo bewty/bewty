@@ -5,6 +5,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
+import moment from 'moment';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -77,7 +78,10 @@ export default class CallSchedule extends React.Component {
     console.log(date);
     let time = (('00' + date.getHours()).slice(-2)) + ':' + (('00' + date.getMinutes()).slice(-2));
     console.log(time);
-    this.setState({scheduled_time: time});
+    this.setState({
+      scheduled_time: time,
+      time: date
+    });
   }
 
   handleSubmit(event) {
@@ -141,6 +145,7 @@ export default class CallSchedule extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     if (this.state.stopCalls === true) {
       return (
         <div>
@@ -165,6 +170,7 @@ export default class CallSchedule extends React.Component {
       //     </form>
       //   </div>
       // );
+      console.log('testing');
       return (
         <div className="new-entry-container">
         {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
@@ -198,17 +204,55 @@ export default class CallSchedule extends React.Component {
         </div>
       );
     } else {
+      console.log('else');
       return (
-        <div>
-          <h2>You currently have a call scheduled for {this.state.scheduled_time}</h2>
-          <h2>With the question:</h2>
-          <h1>{this.state.scheduled_message}</h1>
-          <h4>Would you like to revise your message or time?</h4>
-          <input onClick={this.revise} type="submit" value="Revise" />
-          <h4>Or stop current call schedule?</h4>
-          <input onClick={this.endCall} type="submit" value="End Schedule" />
+        <div className="new-entry-container">
+          <h3>You currently have a call scheduled!</h3>
+          <MuiThemeProvider>
+            <TextField
+              value={this.state.scheduled_message}
+              onChange={this.handleQuestion}
+              fullWidth={true}
+              underlineFocusStyle={{borderColor: '#EB5424'}}
+              style={{fontFamily: 'Lato, san-serif'}}
+              disabled={true}
+            />
+          </MuiThemeProvider>
+
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <TimePicker
+              defaultTime={this.state.time}
+              textFieldStyle={{fontFamily: 'Lato, san-serif'}}
+              disabled={true}
+            />
+          </MuiThemeProvider>
+          <br/>
+          <MuiThemeProvider>
+          <RaisedButton
+            label="Revise"
+            style={{marginRight: '12px'}}
+            onTouchTap={this.revise}
+          />
+          </MuiThemeProvider>
+          <MuiThemeProvider>
+          <RaisedButton
+            label="Stop"
+            onTouchTap={this.endCall}
+          />
+          </MuiThemeProvider>
         </div>
       );
+      // return (
+      //   <div>
+      //     <h2>You currently have a call scheduled for {this.state.scheduled_time}</h2>
+      //     <h2>With the question:</h2>
+      //     <h1>{this.state.scheduled_message}</h1>
+      //     <h4>Would you like to revise your message or time?</h4>
+      //     <input onClick={this.revise} type="submit" value="Revise" />
+      //     <h4>Or stop current call schedule?</h4>
+      //     <input onClick={this.endCall} type="submit" value="End Schedule" />
+      //   </div>
+      // );
     }
 // =======
 //     return (
