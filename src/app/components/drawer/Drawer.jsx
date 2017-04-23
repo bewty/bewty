@@ -30,6 +30,7 @@ export default class AppDrawer extends React.Component {
         />
         <Drawer
           open={this.state.open}
+          style={{position: 'fixed'}}
         >
           <AppBar
             title="MindFit"
@@ -37,7 +38,10 @@ export default class AppDrawer extends React.Component {
             style={{'backgroundColor': '#EB5424',
                     fontFamily: 'Lato, san-serif'}}
           />
-          <Menu menuItemStyle={{fontFamily: 'Lato, san-serif'}}>
+          <Menu
+            menuItemStyle={{fontFamily: 'Lato, san-serif'}}
+
+            >
             <MenuItem
               containerElement={<Link to="/new-entry" />}
               primaryText="New Entry"
