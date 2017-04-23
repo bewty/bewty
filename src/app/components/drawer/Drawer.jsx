@@ -51,7 +51,7 @@ export default class AppDrawer extends React.Component {
               primaryText="Results"
             />
             <MenuItem
-              containerElement={<Link to="/call-schedule" />}
+              containerElement={<Link to="/call-home" />}
               primaryText="Call Schedule"
             />
             <Divider />
