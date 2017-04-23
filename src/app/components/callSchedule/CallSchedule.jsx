@@ -108,7 +108,8 @@ export default class CallSchedule extends React.Component {
       scheduled: false,
       stopCalls: false,
       scheduled_message: '',
-      scheduled_time: ''
+      scheduled_time: '',
+      hasQuestion: false
     });
   }
 
@@ -129,7 +130,8 @@ export default class CallSchedule extends React.Component {
     localStorage.setItem('stopCalls', true);
     this.setState({
       stopCalls: true,
-      scheduled: false
+      scheduled: false,
+      hasQuestion: false
     });
   }
 
