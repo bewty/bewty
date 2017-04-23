@@ -52,6 +52,7 @@ export default class CallSchedule extends React.Component {
       scheduled_message: localStorage.scheduled_message,
       stop: localStorage.stopCalls
     });
+    this.handleTime(null, this.defaultTime);
   }
 
   retrieveUserState() {
@@ -76,7 +77,7 @@ export default class CallSchedule extends React.Component {
     console.log(date);
     let time = (('00' + date.getHours()).slice(-2)) + ':' + (('00' + date.getMinutes()).slice(-2));
     console.log(time);
-    this.setState({time: time});
+    this.setState({scheduled_time: time});
   }
 
   handleSubmit(event) {
