@@ -99,6 +99,8 @@ export default class CallSchedule extends React.Component {
       this.retrieveUserState();
       console.log('Successfully sent data');
     });
+
+    // should set state on success
     this.setState({
       scheduled_time: this.state.scheduled_time,
       scheduled_message: this.state.scheduled_message,
