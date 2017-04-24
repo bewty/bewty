@@ -75,8 +75,15 @@ export default class CallEntry extends React.Component {
                 }
               })}
             >
-              <h2>{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h2>
-              <h3>Started on: {this.props.call.date_set.slice(0, 10)}</h3> <h4> Calltime: {this.props.call.call_time.slice(0, 2) + ':' + this.props.call.call_time.slice(2)}</h4>
+              <div>
+                <h3 className="question">{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h3>
+                <div className="entry-meta">
+                  <span className="date">{moment(this.props.call.date_set).format('MM-DD-YYYY')}</span>
+                </div>
+                <div className="time-container">
+                  <span className="time">{moment(this.props.call.call_time).format('h:mm a')}</span>
+                </div>
+              </div>
 
             </ListItem>
 
