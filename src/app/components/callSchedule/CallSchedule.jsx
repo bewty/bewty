@@ -4,7 +4,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
+import Dialog from 'material-ui/Dialog';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -51,7 +53,8 @@ export default class CallSchedule extends React.Component {
     this.setState({
       scheduled_time: localStorage.scheduled_time,
       scheduled_message: localStorage.scheduled_message,
-      stop: localStorage.stopCalls
+      //stop: localStorage.stopCalls,
+      stopCalls: localStorage.stopCalls
     });
   }
 
@@ -135,7 +138,7 @@ export default class CallSchedule extends React.Component {
     localStorage.setItem('stopCalls', true);
     this.setState({
       stopCalls: true,
-      scheduled: false,
+      // scheduled: false,
       hasQuestion: false
     });
   }
@@ -146,15 +149,38 @@ export default class CallSchedule extends React.Component {
 
   render() {
     console.log(this.state);
-    if (this.state.stopCalls === true) {
-      return (
-        <div>
-          <h1>All scheduled calls have been stopped.</h1>
-          <h3>Create new scheduled call:</h3>
-          <input onClick={this.revise} type="submit" value="Schedule" />
-        </div>
-      );
-    }
+    // if (this.state.stopCalls === true) {
+    //   // return (
+    //   //   <div>
+    //   //     <h1>All scheduled calls have been stopped.</h1>
+    //   //     <h3>Create new scheduled call:</h3>
+    //   //     <input onClick={this.revise} type="submit" value="Schedule" />
+    //   //   </div>
+    //   // );
+    //   return (
+    //     <MuiThemeProvider>
+    //       <Dialog
+    //          Weird bug where stopCalls is sometimes string instead of boolean
+    //         open={typeof this.state.stopCalls === 'boolean' ? this.state.stopCalls : this.state.stopCalls === 'true'}
+
+    //         open={true}
+    //         actions={
+    //           [
+    //             <MuiThemeProvider>
+    //             <FlatButton
+    //               label="Ok"
+    //               onTouchTap={this.revise}
+    //             />
+    //             </MuiThemeProvider>
+    //           ]
+    //         }
+    //       >
+    //       All scheduled calls have been stopped
+    //       </Dialog>
+    //     </MuiThemeProvider>
+
+    //   );
+    // }
     if (this.state.scheduled === false) {
       // return (
       //   <div className="container">
@@ -241,6 +267,26 @@ export default class CallSchedule extends React.Component {
             label="Stop"
             onTouchTap={this.endCall}
           />
+          </MuiThemeProvider>
+          <MuiThemeProvider>
+            <Dialog
+              /* Weird bug where stopCalls is sometimes string instead of boolean
+              open={typeof this.state.stopCalls === 'boolean' ? this.state.stopCalls : this.state.stopCalls === 'true'}
+              */
+              open={this.state.stopCalls === true}
+              actions={
+                [
+                  <MuiThemeProvider>
+                  <FlatButton
+                    label="Ok"
+                    onTouchTap={this.revise}
+                  />
+                  </MuiThemeProvider>
+                ]
+              }
+            >
+            All scheduled calls have been stopped
+            </Dialog>
           </MuiThemeProvider>
         </div>
       );
