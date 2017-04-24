@@ -54,17 +54,35 @@ export default class CallEntry extends React.Component {
     );
     // return (
     //   <div>
-    //     <MuiThemeProvider>
-    //       <DropDownMenu>
-    //         <MenuItem>
-    //           <h2>{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h2>
-    //           <h3>Started on: {this.props.call.date_set.slice(0, 10)}</h3> <h4> Calltime: {this.props.call.call_time.slice(0, 2) + ':' + this.props.call.call_time.slice(2)}</h4>
-    //         </MenuItem>
-    //       </DropDownMenu>
-    //     </MuiThemeProvider>
+    //     <h2>{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h2>
+    //     <h3>Started on: {this.props.call.date_set.slice(0, 10)}</h3> <h4> Calltime: {this.props.call.call_time.slice(0, 2) + ':' + this.props.call.call_time.slice(2)}</h4>
+    //     {this.props.call.responses.map((response) => {
+    //       if (response.text) {
+    //         return <EntryTextDisplay entry={response} type={'snippet'}/>;
+    //       }
+    //     })}
     //   </div>
-
     // );
+    return (
+      <div>
+        <MuiThemeProvider>
+
+            <ListItem
+              nestedItems={this.props.call.responses.map((response) => {
+                if (response.text) {
+                  return <EntryTextDisplay entry={response} type={'snippet'}/>;
+                }
+              })}
+            >
+              <h2>{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h2>
+              <h3>Started on: {this.props.call.date_set.slice(0, 10)}</h3> <h4> Calltime: {this.props.call.call_time.slice(0, 2) + ':' + this.props.call.call_time.slice(2)}</h4>
+
+            </ListItem>
+
+        </MuiThemeProvider>
+      </div>
+
+    );
   }
 }
 
