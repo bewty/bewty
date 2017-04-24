@@ -46,7 +46,7 @@ export default class CallEntryList extends React.Component {
         <div className="entry-list-container">
           <MuiThemeProvider>
             <List>
-              <Subheader>Call Entry List</Subheader>
+              <h3 className="title">Call Entry List</h3>
               <ListItem
                 primaryText="No entries yet"
               />
