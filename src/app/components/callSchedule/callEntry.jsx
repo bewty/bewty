@@ -24,6 +24,7 @@ export default class CallEntry extends React.Component {
         <MuiThemeProvider>
 
             <ListItem
+              primaryTogglesNestedList={true}
               nestedItems={this.props.call.responses.map((response) => {
                 if (response.text) {
                   return <EntryTextDisplay entry={response} type={'snippet'}/>;
