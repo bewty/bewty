@@ -39,7 +39,7 @@ export default class CallEntry extends React.Component {
                   <span className="date">{moment(this.props.call.date_set).format('MM-DD-YYYY')}</span>
                 </div>
                 <div className="time-container">
-                  <span className="time">{moment(this.props.call.call_time).format('h:mm a')}</span>
+                  <span className="time">{moment(this.props.call.date_set).format('h:mm a')}</span>
                 </div>
               </div>
 
