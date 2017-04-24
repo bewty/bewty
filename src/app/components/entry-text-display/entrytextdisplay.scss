@@ -1,6 +1,7 @@
 .entry-container {
+  width: 30%;
   padding: 1em 2em;
-  margin-bottom: 12px;
+  margin: auto auto 12px auto;
   background-color: #fff;
   box-shadow: $shadow;
 
@@ -20,6 +21,15 @@
   font-size: 0.9em;
   font-weight: bold;
   color: $font-dark;
+}
+
+.time {
+  font-size: 0.7em;
+  color: $font-dark
+}
+
+.time-container {
+  margin-top: -10px;
 }
 
 .entry-icon {

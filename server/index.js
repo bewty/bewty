@@ -137,26 +137,30 @@ app.post('/api/watson', (req, res) => {
 });
 
 app.post('/entry', upload.single('media'), (req, res) => {
-  watson.promisifiedTone(req.body.text)
-  .then(tone => {
-    let log = {
-      user_id: req.body.user_id,
-      entry_type: req.body.entryType,
-      video: {
-        bucket: req.file ? req.file.bucket : null,
-        key: req.file ? req.file.key : null,
-        avgData: req.body.avgData ? req.body.avgData : null,
-        rawData: req.body.rawData ? req.body.rawData : null,
-      },
-      audio: {
-        bucket: req.file ? req.file.bucket : null, // should be same as video later
-        key: req.file ? req.file.key : null,
-      },
-      text: req.body.text,
-      watson_results: tone
-    };
-    database.saveEntry(req, res, log);
-  });
+  if (req.body.text.length === 0) {
+    res.sendStatus(400);
+  } else {
+    watson.promisifiedTone(req.body.text)
+    .then(tone => {
+      let log = {
+        user_id: req.body.user_id,
+        entry_type: req.body.entryType,
+        video: {
+          bucket: req.file ? req.file.bucket : null,
+          key: req.file ? req.file.key : null,
+          avgData: req.body.avgData ? req.body.avgData : null,
+          rawData: req.body.rawData ? req.body.rawData : null,
+        },
+        audio: {
+          bucket: req.file ? req.file.bucket : null, // should be same as video later
+          key: req.file ? req.file.key : null,
+        },
+        text: req.body.text,
+        watson_results: tone
+      };
+      database.saveEntry(req, res, log);
+    });
+  }
 });
 
 const getAWSSignedUrl = (bucket, key) => {
