@@ -23,10 +23,10 @@ export default class CallEntryList extends React.Component {
     //     </div>
     // );
     return (
-      <div>
+      <div className="entry-list-container">
         <MuiThemeProvider>
           <List>
-            <Subheader>Call Entry List</Subheader>
+            <h3 className="title">Call Entry List</h3>
 
             {this.props.call_data.map((call) => {
               return <CallEntry call={call} />;
@@ -43,7 +43,7 @@ export default class CallEntryList extends React.Component {
       //   </div>
       // );
       return (
-        <div>
+        <div className="entry-list-container">
           <MuiThemeProvider>
             <List>
               <Subheader>Call Entry List</Subheader>
