@@ -22,10 +22,12 @@ export default class CallEntry extends React.Component {
     // );
     console.log(this.props);
     return (
-      <div>
+      <div className="entry-container call-entry">
         <MuiThemeProvider>
 
             <ListItem
+              innerDivStyle={{padding: '0'}}
+              style={{fontFamily: 'Lato, sans-serif'}}
               primaryTogglesNestedList={true}
               nestedItems={this.props.call.responses.map((response) => {
                 if (response.text) {
@@ -33,7 +35,7 @@ export default class CallEntry extends React.Component {
                 }
               })}
             >
-              <div>
+              <div className="header-box">
                 <h3 className="question">{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h3>
                 <div className="entry-meta">
                   <span className="date">{moment(this.props.call.date_set).format('MM-DD-YYYY')}</span>
