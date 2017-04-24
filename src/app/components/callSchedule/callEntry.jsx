@@ -27,6 +27,7 @@ export default class CallEntry extends React.Component {
 
             <ListItem
               innerDivStyle={{padding: '0'}}
+              nestedListStyle={{padding: '0'}}
               style={{fontFamily: 'Lato, sans-serif'}}
               primaryTogglesNestedList={true}
               nestedItems={this.props.call.responses.map((response) => {

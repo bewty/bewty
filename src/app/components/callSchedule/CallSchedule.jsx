@@ -200,7 +200,7 @@ export default class CallSchedule extends React.Component {
       // );
       console.log('testing');
       return (
-        <div className="new-entry-container">
+        <div className="new-entry-container call-home">
         {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
         {!this.state.hasQuestion ?
           <MuiThemeProvider>
@@ -234,7 +234,7 @@ export default class CallSchedule extends React.Component {
     } else {
       console.log('else');
       return (
-        <div className="new-entry-container">
+        <div className="new-entry-container call-home">
           <h3>You currently have a call scheduled!</h3>
           <MuiThemeProvider muiTheme={muiTheme}>
             <TextField
