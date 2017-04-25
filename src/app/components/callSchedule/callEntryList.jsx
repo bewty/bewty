@@ -23,19 +23,19 @@ export default class CallEntryList extends React.Component {
     //       })}
     //     </div>
     // );
-    return (
-      <div className="entry-list-container">
-        <MuiThemeProvider>
-          <List>
-            <h3 className="title">Call Entry List</h3>
+      return (
+        <div className="entry-list-container">
+          <MuiThemeProvider>
+            <List>
+              <h3 className="title">Call Entry List</h3>
 
-            {this.props.call_data.map((call) => {
-              return <CallEntry call={call} />;
-            })}
-          </List>
-        </MuiThemeProvider>
-      </div>
-    );
+              {this.props.call_data.map((call) => {
+                return <CallEntry call={call} />;
+              })}
+            </List>
+          </MuiThemeProvider>
+        </div>
+      );
     } else {
       // return (
       //   <div>
