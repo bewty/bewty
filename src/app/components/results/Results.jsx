@@ -64,6 +64,7 @@ class Results extends Component {
     });
   }
   render() {
+    console.log('this is the state', this);
     const pieData = JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories.filter((obj) => {return obj.category_id === 'emotion_tone'});
     const scatterData = JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories.filter((obj) => {return obj.category_id === 'social_tone'});
     const barData =  JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories

@@ -9,6 +9,7 @@ const ObjectId = mongoose.Types.ObjectId;
 exports.userEntry = (req, res, userInfo) => {
   User.findOne({'phonenumber': userInfo.phonenumber})
   .then((user) => {
+    console.log(user);
     if (user === null) {
       let newUser = User({
         phonenumber: userInfo.phonenumber,

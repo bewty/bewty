@@ -19,7 +19,7 @@ class CustomPie extends React.Component {
    //  console.log('bizniz in piedata', this.props.datum)
    return this.props.pieData.map((obj)=>
        {
-         console.log('obj inside bizniz', obj)
+         // console.log('obj inside bizniz', obj)
        return {
          x:null,
          y: obj.x,
