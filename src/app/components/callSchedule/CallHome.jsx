@@ -23,13 +23,12 @@ export default class CallHome extends React.Component {
       });
     });
   }
-  
+
   render() {
     return (
       <div>
-        <h1>Call Scheduler</h1>
         <CallSchedule />
-        <CallEntryList call_data={this.state.call_data} />        
+        <CallEntryList call_data={this.state.call_data} />
       </div>
     );
   }
