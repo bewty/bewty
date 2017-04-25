@@ -5,7 +5,6 @@
   @include phone {
     margin: 20px auto;
     width: 80%;
-
     @include placeholder {
       color: $font-hint;
       font-size: 1.2em;

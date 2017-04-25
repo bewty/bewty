@@ -27,7 +27,6 @@ $desktop-width: 1024px;
     @content;
   }
 }
-<<<<<<< e38f349ce0435963a11b35bb3bde53c71e9b5ad3
 
 @mixin optional-at-root($sel) {
   @at-root #{if(not &, $sel, selector-append(&, $sel))} {
@@ -52,5 +51,3 @@ $desktop-width: 1024px;
     @content;
   }
 }
-=======
->>>>>>> [styling] Add media query to variables and styled newentry.scss
