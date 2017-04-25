@@ -13,9 +13,8 @@ class EntryView extends Component {
 
   render() {
     const {match, entrySelected, fetchMedia} = this.props;
-
-    console.log('LETS GO', this.props.entrySelected)
-    const barData =  JSON.parse(this.props.entrySelected.watson_results).document_tone.tone_categories
+    console.log('LETS GO', this.props.entrySelected);
+    const barData = JSON.parse(this.props.entrySelected.watson_results).document_tone.tone_categories;
     return (
       <div>
         {entrySelected === null ? null :
@@ -29,7 +28,9 @@ class EntryView extends Component {
             </div>
             : <Daily barData={barData}/> }
             </div>
-            <EntryTextDisplay entry={entrySelected}/>
+            <div className="entry-list-container">
+              <EntryTextDisplay entry={entrySelected}/>
+            </div>
             {entrySelected.entry_type === 'text' ? null : <MediaPlayer mediaSrc={fetchMedia} mediaType={entrySelected.entry_type}/>}
           </div>
         }
