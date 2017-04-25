@@ -115,15 +115,12 @@ export default class Chart extends React.Component {
     return (
       <div
         ref="container"
-        style={{
-          width: '800px',
-          height: '800px',
-        }}
       >
       <VictoryChart
+        style={{parent: {paddingLeft: '20%'}}}
         domainPadding={120}
-        width = {800}
-        height ={800}
+        width = {750}
+        height ={750}
         theme={VictoryTheme.material}
         // domain={{y: [0, 5]}}
         domain={{x: [0, 100]}}
