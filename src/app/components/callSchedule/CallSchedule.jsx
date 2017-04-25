@@ -210,6 +210,7 @@ export default class CallSchedule extends React.Component {
               fullWidth={true}
               underlineFocusStyle={{borderColor: '#EB5424'}}
               style={{fontFamily: 'Lato, san-serif'}}
+              errorText={!this.state.scheduled_message.length > 0 && 'This field is required'}
             />
           </MuiThemeProvider>
           :
@@ -226,7 +227,14 @@ export default class CallSchedule extends React.Component {
             fullWidth={true}
             label="Submit"
             labelStyle={{fontFamily: 'Lato, san-serif'}}
-            onTouchTap={!this.state.hasQuestion ? this.handleQuestionSubmit : this.handleSubmit}
+            onTouchTap={(event) => {
+              if (!this.state.hasQuestion) {
+                this.state.scheduled_message.length > 0 && this.handleQuestionSubmit();
+              } else {
+                this.handleSubmit(event);
+              }
+            }}
+
           />
         </MuiThemeProvider>
         </div>
@@ -275,13 +283,21 @@ export default class CallSchedule extends React.Component {
               /* Weird bug where stopCalls is sometimes string instead of boolean
               open={typeof this.state.stopCalls === 'boolean' ? this.state.stopCalls : this.state.stopCalls === 'true'}
               */
+              bodyStyle={{fontFamily: 'Lato, san-serif'}}
+              contentStyle={{
+                width: '40%'
+
+              }}
               open={this.state.stopCalls === true}
               actions={
                 [
                   <MuiThemeProvider>
-                  <FlatButton
+                  <RaisedButton
                     label="Ok"
+                    labelStyle={{fontFamily: 'Lato, san-serif'}}
                     onTouchTap={this.revise}
+
+
                   />
                   </MuiThemeProvider>
                 ]
