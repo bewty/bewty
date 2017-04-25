@@ -112,7 +112,7 @@ app.post('/transcribe', (req, res) => {
     let log = {
       phonenumber: phonenumber,
       text: text,
-      watson_results: JSON.stringify(JSON.parse(tone).document_tone)
+      watson_results: tone
     };
     database.saveCall(req, res, log);
   });
