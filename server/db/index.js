@@ -13,7 +13,7 @@ db.once('open', function() {
 
 const userSchema = new mongoose.Schema({
   user_id: String,
-  phonenumber: { type: String, required: true, unique: true},
+  phonenumber: { type: String, required: true, unique: true, es_indexed: true},
   scheduled_time: { type: String, default: '' },
   scheduled_message: String,
   entries: [{
@@ -34,10 +34,14 @@ const userSchema = new mongoose.Schema({
     tags: Array
   }],
   call_entries: [{
+    // es_indexed: true,
+    // es_type: 'nested',
     question: String,
     call_time: String,
     date_set: {type: Date, default: Date.now},    
     responses: [{
+      // es_indexed: true,
+      // es_type: 'nested',
       text: String,
       created_at: {type: Date, default: Date.now},
       entry_type: {type: String, default: 'audio'},
@@ -55,16 +59,6 @@ userSchema.plugin(mongoosastic);
 
 const Call = mongoose.model('Call', callSchema);
 const User = mongoose.model('User', userSchema);
-
-// User.createMapping(function(err, mapping) {  
-//   if (err) {
-//     console.log('error creating mapping (you can safely ignore this)');
-//     console.log(err);
-//   } else {
-//     console.log('mapping created!');
-//     console.log(mapping);
-//   }
-// });
 
 module.exports = {
   User: User,
