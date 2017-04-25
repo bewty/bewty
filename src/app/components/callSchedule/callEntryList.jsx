@@ -1,5 +1,6 @@
 import React from 'react';
-import CallEntry from './CallEntry.jsx';
+// import CallEntry from './CallEntry.jsx';
+import CallEntry from '../../containers/call-schedule/CallEntry.jsx';
 import {List, ListItem} from 'material-ui/List';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Subheader from 'material-ui/Subheader';
