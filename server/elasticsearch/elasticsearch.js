@@ -6,14 +6,20 @@ const User = mongoDatabase.User;
 
 User.search(
   {
-    query_string: {
-      query: 'dog'
-    }}, 
-    {hydrate: true, hydrateOptions: {select: 'entries'}}, (err, results) => {
+    'query': {
+      'nested': {
+        'path': 'entries',
+        'query': {
+          'match_all': {}
+        }
+      }
+    }
+  }, 
+  (err, results) => {
     if (err) {
       console.log('Received error in ES search:', err);
     } else {
-      console.log('Received results in ES search:', results.hits.hits[0].call_entries);
+      console.log('Received results in ES search:', results.hits.hits);
     }
   }
 );
