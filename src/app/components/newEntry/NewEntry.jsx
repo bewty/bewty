@@ -62,7 +62,7 @@ export default class NewEntry extends Component {
   render() {
     return (
       <div className='new-entry-container'>
-        <h1> New {this.state.activeTab} Entry</h1>
+        <h1 className="entry-header"> New {this.state.activeTab} Entry</h1>
         {this.renderNav()}
         {this.state.activeTab === 'Text' ? <TextEntry /> : null}
         {this.state.activeTab === 'Video' ? <VideoEntry mobile={this.state.mobile} _detectMobileUser={this._detectMobileUser}/> : null}

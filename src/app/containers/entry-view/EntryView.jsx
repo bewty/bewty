@@ -39,11 +39,11 @@ class EntryView extends Component {
   }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {
     entrySelected: state.entrySelected,
     fetchMedia: state.fetchMedia
   };
-}
+};
 
 export default connect(mapStateToProps, null)(EntryView);

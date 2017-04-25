@@ -1,6 +1,24 @@
 .new-entry-container {
   text-align: center;
   margin: auto;
+
+  @include phone {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 80%;
+    height: 100vh;
+  }
+}
+
+.entry-header {
+  @include phone {
+    flex: 1;
+    font-weight: normal;
+    font-size: 1.6em;
+    margin-top: 30px;
+    margin-bottom: 0px;
+  }
 }
 
 .new-entry-nav-container {
@@ -8,6 +26,17 @@
   flex-flow: row nowrap;
   justify-content: space-around;
   align-items: stretch;
+
+  @include phone {
+    flex: 1;
+    max-height: 60px;
+  }
+}
+
+.entry-type-container {
+  @include phone {
+    flex: 10;
+  }
 }
 
 .icon {
@@ -22,6 +51,9 @@
   background: url('../styles/assets/text.svg');
   &.active {
     background: url('../styles/assets/text-white.svg');
+  }
+  @include phone {
+    flex:1;
   }
 }
 
