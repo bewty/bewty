@@ -4,6 +4,7 @@ mongoose.Promise = require('bluebird');
 const mongoDatabase = require('./index.js');
 const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
+const Response = mongoDatabase.Response;
 
 exports.userEntry = (req, res, userInfo) => {
   User.findOne({'phonenumber': userInfo.phonenumber})
@@ -238,17 +239,41 @@ exports.callEntry = (req, res, log) => {
   .catch(err => res.sendStatus(400).send(err));
 };
 
+exports.saveResponse = (log) => {
+  let data = {
+    user_id: log.user_id,
+    phonenumber: log.phonenumbe,
+    text: log.text,
+    watson_results: log.watson_results
+  };
+
+  return new Promise((resolve, reject) => {
+    Response.insert(data)
+    .then((response) => {
+      resolve(response);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+  });
+};
+
 exports.saveCall = (req, res, log) => {
   let phonenumber = log.phonenumber;
   logEntry = {
     text: log.text,
-    watson_results: log.watson_results
+    watson_results: log.watson_results,
   };
   User.findOne({phonenumber: phonenumber})
   .then((user) => {
     let lastIndex = user.call_entries.length - 1;
     user.call_entries[lastIndex].responses.push(logEntry);
-    user.save();
+    return user.save();
+  })
+  .then(() => {
+    let log = logEntry;
+    log.phonenumber = phonenumber;
+    return exports.saveResponse(log);
   })
   .then(() => {
     res.sendStatus(200);
