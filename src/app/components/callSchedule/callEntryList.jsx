@@ -49,6 +49,9 @@ export default class CallEntryList extends React.Component {
               <h3 className="title">Call Entry List</h3>
               <ListItem
                 primaryText="No entries yet"
+                innerDivStyle={{padding: '0'}}
+                nestedListStyle={{padding: '0'}}
+                style={{fontFamily: 'Lato, sans-serif'}}
               />
             </List>
           </MuiThemeProvider>
