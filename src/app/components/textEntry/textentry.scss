@@ -3,7 +3,7 @@
   margin: 20px auto;
 
   @include phone {
-    margin-top: 20px;
+    margin: 20px;
 
     @include placeholder {
       color: $font-hint;

@@ -1,8 +1,18 @@
+.video-entry-container {
+   @include phone {
+    margin-top: 20px;
+  }
+}
+
 .controls {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
   justify-content: center;
+}
+
+.video {
+  padding: 20px 0;
 }
 
 .flash-message {
