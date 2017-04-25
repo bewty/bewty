@@ -65,13 +65,15 @@ export default class TextEntry extends React.Component {
       <div className="text-entry-container">
         <MuiThemeProvider>
           <TextField
+            className="text-field"
+            placeholder="What's on your mind today?"
             value={this.state.value}
             onChange={this.handleChange}
             multiLine={true}
             rows={10}
             fullWidth={true}
             underlineFocusStyle={{borderColor: '#EB5424'}}
-            style={{fontFamily: 'Lato, san-serif'}}
+            style={{fontFamily: 'Lato, san-serif', fontSize: '18px'}}
             errorText={!this.state.value.length > 0 && 'This field is required'}
           />
         </MuiThemeProvider>
@@ -82,7 +84,7 @@ export default class TextEntry extends React.Component {
             onTouchTap={() => {
               this.state.value.length > 0 && this.handleSubmit();
             }}
-            labelStyle={{fontFamily: 'Lato, san-serif'}}
+            labelStyle={{fontFamily: 'Lato, san-serif', fontSize: '18px'}}
           />
         </MuiThemeProvider>
         {this.state.uploading ? <Loader /> : null }

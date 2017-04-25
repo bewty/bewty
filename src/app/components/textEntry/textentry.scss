@@ -1,6 +1,15 @@
 .text-entry-container {
   max-width: 400px;
   margin: 20px auto;
+
+  @include phone {
+    margin-top: 20px;
+
+    @include placeholder {
+      color: $font-hint;
+      font-size: 1.2em;
+    }
+  }
 }
 
 .error {
