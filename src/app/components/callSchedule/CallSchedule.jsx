@@ -7,6 +7,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
+import moment from 'moment';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -54,7 +55,8 @@ export default class CallSchedule extends React.Component {
       scheduled_time: localStorage.scheduled_time,
       scheduled_message: localStorage.scheduled_message,
       //stop: localStorage.stopCalls,
-      stopCalls: localStorage.stopCalls
+      stopCalls: localStorage.stopCalls,
+      time: moment(localStorage.scheduled_time, 'HHmm')._d
     });
   }
 
@@ -258,7 +260,7 @@ export default class CallSchedule extends React.Component {
           <MuiThemeProvider muiTheme={muiTheme}>
             <TimePicker
 
-              defaultTime={this.state.time}
+              defaultTime={this.state.time ? this.state.time : moment(localStorage.scheduled_time, 'HHmm')._d}
               textFieldStyle={{fontFamily: 'Lato, san-serif'}}
               underlineDisabledStyle={{borderColor: '#EB5424'}}
               disabled={true}
