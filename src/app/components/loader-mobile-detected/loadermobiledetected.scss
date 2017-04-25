@@ -1,0 +1,10 @@
+.loader-mobile-detected {
+
+  .svg::before {
+    content: '';
+    display: inline-block;
+    height: 400px;
+    width: 600px;
+    background: url('../styles/assets/nomobile_animated.svg') center no-repeat;
+  }
+}

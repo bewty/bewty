@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
 import RecordRTC from 'recordrtc';
 import axios from 'axios';
+import LoaderMobileDetected from '../loader-mobile-detected/LoaderMobileDetected';
+import Loader from '../loader/Loader.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import RecordButton from 'material-ui/svg-icons/av/fiber-manual-record';
 import StopButton from 'material-ui/svg-icons/av/stop';
 import UploadButton from 'material-ui/svg-icons/file/cloud-upload';
-import Loader from '../loader/Loader.jsx';
 import { Link } from 'react-router-dom';
 
 class AudioEntry extends Component {
@@ -38,6 +39,7 @@ class AudioEntry extends Component {
   }
 
   componentDidMount() {
+    this.props._detectMobileUser();
     this.getUserMedia();
   }
 
@@ -166,60 +168,64 @@ class AudioEntry extends Component {
 
   render() {
     return (
-      <div className="container">
-        <br/>
-        <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
-        <div>
-        <MuiThemeProvider>
-          <RaisedButton
-            icon={
-               (!this.state.start && !this.state.stop) ?
-                <RecordButton
-                  color="red"
-                  onTouchTap={this.startRecord}
-                  style={{paddingLeft: '0'}}
-                />
-                :
-                <StopButton
-                  color="#565a5c"
-                  onTouchTap={this.stopRecord}
-                  style={{paddingLeft: '0'}}
-                />
-              }
-            onTouchTap={(!this.state.start && !this.state.stop) ?
-                        this.startRecord : this.stopRecord}
-            style={{marginRight: '12px'}}
-          />
-          </MuiThemeProvider>
+      <div>
+        {!this.props.mobile ?
+        <div className="container">
+          <br/>
+          <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
+          <div>
           <MuiThemeProvider>
-          <RaisedButton
-            icon={<UploadButton
-                    color="#565a5c"
+            <RaisedButton
+              icon={
+                 (!this.state.start && !this.state.stop) ?
+                  <RecordButton
+                    color="red"
+                    onTouchTap={this.startRecord}
                     style={{paddingLeft: '0'}}
-                  />}
-            onTouchTap={() => {
-              console.log(this.state.transcript.length);
-              this.state.transcript.length > 0 && this.uploadAudio();
-            }}
-          />
-        </MuiThemeProvider>
+                  />
+                  :
+                  <StopButton
+                    color="#565a5c"
+                    onTouchTap={this.stopRecord}
+                    style={{paddingLeft: '0'}}
+                  />
+                }
+              onTouchTap={(!this.state.start && !this.state.stop) ?
+                          this.startRecord : this.stopRecord}
+              style={{marginRight: '12px'}}
+            />
+            </MuiThemeProvider>
+            <MuiThemeProvider>
+            <RaisedButton
+              icon={<UploadButton
+                      color="#565a5c"
+                      style={{paddingLeft: '0'}}
+                    />}
+              onTouchTap={() => {
+                console.log(this.state.transcript.length);
+                this.state.transcript.length > 0 && this.uploadAudio();
+              }}
+            />
+          </MuiThemeProvider>
+          </div>
+          <p>{this.state.transcript}</p>
+          {this.state.start && (
+            <VoiceRecognition
+              onEnd={this.onEnd}
+              onResult={this.onResult}
+              continuous={true}
+              lang="en-US"
+              stop={this.state.stop}
+            />
+          )}
+          {this.state.uploading ? <Loader /> : null }
+          <div>
+            {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+            {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
+            {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+          </div>
         </div>
-        <p>{this.state.transcript}</p>
-        {this.state.start && (
-          <VoiceRecognition
-            onEnd={this.onEnd}
-            onResult={this.onResult}
-            continuous={true}
-            lang="en-US"
-            stop={this.state.stop}
-          />
-        )}
-        {this.state.uploading ? <Loader /> : null }
-        <div>
-          {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-          {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
-          {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
-        </div>
+        : <LoaderMobileDetected /> }
       </div>
     );
   }
