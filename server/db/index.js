@@ -56,6 +56,16 @@ userSchema.plugin(mongoosastic);
 const Call = mongoose.model('Call', callSchema);
 const User = mongoose.model('User', userSchema);
 
+// User.createMapping(function(err, mapping) {  
+//   if (err) {
+//     console.log('error creating mapping (you can safely ignore this)');
+//     console.log(err);
+//   } else {
+//     console.log('mapping created!');
+//     console.log(mapping);
+//   }
+// });
+
 module.exports = {
   User: User,
   Call: Call

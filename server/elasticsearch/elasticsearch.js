@@ -1,56 +1,19 @@
 const elasticsearch = require('elasticsearch');
 const database = require('../db/dbHelpers.js');
 
-const esClient = new elasticsearch.Client({
-  host: '127.0.0.1:9200',
-  log: 'error'
-});
+const mongoDatabase = require('../db/index.js');
+const User = mongoDatabase.User;
 
-const bulkIndex = (index, type, data) => {
-  let bulkBody = [];
-  data.forEach(item => {
-    bulkBody.push({
-      index: {
-        _index: index,
-        _type: type,
-        _id: item._id
-      }
-    });
-    delete item._id;
-    bulkBody.push(item);
-  });
-
-  esClient.bulk({body: bulkBody})
-  .then(response => {
-    console.log('here');
-    let errorCount = 0;
-    response.items.forEach(item => {
-      if (item.index && item.index.error) {
-        console.log(++errorCount, item.index.error);
-      }
-    });
-    console.log(
-      `Successfully indexed ${data.length - errorCount}
-       out of ${data.length} items`
-    );
-  })
-  .catch(console.err);
-};
-
-
-
-const indexUsers = () => {
-  console.log('test...');
-  // const articlesRaw = fs.readFileSync('data.json');
-  // bulkIndex('user', 'entries', articles);
-  database.retrieveUsers()
-  .then((user) => {
-    bulkIndex('user', 'entries', user);
-  })
-  .catch((err) => {
-    console.log('Received err:', err);
-  });
-};
-
-indexUsers();
-
+User.search(
+  {
+    query_string: {
+      query: 'dog'
+    }}, 
+    {hydrate: true, hydrateOptions: {select: 'entries'}}, (err, results) => {
+    if (err) {
+      console.log('Received error in ES search:', err);
+    } else {
+      console.log('Received results in ES search:', results.hits.hits[0].call_entries);
+    }
+  }
+);
