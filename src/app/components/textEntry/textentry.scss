@@ -2,6 +2,11 @@
   max-width: 400px;
   margin: 20px auto;
 
+  @include placeholder {
+    color: $font-hint;
+    font-size: 1.2em;
+  }
+
   @include phone {
     margin: 20px auto;
     width: 80%;
