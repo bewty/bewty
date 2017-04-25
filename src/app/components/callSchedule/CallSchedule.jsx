@@ -28,7 +28,7 @@ export default class CallSchedule extends React.Component {
       question: '',
       time: '',
       phonenumber: '',
-      user_id: '',
+      // user_id: '',
       hasQuestion: false
     };
 
