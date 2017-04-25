@@ -9,6 +9,12 @@
     text-decoration: none;
     color: $font-normal;
   }
+
+  @include phone {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1em;
+  }
 }
 
 .entry-meta {
@@ -21,12 +27,12 @@
 .date {
   font-size: 0.9em;
   font-weight: bold;
-  color: $font-dark;
+  color: $font-light;
 }
 
 .time {
   font-size: 0.7em;
-  color: $font-dark
+  color: $font-light
 }
 
 .time-container {
