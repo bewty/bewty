@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   phonenumber: { type: String, required: true, unique: true},
   scheduled_time: { type: String, default: '' },
   scheduled_message: String,
+  aggregated_entries: { type: String, default: '' },
   entries: [{
     entry_type: String,
     created_at: {type: Date, default: Date.now},
