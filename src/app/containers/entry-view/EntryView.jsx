@@ -28,7 +28,9 @@ class EntryView extends Component {
             </div>
             : <Daily barData={barData}/> }
             </div>
-            <EntryTextDisplay entry={entrySelected}/>
+            <div className="entry-list-container">
+              <EntryTextDisplay entry={entrySelected}/>
+            </div>
             {entrySelected.entry_type === 'text' ? null : <MediaPlayer mediaSrc={fetchMedia} mediaType={entrySelected.entry_type}/>}
           </div>
         }
