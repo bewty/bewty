@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import EntryTextDisplay from '../entry-text-display/EntryTextDisplay';
+import EntryTextDisplay from '../../components/entry-text-display/EntryTextDisplay';
 import {List, ListItem} from 'material-ui/List';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import moment from 'moment';
