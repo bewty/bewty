@@ -63,38 +63,38 @@ export default class CallEntry extends React.Component {
     //     })}
     //   </div>
     // );
-    return (
-      <div>
-        <MuiThemeProvider>
+//     return (
+//       <div>
+//         <MuiThemeProvider>
 
-            <ListItem
-              innerDivStyle={{padding: '0'}}
-              style={{fontFamily: 'Lato, sans-serif'}}
-              primaryTogglesNestedList={true}
-              nestedItems={this.props.call.responses.map((response) => {
-                if (response.text) {
-                  return <EntryTextDisplay entry={response} type={'snippet'}/>;
-                }
-              })}
-            >
-              <div className="header-box">
-                <h3 className="question">{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h3>
-                <div className="entry-meta">
-                  <span className="date">{moment(this.props.call.date_set).format('MM-DD-YYYY')}</span>
-                </div>
-                <div className="time-container">
-                  <span className="time">{moment(this.props.call.date_set).format('h:mm a')}</span>
-                </div>
-              </div>
+//             <ListItem
+//               innerDivStyle={{padding: '0'}}
+//               style={{fontFamily: 'Lato, sans-serif'}}
+//               primaryTogglesNestedList={true}
+//               nestedItems={this.props.call.responses.map((response) => {
+//                 if (response.text) {
+//                   return <EntryTextDisplay entry={response} type={'snippet'}/>;
+//                 }
+//               })}
+//             >
+//               <div className="header-box">
+//                 <h3 className="question">{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h3>
+//                 <div className="entry-meta">
+//                   <span className="date">{moment(this.props.call.date_set).format('MM-DD-YYYY')}</span>
+//                 </div>
+//                 <div className="time-container">
+//                   <span className="time">{moment(this.props.call.date_set).format('h:mm a')}</span>
+//                 </div>
+//               </div>
 
-            </ListItem>
+//             </ListItem>
 
-        </MuiThemeProvider>
-      </div>
+//         </MuiThemeProvider>
+//       </div>
 
-    );
-  }
-}
+//     );
+//   }
+// }
 
 
               /*
