@@ -34,10 +34,11 @@ class Daily extends Component {
   render() {
     return (
     <div
+        className="entry-list-container"
         ref="container"
         style={{
-          width: '800px',
-          height: '800px',
+          textAlign: 'center',
+          width: '40%'
         }}
     >
     <VictoryChart

@@ -6,7 +6,14 @@
 @import '../components/newEntry/newentry';
 @import '../components/mediaplayer/mediaplayer';
 @import '../components/loader/loader';
+@import '../components/loader-mobile-detected/loadermobiledetected';
 @import '../components/home/home';
 @import '../components/results/video-bar-chart/barchart';
 @import '../containers/entry-list/entrylist';
 @import '../containers/entry-view/entryview';
+@import '../components/drawer/drawer';
+@import '../components/callSchedule/callschedule';
+@import '../components/callSchedule/callentrylist';
+@import '../containers/call-schedule/callentry';
+@import '../components/textEntry/textentry';
+@import '../components/results/daily-chart/daily';

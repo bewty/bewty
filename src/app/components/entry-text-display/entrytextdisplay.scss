@@ -1,6 +1,5 @@
 .entry-container {
   padding: 1em 2em;
-  margin-bottom: 12px;
   background-color: #fff;
   box-shadow: $shadow;
 
@@ -14,12 +13,22 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  height: 2em;
 }
 
 .date {
   font-size: 0.9em;
   font-weight: bold;
   color: $font-dark;
+}
+
+.time {
+  font-size: 0.7em;
+  color: $font-dark
+}
+
+.time-container {
+  margin-top: -10px;
 }
 
 .entry-icon {

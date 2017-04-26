@@ -108,7 +108,7 @@ app.post('/db/userentry', (req, res) => {
     req.body.phonenumber = '1' + req.body.phonenumber;
   }
   let userInfo = {
-    phonenumber: req.body.phonenumber 
+    phonenumber: req.body.phonenumber
   };
 
   database.userEntry(req, res, userInfo);
@@ -131,7 +131,7 @@ app.post('/transcribe', (req, res) => {
     let log = {
       phonenumber: phonenumber,
       text: text,
-      watson_results: JSON.stringify(JSON.parse(tone).document_tone)
+      watson_results: tone
     };
     database.saveCall(req, res, log);
   });
@@ -150,31 +150,36 @@ app.post('/api/watson', (req, res) => {
     res.status(200).send(results);
   })
   .error(function(e) {
+    // TODO: HANDLE ERROR
     console.log('Error received within post to /api/watson', e);
   });
 });
 
 app.post('/entry', upload.single('media'), (req, res) => {
-  watson.promisifiedTone(req.body.text)
-  .then(tone => {
-    let log = {
-      user_id: req.body.user_id,
-      entry_type: req.body.entryType,
-      video: {
-        bucket: req.file ? req.file.bucket : null,
-        key: req.file ? req.file.key : null,
-        avgData: req.body.avgData ? req.body.avgData : null,
-        rawData: req.body.rawData ? req.body.rawData : null,
-      },
-      audio: {
-        bucket: req.file ? req.file.bucket : null, // should be same as video later
-        key: req.file ? req.file.key : null,
-      },
-      text: req.body.text,
-      watson_results: tone
-    };
-    database.saveEntry(req, res, log);
-  });
+  if (req.body.text.length === 0) {
+    res.sendStatus(400);
+  } else {
+    watson.promisifiedTone(req.body.text)
+    .then(tone => {
+      let log = {
+        user_id: req.body.user_id,
+        entry_type: req.body.entryType,
+        video: {
+          bucket: req.file ? req.file.bucket : null,
+          key: req.file ? req.file.key : null,
+          avgData: req.body.avgData ? req.body.avgData : null,
+          rawData: req.body.rawData ? req.body.rawData : null,
+        },
+        audio: {
+          bucket: req.file ? req.file.bucket : null, // should be same as video later
+          key: req.file ? req.file.key : null,
+        },
+        text: req.body.text,
+        watson_results: tone
+      };
+      database.saveEntry(req, res, log);
+    });
+  }
 });
 
 const getAWSSignedUrl = (bucket, key) => {

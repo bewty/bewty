@@ -3,6 +3,13 @@ import RecordRTC from 'recordrtc';
 import axios from 'axios';
 import Loader from '../loader/Loader.jsx';
 import VoiceRecognition from '../VoiceRecognition/VoiceRecognition.jsx';
+import LoaderMobileDetected from '../loader-mobile-detected/LoaderMobileDetected';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import RaisedButton from 'material-ui/RaisedButton';
+import RecordButton from 'material-ui/svg-icons/av/fiber-manual-record';
+import StopButton from 'material-ui/svg-icons/av/stop';
+import UploadButton from 'material-ui/svg-icons/file/cloud-upload';
+import { Link } from 'react-router-dom';
 
 export default class VideoEntry extends Component {
   constructor(props) {
@@ -17,7 +24,7 @@ export default class VideoEntry extends Component {
       recording: false,
       uploadable: false,
       uploading: false,
-      uploadSuccess: null,
+      uploadSuccess: false,
       uploadError: false,
       emotionable: false,
       okayToRecord: false,
@@ -33,7 +40,8 @@ export default class VideoEntry extends Component {
       },
       start: false,
       stop: false,
-      transcript: ''
+      transcript: '',
+      noTranscript: false,
     };
 
     this.getUserMedia = this.getUserMedia.bind(this);
@@ -51,6 +59,7 @@ export default class VideoEntry extends Component {
   }
 
   componentDidMount() {
+    this.props._detectMobileUser();
     this.getUserMedia();
     const width = 480;
     const height = 360;
@@ -63,10 +72,12 @@ export default class VideoEntry extends Component {
 
     //onInitialize
     this.state.detector.addEventListener('onInitializeSuccess', () => {
-      this.setState({
-        okayToRecord: true,
-        loadingRecordMsg: false
-      });
+      if (!this.state.uploadable && !this.state.recording) {
+        this.setState({
+          okayToRecord: true,
+          loadingRecordMsg: false
+        });
+      }
       console.log('onInitializeSuccess');
     });
     this.state.detector.addEventListener('onInitializeFailure', (err) => console.log('onInitializeFailure', err));
@@ -163,7 +174,11 @@ export default class VideoEntry extends Component {
         sadness: 0,
         surprise: 0,
       },
-      start: true
+      start: true,
+      transcript: '',
+      uploadError: false,
+      uploadSuccess: false,
+      noTranscript: false
     });
 
     this.captureUserMedia( stream => {
@@ -218,7 +233,12 @@ export default class VideoEntry extends Component {
         joy: 0,
         sadness: 0,
         surprise: 0,
-      }
+      },
+      uploadable: false,
+      noTranscript: false,
+      uploadError: false,
+      uploadSuccess: false,
+      transcript: ''
     });
   }
 
@@ -234,6 +254,7 @@ export default class VideoEntry extends Component {
     this.setState({
       uploading: true,
       uploadError: false,
+      uploadSuccess: false
     });
 
     let blob = this.state.blob;
@@ -251,13 +272,25 @@ export default class VideoEntry extends Component {
 
     axios.post('/entry', fd, config)
     .then( res => {
-      this.setState({ uploading: false });
+      this.setState({
+        uploading: false,
+        uploadSuccess: true,
+        uploadError: false,
+        transcript: '',
+        okayToRecord: true,
+        uploadable: false,
+        recording: false
+      });
       console.log('video upload to server COMPLETE:', res);
     })
     .catch( err => {
       this.setState({
+        uploading: false,
+        uploadSuccess: false,
         uploadError: true,
-        uploading: false
+        okayToRecord: true,
+        uploadable: false,
+        recording: false
       });
       console.log('video upload to server ERROR:', err);
     });
@@ -272,43 +305,108 @@ export default class VideoEntry extends Component {
   }
 
   onEnd() {
-    this.setState({ start: false, stop: false });
+    console.log('end');
+    if (this.state.transcript.length > 0) {
+      this.setState({
+        start: false,
+        stop: false,
+      });
+    } else {
+      this.setState({
+        start: false,
+        stop: false,
+        noTranscript: true,
+        okayToRecord: true,
+        uploadable: false,
+        recording: false
+      });
+    }
   }
 
   onResult ({ finalTranscript }) {
-    this.setState({ start: false,
-                    transcript: finalTranscript });
+    console.log(finalTranscript);
+    this.setState({
+    start: false,
+    transcript: finalTranscript
+    });
   }
 
   render() {
     return (
-      <div className='container'>
-        {this.state.start &&
-        (<VoiceRecognition
-          onEnd={this.onEnd}
-          onResult={this.onResult}
-          continuous={true}
-          lang="en-US"
-          stop={this.state.stop}
-        />)}
-          { this.state.playback
-            ? <video autoPlay='true' src={this.state.src} controls></video>
-            : <video autoPlay='true' src={this.state.src} muted></video>
-          }
-          <div className='flash-message'>
-            {this.state.uploadError ? <p>Error Uploading Video, Please Try Again</p> : null }
-            {this.state.loadingRecordMsg ? <p>Loading and starting the emotions detector, this may take few minutes ...</p> : null }
+      <div>
+        {!this.props.mobile ?
+          <div className='container'>
+          {this.state.start &&
+          (<VoiceRecognition
+            onEnd={this.onEnd}
+            onResult={this.onResult}
+            continuous={true}
+            lang="en-US"
+            stop={this.state.stop}
+          />)}
+            { this.state.playback
+              ? <video autoPlay='true' src={this.state.src} controls></video>
+              : <video autoPlay='true' src={this.state.src} muted></video>
+            }
+            <div className='flash-message'>
+              {this.state.loadingRecordMsg && !this.props.mobile ? <p>Loading and starting the emotions detector.<br/>This may take a moment.</p> : null }
+            </div>
+            <div className='controls'>
+              {this.state.okayToRecord ?
+                <MuiThemeProvider>
+                  <RaisedButton
+                    icon={<RecordButton
+                            color="red"
+                            style={{paddingLeft: '0'}}
+                          />}
+                    onTouchTap={this.onRecord}
+                    style={{marginRight: '12px'}}
+                  />
+                </MuiThemeProvider>
+                : null}
+              {this.state.recording ?
+                <MuiThemeProvider>
+                  <RaisedButton
+                    icon={<StopButton
+                            color="#565a5c"
+                            style={{paddingLeft: '0'}}
+                          />}
+                    onTouchTap={this.onStop}
+                  />
+                </MuiThemeProvider>
+                : null}
+              {this.state.uploadable ?
+                <MuiThemeProvider>
+                  <RaisedButton
+                    icon={<UploadButton
+                            color="#565a5c"
+                            style={{paddingLeft: '0'}}
+                          />}
+                    onTouchTap={() => {
+                      console.log(this.state.transcript.length);
+                      this.state.transcript.length > 0 && this.onSubmit();
+                    }}
+                  />
+                </MuiThemeProvider>
+                : null }
+              <MuiThemeProvider>
+                <RaisedButton
+                  label="Reset"
+                  onTouchTap={this.onReset}
+                />
+              </MuiThemeProvider>
+            </div>
+            <div id='affdex_elements' ref='affdex_elements'> </div>
+            {this.state.uploading ? <Loader /> : null }
+            <div>
+              {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+              {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
+              {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+            </div>
           </div>
-          <div className='controls'>
-            {this.state.okayToRecord ? <button onClick={this.onRecord}>Record</button> : null}
-            {this.state.recording ? <button onClick={this.onStop}>Stop</button> : null}
-            {this.state.uploadable ? <button onClick={this.onSubmit}>Upload</button> : null }
-            <button onClick={this.onReset}>Reset</button>
-          </div>
-          <div id='affdex_elements' ref='affdex_elements'> </div>
-          {this.state.uploading ? <Loader /> : null }
-      </div>
-    );
+      : <LoaderMobileDetected />}
+    </div>
+      );
   }
 
   componentWillUnmount() {

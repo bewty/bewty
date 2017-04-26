@@ -13,6 +13,10 @@ import EntryView from './containers/entry-view/EntryView';
 import Results from './components/results/Results';
 import CallSchedule from './components/callSchedule/CallSchedule';
 import CallHome from './components/callSchedule/CallHome';
+import DrawerSimpleExample from './components/drawer/Drawer.jsx';
+import AppDrawer from './components/drawer/Drawer.jsx';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import reducers from './reducers';
 import Search from './components/search/Search';
 import './styles/variables.scss';
@@ -26,7 +30,10 @@ ReactDOM.render(
   <Provider store={store}>
     <Router>
       <div>
-        <Header />
+        <MuiThemeProvider>
+          <AppDrawer />
+        </MuiThemeProvider>
+
         <Route exact path="/" component={App} />
         <Route path="/new-entry" component={NewEntry} />
         <Route path="/entries" component={EntryList} />

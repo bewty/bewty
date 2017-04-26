@@ -69,10 +69,10 @@ class Results extends Component {
     const barData =  JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories
     return (
       <div>
-      <h1> Results View </h1>
-      <h2> Your overall report</h2>
+      <h2 className="title">Results</h2>
+      <h3 className="title"> Your overall report</h3>
       <Trend scatterData={scatterData} pieData ={pieData}/>
-      <h2> Your daily report</h2>
+      <h3 className="title"> Your daily report</h3>
       <Daily barData={barData}/>
       </div>
     );
