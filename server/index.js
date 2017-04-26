@@ -138,7 +138,6 @@ app.post('/transcribe', (req, res) => {
 });
 
 app.get('/api/watson', (req, res) => {
-  // console.log('query', req.query.text);
   watson.promisifiedPersonality(req.query.text)
   .then(tone => {
     res.json(tone);
@@ -146,22 +145,6 @@ app.get('/api/watson', (req, res) => {
   .catch(err => {
     res.sendStatus(400).send(err);
   });
-  // watson.promisifiedPersonality()
-  // let target = 'Ghandi.txt';
-  // let entry = req.body.text || `${__dirname}/watsonAPI/watsonTest/${target}`;
-
-  // fs.readFileAsync(entry, 'utf8')
-  // .then((results) => {
-  //   return watson.promisifiedPersonality(results);
-  // })
-  // .then((results) => {
-  //   return fs.writeFile(`./watsonAPI/watsonResults/${target}`, JSON.stringify(results));
-  //   res.status(200).send(results);
-  // })
-  // .error(function(e) {
-  //   // TODO: HANDLE ERROR
-  //   console.log('Error received within post to /api/watson', e);
-  // });
 });
 
 app.post('/entry', upload.single('media'), (req, res) => {

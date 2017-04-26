@@ -28,7 +28,7 @@ export default class Search extends React.Component {
     .then((response) => {
       this.setState({search_data: response, search: ''});
     })
-    .then(res => console.log('search done, results retrieved'))
+    .then(res => console.log('search done, results retrieved:'))
     .catch(err => console.log('text upload error...', err));
   }
   render() {
