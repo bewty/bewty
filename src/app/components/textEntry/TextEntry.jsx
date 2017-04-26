@@ -62,7 +62,7 @@ export default class TextEntry extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="text-entry-container">
         <MuiThemeProvider>
           <TextField
             value={this.state.value}

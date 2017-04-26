@@ -10,6 +10,7 @@ const ObjectId = mongoose.Types.ObjectId;
 exports.userEntry = (req, res, userInfo) => {
   User.findOne({'phonenumber': userInfo.phonenumber})
   .then((user) => {
+    console.log(user);
     if (user === null) {
       let newUser = User({
         phonenumber: userInfo.phonenumber,
@@ -48,9 +49,14 @@ exports.saveEntry = (req, res, log) => {
     watson_results: log.watson_results,
     tags: log.tags
   };
-  User.findOneAndUpdate({_id: _id}, {$push: {'entries': logEntry}}, {safe: true, upsert: false, new: true})
-  .then((result) => {
+  User.findOneAndUpdate({_id: _id}, {
+    $push: {'entries': logEntry}
+  }, {safe: true, upsert: false, new: true})
+  .then(result => {
+    result.aggregated_entries += (log.text + ' ');
+    result.save();
     res.sendStatus(201);
+
   })
   .error(err => res.sendStatus(500).send(err))
   .catch(err => res.sendStatus(400).send(err));
