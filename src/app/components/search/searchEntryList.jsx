@@ -12,7 +12,7 @@ export default class SearchEntryList extends React.Component {
     if (this.props.search_data !== '') {
       return (
         <div>
-          <h1>Search Results</h1>
+          <h2>Search Results</h2>
           {this.props.search_data.data.map((response) => {
             if (response.text) {
               return <EntryTextDisplay entry={response} type={'snippet'} />;
