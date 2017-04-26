@@ -17,13 +17,13 @@ class CustomPie extends React.Component {
   takeOnePieceOfPieData() {
    //  console.log('bizniz outside datum', this.props)
    //  console.log('bizniz in piedata', this.props.datum)
-   return this.props.pieData.map((obj)=>
+   return this.props.datum.children.map((obj)=>
        {
-         console.log('obj inside bizniz', obj)
+         // console.log('obj inside bizniz', obj)
        return {
-         x:null,
-         y: obj.x,
-         name:  obj.x +"\n "+ Math.floor(obj.y) + "%"
+         x: ' ',
+         y: obj.percentile * 100,
+         name:  obj.name + "\n " + Math.floor(obj.percentile * 100) + "%"
        }
       })
   }
@@ -82,30 +82,40 @@ export default class Chart extends React.Component {
     super(props);
     this.state = {
       data: this.getScatterData(),
-      children: window.exampleData.personality.children,
+      // children: window.exampleData.personality.children,
+      // children: this.props.watson.personality.children
     }
     this.getScatterData = this.getScatterData.bind(this);
   }
 
   getScatterData() {
-    return this.props.scatterData[0].tones.map((index) => {
+    return this.props.watson.personality.map((index) => {
       return {
-        y: index.tone_name,
-        x: index.score*100,
-        label: Math.floor(index.score*100),
+        y: index.name,
+        x: index.percentile*100,
+        label: Math.floor(index.percentile*100),
+        children: index.children
       };
     });
   }
 
   getPieData() {
-    console.log('bizniz passed down', this.props.pieData[0])
-    return this.props.pieData[0].tones.map((index) => {
-      console.log(index)
-      return {
-        x: index.tone_name,
-        y: index.score*100
-      };
-    });
+    // console.log('bizniz passed down', this.props.pieData[0])
+    // return this.props.watson.personality.map((index) => {
+    //   console.log(index)
+    //   return {
+    //     x: index.tone_name,
+    //     y: index.score*100
+    //   };
+    // });
+    this.props.watson.personality.map((bigTrait) =>{
+      bigTrait.children.map((trait) => {
+        return {
+          x: trait.name,
+          y: trait.percentile * 100
+        }
+      })
+    })
   }
 
 
@@ -117,14 +127,14 @@ export default class Chart extends React.Component {
         ref="container"
       >
       <VictoryChart
-        style={{parent: {paddingLeft: '20%'}}}
+        style={{parent: {padding: '0 20%', maxWidth: '60%'}}}
         domainPadding={120}
         width = {750}
         height ={750}
         theme={VictoryTheme.material}
         // domain={{y: [0, 5]}}
-        domain={{x: [0, 100]}}
-        containerComponent={<VictoryZoomContainer zoomDomain={{x: [0,100], y: [0, 6]}} responsive={false} />}
+        domain={{x: [0, 120]}}
+
       >
         <VictoryScatter
           data={this.state.data}
@@ -132,6 +142,7 @@ export default class Chart extends React.Component {
             <VictoryLabel dx={25} dy={2} verticalAnchor="middle" textAnchor="end"/>
           }
           dataComponent= {
+            // <CustomPie pieData={pieData}/>
             <CustomPie pieData={pieData}/>
           }
           style={{
