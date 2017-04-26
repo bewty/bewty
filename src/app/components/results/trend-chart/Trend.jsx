@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as V from 'victory';
-import { VictoryScatter,VictoryPie, VictoryZoomContainer, VictoryBar, VictoryLabel, VictoryTheme, VictoryChart } from 'victory';
+import { VictoryScatter,VictoryPie, VictoryZoomContainer, VictoryBar, VictoryLabel, VictoryTheme, VictoryChart, VictoryAxis } from 'victory';
 import exampleData from '../../../../../static/exampleData.js'
 
 class CustomPie extends React.Component {
@@ -133,9 +133,14 @@ export default class Chart extends React.Component {
         height ={750}
         theme={VictoryTheme.material}
         // domain={{y: [0, 5]}}
-        domain={{x: [0, 120]}}
-
+        domain={{x: [-20, 120]}}
       >
+        <VictoryAxis
+          crossAxis={false}
+        />
+        <VictoryAxis
+          offsetX={50}
+          dependentAxis />
         <VictoryScatter
           data={this.state.data}
           labelComponent={
