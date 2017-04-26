@@ -16,6 +16,7 @@ const querystring = require('querystring');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
 const cron = require('./callCron/cron.js');
+const elastic = require('./elasticsearch/elasticsearch.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,6 +46,20 @@ AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'us-west-1'
+});
+
+app.post('/elasticSearch', (req, res) => {
+  let data = {
+    phonenumber: req.body.phonenumber,
+    search: req.body.search
+  };
+  elastic.eSearch(data)
+  .then((results) => {
+    res.status(200).send(results);
+  })
+  .catch((err) => {
+    res.sendStatus(400);
+  });
 });
 
 app.post('/scheduleCall', (req, res) => {

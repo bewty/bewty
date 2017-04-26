@@ -1,18 +1,21 @@
-const elasticsearch = require('elasticsearch');
-const database = require('../db/dbHelpers.js');
-
 const mongoDatabase = require('../db/index.js');
 const Response = mongoDatabase.Response;
 
-let eSearch = (query) => {
+exports.eSearch = (query) => {
   let identification = query.phonenumber;
   let search = query.search;
-
+  console.log('eSearch triggered with:', identification, search);
   let eSearchQ = 
     { 'bool': {
-      'must': [
-      {'term': {phonenumber: identification}},
-      {'match': {'text': 'apple message'}}
+      'must': [{
+        'term': {phonenumber: identification}}, {
+          'match': {
+            'text': {
+              'query': search,
+              'fuzziness': 'AUTO'
+            }
+          }
+        }
       ] 
     },
   }; 
@@ -21,6 +24,7 @@ let eSearch = (query) => {
       if (err) {
         reject(err);
       } else {
+        // console.log('Sending result from eSearch:', results.hits.hits);
         resolve(results.hits.hits);
       }
     }
@@ -28,7 +32,10 @@ let eSearch = (query) => {
   });
 };
 
-eSearch({phonenumber: '17143389938', search: 'apple'})
-.then((result) => {
-  console.log('Found result:', result);
-});
+// exports.eSearch({phonenumber: '17143389938', search: 'apple'})
+// .then((result) => {
+//   console.log('Found result:', result);
+// })
+// .catch((err) => {
+//   console.log('Received error:', err);
+// });
