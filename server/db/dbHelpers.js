@@ -242,13 +242,14 @@ exports.callEntry = (req, res, log) => {
 exports.saveResponse = (log) => {
   let data = {
     user_id: log.user_id,
-    phonenumber: log.phonenumbe,
+    phonenumber: log.phonenumber,
     text: log.text,
     watson_results: log.watson_results
   };
 
   return new Promise((resolve, reject) => {
-    Response.insert(data)
+    let newResponse = Response(data);
+    newResponse.save()
     .then((response) => {
       resolve(response);
     })
@@ -273,7 +274,7 @@ exports.saveCall = (req, res, log) => {
   .then(() => {
     let log = logEntry;
     log.phonenumber = phonenumber;
-    return exports.saveResponse(log);
+    exports.saveResponse(log);
   })
   .then(() => {
     res.sendStatus(200);

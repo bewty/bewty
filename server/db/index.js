@@ -48,8 +48,6 @@ const userSchema = new mongoose.Schema({
     call_time: String,
     date_set: {type: Date, default: Date.now},    
     responses: [{
-      es_indexed: true,
-      es_type: 'nested',
       text: String,
       created_at: {type: Date, default: Date.now},
       entry_type: {type: String, default: 'audio'},

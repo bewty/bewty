@@ -2,24 +2,33 @@ const elasticsearch = require('elasticsearch');
 const database = require('../db/dbHelpers.js');
 
 const mongoDatabase = require('../db/index.js');
-const User = mongoDatabase.User;
+const Response = mongoDatabase.Response;
 
-User.search(
-  {
-    'query': {
-      'nested': {
-        'path': 'entries',
-        'query': {
-          'match_all': {}
-        }
+let eSearch = (query) => {
+  let identification = query.phonenumber;
+  let search = query.search;
+
+  let eSearchQ = 
+    { 'bool': {
+      'must': [
+      {'term': {phonenumber: identification}},
+      {'match': {'text': 'apple message'}}
+      ] 
+    },
+  }; 
+  return new Promise((resolve, reject) => {
+    Response.search(eSearchQ, (err, results) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(results.hits.hits);
       }
     }
-  }, 
-  (err, results) => {
-    if (err) {
-      console.log('Received error in ES search:', err);
-    } else {
-      console.log('Received results in ES search:', results.hits.hits);
-    }
-  }
-);
+    );
+  });
+};
+
+eSearch({phonenumber: '17143389938', search: 'apple'})
+.then((result) => {
+  console.log('Found result:', result);
+});
