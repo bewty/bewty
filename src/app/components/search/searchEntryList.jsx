@@ -1,5 +1,4 @@
 import React from 'react';
-import SearchEntry from './SearchEntry.jsx';
 import EntryTextDisplay from '../../components/entry-text-display/EntryTextDisplay';
 
 export default class SearchEntryList extends React.Component {
@@ -10,7 +9,6 @@ export default class SearchEntryList extends React.Component {
   }
 
   render() {
-    console.log('Within searchEntryList props is:', this.props.search_data);
     if (this.props.search_data !== '') {
       return (
         <div>
