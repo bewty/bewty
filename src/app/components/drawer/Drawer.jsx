@@ -13,10 +13,15 @@ export default class AppDrawer extends React.Component {
     super(props);
     this.state = {open: false};
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleToggle() {
     this.setState({open: !this.state.open});
+  }
+
+  handleClose() {
+    this.setState({open: false});
   }
 
   render() {
@@ -29,8 +34,10 @@ export default class AppDrawer extends React.Component {
                   top: 0}}
         />
         <Drawer
+          docked={false}
           open={this.state.open}
           style={{position: 'fixed'}}
+          onRequestChange={(open) => this.setState({open})}
         >
           <AppBar
             title="MindFit"
@@ -44,18 +51,22 @@ export default class AppDrawer extends React.Component {
             >
             <MenuItem
               containerElement={<Link to="/new-entry" />}
+              onTouchTap={this.handleClose}
               primaryText="New Entry"
             />
             <MenuItem
               containerElement={<Link to="/entries" />}
+              onTouchTap={this.handleClose}
               primaryText="Saved Entries"
             />
             <MenuItem
               containerElement={<Link to="/results" />}
+              onTouchTap={this.handleClose}
               primaryText="Results"
             />
             <MenuItem
               containerElement={<Link to="/call-home" />}
+              onTouchTap={this.handleClose}
               primaryText="Call Schedule"
             />
             <Divider />

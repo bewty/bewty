@@ -39,7 +39,6 @@ class EntryList extends Component {
     return this.props.entries.map( (entry, index) => {
       return (
         <div
-          className="entry-list-container"
           key={index}
           onClick={ () => {
             this.props.selectEntry(entry);
@@ -57,31 +56,25 @@ class EntryList extends Component {
 
   render() {
     return (
-      <div>
+      <div className="entry-list-container">
         {this.renderList()}
       </div>
     );
   }
 }
 
-//anything returned from this function will end up as props on the EntryList container
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {
     entries: state.entries
   };
-}
+};
 
-//anything returned from this function will end up as props on the EntryList container
-function mapDispatchToProps(dispatch) {
-  //whenever actions are called, the result should be passed to all reducers
+const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     selectEntry: selectEntry,
     fetchEntry: fetchEntry,
     fetchMedia: fetchMedia,
   }, dispatch);
-}
+};
 
-//promote EntryList from component to container. It needs to know about
-//this new dispatch method, selectEntry, fetchEntry. Make it available
-//as a prop
 export default connect(mapStateToProps, mapDispatchToProps)(EntryList);
