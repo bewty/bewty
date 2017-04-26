@@ -24,13 +24,11 @@ export default class Search extends React.Component {
       search: this.state.search,
       phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
     };
-    console.log('Constructed data:', data);
     axios.post('/elasticSearch', data)
     .then((response) => {
-      console.log('Received response:', response);
       this.setState({search_data: response, search: ''});
     })
-    .then(res => console.log('search done, state updated:', this.state))
+    .then(res => console.log('search done, state updated'))
     .catch(err => console.log('text upload error...', err));
   }
   render() {
@@ -43,13 +41,13 @@ export default class Search extends React.Component {
             type="text"
             value={this.state.search}
             onChange={this.handleChange}
-            rows="10"
-            cols="50"
+            rows="1"
+            cols="100"
+            placeholder="Search for anything..."
           />
         </label>
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Search" />
       </form>
-      <h2>Search Results</h2>
       <SearchEntryList search_data={this.state.search_data} />
       </div>
     );
