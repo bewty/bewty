@@ -42,7 +42,7 @@ export default class AppDrawer extends React.Component {
         <Drawer
           docked={false}
           open={this.state.open}
-          style={{position: 'fixed'}}
+          style={{position: 'fixed', zIndex: 1300}}
           onRequestChange={(open) => this.setState({open})}
         >
           <AppBar
