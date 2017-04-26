@@ -6,6 +6,7 @@ import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar';
 import Divider from 'material-ui/Divider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+
 injectTapEventPlugin();
 
 export default class AppDrawer extends React.Component {
@@ -57,6 +58,10 @@ export default class AppDrawer extends React.Component {
             <MenuItem
               containerElement={<Link to="/call-home" />}
               primaryText="Call Schedule"
+            />
+            <MenuItem
+              containerElement={<Link to="/search" />}
+              primaryText="Search"
             />
             <Divider />
             <MenuItem>Logout</MenuItem>

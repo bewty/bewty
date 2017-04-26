@@ -28,7 +28,7 @@ export default class Search extends React.Component {
     .then((response) => {
       this.setState({search_data: response, search: ''});
     })
-    .then(res => console.log('search done, state updated'))
+    .then(res => console.log('search done, results retrieved'))
     .catch(err => console.log('text upload error...', err));
   }
   render() {
@@ -37,13 +37,12 @@ export default class Search extends React.Component {
       <h1>Search</h1>
         <form onSubmit={this.handleSubmit}>
         <label>
-          <textarea
-            type="text"
-            value={this.state.search}
-            onChange={this.handleChange}
-            rows="1"
-            cols="100"
-            placeholder="Search for anything..."
+          <input 
+          type="text" 
+          value={this.state.search} 
+          onChange={this.handleChange} 
+          placeholder="Search for anything..."
+          size="100"
           />
         </label>
         <input type="submit" value="Search" />
