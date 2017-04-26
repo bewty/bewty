@@ -49,10 +49,14 @@ AWS.config.update({
 });
 
 app.post('/elasticSearch', (req, res) => {
+  if (req.body.phonenumber[0] !== '1') {
+    req.body.phonenumber = '1' + req.body.phonenumber;
+  }
   let data = {
     phonenumber: req.body.phonenumber,
     search: req.body.search
   };
+  console.log('elasticsearch route called with:', data);
   elastic.eSearch(data)
   .then((results) => {
     res.status(200).send(results);

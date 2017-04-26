@@ -14,7 +14,7 @@ import Results from './components/results/Results';
 import CallSchedule from './components/callSchedule/CallSchedule';
 import CallHome from './components/callSchedule/CallHome';
 import reducers from './reducers';
-
+import Search from './components/search/Search';
 import './styles/variables.scss';
 import './styles/global.scss';
 import './styles/bundle.scss';
@@ -33,6 +33,7 @@ ReactDOM.render(
         <Route path="/entry/:id" component={EntryView} />
         <Route path="/results" component={Results} />
         <Route path="/call-home" component={CallHome} />
+        <Route path="/search" component={Search} />
       </div>
     </Router>
   </Provider>
