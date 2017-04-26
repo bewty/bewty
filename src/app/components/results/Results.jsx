@@ -9,6 +9,10 @@ import { bindActionCreators } from 'redux';
 class Results extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      watson: null,
+      textLength: 0
+    };
     this.onFetchMedia = this.onFetchMedia.bind(this);
   }
   componentWillMount() {
@@ -22,6 +26,36 @@ class Results extends Component {
       this.props.fetchEntry(result.data);
     })
     .catch( err => console.error('Fetching Entry Error'));
+  }
+
+  componentDidMount() {
+    let data = {
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
+    };
+    axios.post('/db/userentry', data)
+    .then((user_id) => {
+      // localStorage.setItem('scheduled_message', user_id.data.scheduled_message);
+      // localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
+      console.log(user_id);
+      if (user_id.data.aggregated_entries.length > 800) {
+        console.log('say ayeeee', user_id.data.aggregated_entries.length);
+        let params = {text: JSON.stringify(user_id.data.aggregated_entries)};
+        axios.get('/api/watson', {params})
+        .then(results => {
+          console.log('success!', results);
+          this.setState({
+            watson: results.data,
+            textLength: user_id.data.aggregated_entries.length
+          });
+        })
+        .catch(err => {
+          console.log('error', err);
+        });
+      }
+    })
+    .catch((err) => {
+      console.log('Received error in retrieving state:', err);
+    });
   }
 
   onFetchMedia(entryId, entryType) {
@@ -72,7 +106,8 @@ class Results extends Component {
       <div>
       <h2 className="title">Results</h2>
       <h3 className="title"> Your overall report</h3>
-      <Trend scatterData={scatterData} pieData ={pieData}/>
+      {this.state.textLength > 800 && <Trend watson={this.state.watson} />}
+      {/*<Trend scatterData={scatterData} pieData ={pieData}/>*/}
       <h3 className="title"> Your daily report</h3>
       <Daily barData={barData}/>
       </div>
