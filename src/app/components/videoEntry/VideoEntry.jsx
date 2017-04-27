@@ -290,7 +290,7 @@ export default class VideoEntry extends Component {
         uploadable: false,
         recording: false
       });
-      console.log('video upload to server COMPLETE:', res);
+      // console.log('video upload to server COMPLETE:', res);
     })
     .catch( err => {
       this.setState({
@@ -301,7 +301,7 @@ export default class VideoEntry extends Component {
         uploadable: false,
         recording: false
       });
-      console.log('video upload to server ERROR:', err);
+      // console.log('video upload to server ERROR:', err);
     });
   }
 
@@ -315,7 +315,7 @@ export default class VideoEntry extends Component {
   }
 
   onEnd() {
-    console.log('end');
+    // console.log('end');
     if (this.state.transcript.length > 0) {
       this.setState({
         start: false,
@@ -334,10 +334,10 @@ export default class VideoEntry extends Component {
   }
 
   onResult ({ finalTranscript }) {
-    console.log(finalTranscript);
+    // console.log(finalTranscript);
     this.setState({
-    start: false,
-    transcript: finalTranscript
+      start: false,
+      transcript: finalTranscript
     });
   }
 
@@ -442,7 +442,7 @@ export default class VideoEntry extends Component {
         </div>
       : <LoaderMobileDetected />}
     </div>
-      );
+    );
   }
 
   componentWillUnmount() {
