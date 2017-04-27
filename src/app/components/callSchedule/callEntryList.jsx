@@ -2,7 +2,6 @@ import React from 'react';
 import CallEntry from '../../containers/call-schedule/CallEntry.jsx';
 import {List, ListItem} from 'material-ui/List';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Subheader from 'material-ui/Subheader';
 
 export default class CallEntryList extends React.Component {
   constructor(props) {
@@ -19,7 +18,6 @@ export default class CallEntryList extends React.Component {
           <MuiThemeProvider>
             <List>
               <h3 className="title">Call Entry List</h3>
-
               {this.props.call_data.map((call) => {
                 return <CallEntry call={call} />;
               })}
