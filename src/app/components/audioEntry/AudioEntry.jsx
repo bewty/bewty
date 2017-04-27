@@ -168,15 +168,22 @@ class AudioEntry extends Component {
       <div className='upload-container'>
         <MuiThemeProvider>
           <RaisedButton
-            icon={<UploadButton
-                    color="#fff"
-                    style={{paddingLeft: '0'}}
-                  />}
+            icon={
+              <UploadButton
+                color="#fff"
+                style={{paddingLeft: '0'}}
+              />
+            }
             fullWidth={true}
-            buttonStyle={{backgroundColor: '#EB5424', height: 50, width: 400}}
+            buttonStyle={{
+              backgroundColor: '#EB5424',
+              height: 50,
+              width: 400
+            }}
             onTouchTap={() => {
-              console.log(this.state.transcript.length);
-              this.state.transcript.length > 0 && this.uploadAudio();
+              this.state.transcript.length > 0
+              &&
+              this.uploadAudio();
             }}
           />
         </MuiThemeProvider>
@@ -190,34 +197,58 @@ class AudioEntry extends Component {
         <MuiThemeProvider>
           <RaisedButton
             icon={
-               (!this.state.start && !this.state.stop) ?
-                <RecordButton
-                  color="red"
-                  onTouchTap={this.startRecord}
-                  style={{paddingLeft: '0'}}
-                />
-                :
-                <StopButton
-                  color="#565a5c"
-                  onTouchTap={this.stopRecord}
-                  style={{paddingLeft: '0'}}
-                />
-              }
-            onTouchTap={(!this.state.start && !this.state.stop) ?
-                        this.startRecord : this.stopRecord}
+              (!this.state.start && !this.state.stop)
+              ?
+              <RecordButton
+                color="red"
+                onTouchTap={this.startRecord}
+                style={{paddingLeft: '0'}}
+              />
+              :
+              <StopButton
+                color="#565a5c"
+                onTouchTap={this.stopRecord}
+                style={{paddingLeft: '0'}}
+              />
+            }
+            onTouchTap={
+              (!this.state.start && !this.state.stop)
+              ?
+              this.startRecord
+              :
+              this.stopRecord
+            }
             style={{marginRight: '12px'}}
           />
-          </MuiThemeProvider>
-        </div>
+        </MuiThemeProvider>
+      </div>
     );
   }
 
   renderFlashMessage() {
     return (
       <div className='flash-message'>
-        {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-        {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
-        {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+        {
+          this.state.uploadError
+          ?
+          <p className="error">There seems to have been an error.<br/>Please try again later!</p>
+          :
+          null
+        }
+        {
+          this.state.noTranscript
+          ?
+          <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p>
+          :
+          null
+        }
+        {
+          this.state.uploadSuccess
+          ?
+          <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p>
+          :
+          null
+        }
       </div>
     );
   }
@@ -237,19 +268,23 @@ class AudioEntry extends Component {
   render() {
     return (
       <div>
-        {!this.props.mobile ?
-        <div className="audio-entry-outter-container">
-          <div className="audio-entry-container">
-            <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
-            {this.renderControls()}
-            <p>{this.state.transcript}</p>
-            {this.state.start && this.renderVoiceRecognition()}
-            {this.renderFlashMessage()}
-            {this.state.uploading ? <Loader /> : null }
+        {
+          !this.props.mobile
+          ?
+          <div className="audio-entry-outter-container">
+            <div className="audio-entry-container">
+              <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
+              {this.renderControls()}
+              <p>{this.state.transcript}</p>
+              {this.state.start && this.renderVoiceRecognition()}
+              {this.renderFlashMessage()}
+              {this.state.uploading ? <Loader /> : null }
+            </div>
+            {this.renderUploadBtn()}
           </div>
-          {this.renderUploadBtn()}
-        </div>
-        : <LoaderMobileDetected /> }
+          :
+          <LoaderMobileDetected />
+        }
       </div>
     );
   }
