@@ -12,6 +12,7 @@ import Book from 'material-ui/svg-icons/action/book';
 import AddBox from 'material-ui/svg-icons/content/add';
 import Call from 'material-ui/svg-icons/communication/call';
 import Power from 'material-ui/svg-icons/action/power-settings-new';
+import Search from 'material-ui/svg-icons/action/search';
 
 injectTapEventPlugin();
 
@@ -82,6 +83,8 @@ export default class AppDrawer extends React.Component {
             />
             <MenuItem
               containerElement={<Link to="/search" />}
+              onTouchTap={this.handleClose}
+              leftIcon={<Search />}
               primaryText="Search"
             />
             <Divider />
