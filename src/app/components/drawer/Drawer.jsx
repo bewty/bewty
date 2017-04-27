@@ -58,7 +58,7 @@ export default class AppDrawer extends React.Component {
           onRequestChange={(open) => this.setState({open})}
         >
           <AppBar
-            title="MindFit"
+            title="MindFits"
             onLeftIconButtonTouchTap={this.handleToggle}
             style={{
               'backgroundColor': '#EB5424',
