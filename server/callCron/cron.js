@@ -5,7 +5,7 @@ const schedule = require('node-schedule');
 const cronos = require('./cronHelpers.js');
 const twilio = require('../twilioAPI/twilioAPI.js');
 
-exports.setCron = (time) => {
+exports.setCron = (time) => { 
   let hour = time.slice(0, 2);
   let minute = time.slice(2, 4);
   schedule.scheduleJob(`0 ${minute} ${hour} * * *`, () => {
@@ -22,14 +22,18 @@ exports.setCron = (time) => {
       });
     })
     .then(() => {
-      exports.scheduleCall();
+      setTimeout(() => {
+        exports.scheduleCall();
+      }, 5000);
+    })
+    .catch((err) => {
+      console.log('Received err in cron/setCron:', err);
     });
   });
 };
 
 exports.scheduleCall = () => {
   let d = new Date();
-  console.log('Recent d is:', d.getMinutes());
   let hour = ('' + d.getHours()).length === 1 ? `0${d.getHours()}` : '' + d.getHours();
   let minute = ('' + d.getMinutes()).length === 1 ? `0${d.getMinutes()}` : '' + d.getMinutes();
   let currentTime = hour + minute;
@@ -51,9 +55,13 @@ exports.scheduleCall = () => {
       }
     })
     .then((time) => {
+      console.log(`Set cron job for ${time}`);
       exports.setCron(time);
-      let resolved = `Set cron job for ${time}`;
+    })
+    .then(() => {
+      let resolved = 'Call scheduled';
       resolve(resolved);
+
     })
     .catch((err) => {
       reject(err);

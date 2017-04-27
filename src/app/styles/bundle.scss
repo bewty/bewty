@@ -3,8 +3,13 @@
 @import '../components/header/header';
 @import '../components/entry-text-display/entrytextdisplay';
 @import '../components/videoEntry/videoEntry';
+@import '../components/newEntry/newentry';
 @import '../components/mediaplayer/mediaplayer';
 @import '../components/loader/loader';
 @import '../components/home/home';
+@import '../components/results/video-bar-chart/barchart';
 @import '../containers/entry-list/entrylist';
 @import '../containers/entry-view/entryview';
+@import '../components/drawer/drawer';
+@import '../components/callSchedule/callschedule';
+@import '../components/textEntry/textentry';

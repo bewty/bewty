@@ -8,7 +8,6 @@ export default class App extends React.Component {
     this.state = {
       idToken: null,
       profile: null,
-      phonenumber: '',
     };
     this.getProfile = this.getProfile.bind(this);
     this.userLog = this.userLog.bind(this);
@@ -19,27 +18,25 @@ export default class App extends React.Component {
     this.setState({
       idToken: this.getIdToken()
     });
-    this.getProfile();
   }
 
   componentDidMount() {
-    this.setState({
-      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
-    });
   }
 
   userLog() {
-    let data = {
-      phonenumber: this.state.phonenumber
-    };
+    let data = {};
+    if (localStorage.smsCred) {
+      data.phonenumber = JSON.parse(localStorage.smsCred).phoneNumber.number;
+    }
     axios.post('/db/userentry', data)
     .then((user_id) => {
-      localStorage.setItem('user_id', user_id.data);
+      localStorage.setItem('user_id', user_id.data._id);
+      localStorage.setItem('scheduled_message', user_id.data.scheduled_message);
+      localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
     })
-    .then((res) => {
-      console.log('Userlog sent to server');
-    })
-    .catch(err => console.log('text upload error...', err));
+    .catch((err) => {
+      console.log('text upload error...', err);
+    });
   }
 
   createLock() {
@@ -52,7 +49,6 @@ export default class App extends React.Component {
       profile: profile
     });
     localStorage.setItem('id_token', id_token);
-      //TODO: SAVE USERS NUMBER TO DB RIGHT HERE
   }
 
 
@@ -86,8 +82,8 @@ export default class App extends React.Component {
   }
 
   render() {
-    this.userLog();
-    if (this.state.idToken && this.loggedIn()) {
+    if (this.state.idToken !== 'undefined' && this.loggedIn()) {
+      this.userLog();
       return (
         <div className="container">
           <h2 className="profileName">Welcome!</h2>
