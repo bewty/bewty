@@ -306,6 +306,7 @@ export default class VideoEntry extends Component {
   }
 
   onSubmit() {
+    console.log('====onSubmit');
     return new Promise( (resolve, reject) => {
       resolve(this.getAverage());
     })
@@ -428,7 +429,7 @@ export default class VideoEntry extends Component {
           <div className="video-entry-outter-container">
             <div className='video-entry-container'>
               <div id='affdex_elements' ref='affdex_elements'> </div>
-              {this.state.start && this.renderVoiceRecognition}
+              {this.state.start && this.renderVoiceRecognition()}
               { this.state.playback
                 ? <video autoPlay='true' src={this.state.src} controls></video>
                 : <video autoPlay='true' src={this.state.src} muted></video>
