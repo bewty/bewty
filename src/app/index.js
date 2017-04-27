@@ -16,9 +16,9 @@ import CallHome from './components/callSchedule/CallHome';
 import DrawerSimpleExample from './components/drawer/Drawer.jsx';
 import AppDrawer from './components/drawer/Drawer.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Search from './components/search/Search';
 
 import reducers from './reducers';
-
 import './styles/variables.scss';
 import './styles/global.scss';
 import './styles/bundle.scss';
@@ -40,6 +40,7 @@ ReactDOM.render(
         <Route path="/entry/:id" component={EntryView} />
         <Route path="/results" component={Results} />
         <Route path="/call-home" component={CallHome} />
+        <Route path="/search" component={Search} />
       </div>
     </Router>
   </Provider>

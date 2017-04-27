@@ -1,14 +1,25 @@
 const mongoose = require('mongoose');
+const mongoosastic = require('mongoosastic');
+
 mongoose.Promise = require('bluebird');
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/bewty');
-
 const db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('Connected to mongoDB');
 });
+
+const responseSchema = new mongoose.Schema({
+  user_id: String,
+  phonenumber: String,
+  text: String,
+  created_at: {type: Date, default: Date.now},
+  entry_type: {type: String, default: 'audio'},
+  watson_results: String
+});
+
 
 const userSchema = new mongoose.Schema({
   user_id: String,
@@ -51,10 +62,14 @@ const callSchema = new mongoose.Schema({
   user: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
+responseSchema.plugin(mongoosastic);
+
+const Response = mongoose.model('Response', responseSchema);
 const Call = mongoose.model('Call', callSchema);
 const User = mongoose.model('User', userSchema);
 
 module.exports = {
   User: User,
-  Call: Call
+  Call: Call,
+  Response: Response
 };
