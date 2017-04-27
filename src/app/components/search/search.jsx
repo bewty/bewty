@@ -55,24 +55,6 @@ export default class Search extends React.Component {
     });
   }
   render() {
-    // return (
-    //   <div className="container">
-    //   <h1>Search</h1>
-    //     <form onSubmit={this.handleSubmit}>
-    //     <label>
-    //       <input
-    //       type="text"
-    //       value={this.state.search}
-    //       onChange={this.handleChange}
-    //       placeholder="Search for anything..."
-    //       size="100"
-    //       />
-    //     </label>
-    //     <input type="submit" value="Search" />
-    //   </form>
-    //   <SearchEntryList search_data={this.state.search_data} />
-    //   </div>
-    // );
     return (
       <div className="call-entry-container call-home">
         <h3>Search</h3>

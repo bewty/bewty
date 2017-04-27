@@ -9,12 +9,14 @@ export default class SearchEntryList extends React.Component {
   }
 
   render() {
+    console.log('Within searchentry search data:', this.props.search_data);
     if (this.props.search_data !== '') {
       return (
         <div>
           <h3>Search Results</h3>
           {this.props.search_data.data.map((response) => {
-            if (response.text) {
+            console.log('Received within searchEntry:', response);
+            if (response !== null) {
               return <EntryTextDisplay entry={response} type={'snippet'} />;
             }
           })}
