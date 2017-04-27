@@ -36,12 +36,12 @@ export default class TextEntry extends React.Component {
       uploadError: false,
       uploadSuccess: false
     });
+
     const data = {
       text: this.state.value,
       entryType: 'text',
       user_id: localStorage.user_id
     };
-
     axios.post('/entry', data)
     .then(res => {
       this.setState({
@@ -57,7 +57,6 @@ export default class TextEntry extends React.Component {
       });
       // console.log('text upload error...', err);
     });
-
     this.setState({value: ''});
   }
 
@@ -83,17 +82,23 @@ export default class TextEntry extends React.Component {
           <RaisedButton
             className="submitButton"
             fullWidth={true}
-             icon={<UploadButton
-                      color="#fff"
-                      style={{paddingLeft: '0'}}
-                    />}
+             icon={
+              <UploadButton
+                color="#fff"
+                style={{paddingLeft: '0'}}
+              />
+            }
             onTouchTap={() => {
               this.state.value.length > 0
               &&
               this.handleSubmit();
             }}
             buttonStyle={{backgroundColor: '#EB5424', height: 50}}
-            labelStyle={{fontFamily: 'Lato, san-serif', fontSize: '18px', color: '#fff'}}
+            labelStyle={{
+              fontFamily: 'Lato, san-serif',
+              fontSize: '18px',
+              color: '#fff'
+            }}
           />
         </MuiThemeProvider>
         {this.state.uploading ? <Loader /> : null }
