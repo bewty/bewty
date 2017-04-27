@@ -306,12 +306,14 @@ export default class VideoEntry extends Component {
   }
 
   onSubmit() {
-    console.log('====onSubmit');
     return new Promise( (resolve, reject) => {
       resolve(this.getAverage());
     })
     .then( avgData => this.uploadVideo(avgData))
-    .catch( err => console.error('Error on submit', err));
+    .catch( err => {
+      // console.error('Error on submit', err);
+      // TODO: HANDLE ERROR
+    });
   }
 
   onEnd() {
@@ -344,30 +346,42 @@ export default class VideoEntry extends Component {
   renderControls() {
     return (
       <div className='controls'>
-        {this.state.okayToRecord ?
+        {
+          this.state.okayToRecord
+          ?
           <MuiThemeProvider>
             <RaisedButton
-              icon={<RecordButton
-                      color="red"
-                      style={{paddingLeft: '0'}}
-                    />}
+              icon={
+                <RecordButton
+                  color="red"
+                  style={{paddingLeft: '0'}}
+                />
+              }
               onTouchTap={this.onRecord}
               style={styles.button}
             />
           </MuiThemeProvider>
-          : null}
-        {this.state.recording ?
+          :
+          null
+        }
+        {
+          this.state.recording
+          ?
           <MuiThemeProvider>
             <RaisedButton
-              icon={<StopButton
-                      color="#565a5c"
-                      style={{paddingLeft: '0'}}
-                    />}
+              icon={
+                <StopButton
+                  color="#565a5c"
+                  style={{paddingLeft: '0'}}
+                />
+              }
               onTouchTap={this.onStop}
               style={styles.button}
             />
           </MuiThemeProvider>
-          : null}
+          :
+          null
+        }
         <MuiThemeProvider>
           <RaisedButton
             label="Reset"
@@ -393,19 +407,25 @@ export default class VideoEntry extends Component {
   renderUploadBtn() {
     return (
       <div className='upload-container'>
-          <MuiThemeProvider>
-            <RaisedButton
-              icon={<UploadButton
-                      color="#fff"
-                      style={{paddingLeft: '0'}}
-                    />}
-              fullWidth={true}
-              buttonStyle={{backgroundColor: '#EB5424', height: 50, width: 400}}
-              onTouchTap={() => {
-                this.state.transcript.length > 0 && this.onSubmit();
-              }}
-            />
-          </MuiThemeProvider>
+        <MuiThemeProvider>
+          <RaisedButton
+            icon={
+              <UploadButton
+                color="#fff"
+                style={{paddingLeft: '0'}}
+              />
+            }
+            fullWidth={true}
+            buttonStyle={{
+              backgroundColor: '#EB5424',
+              height: 50,
+              width: 400
+            }}
+            onTouchTap={() => {
+              this.state.transcript.length > 0 && this.onSubmit();
+            }}
+          />
+        </MuiThemeProvider>
       </div>
     );
   }
@@ -425,23 +445,27 @@ export default class VideoEntry extends Component {
   render() {
     return (
       <div>
-        {!this.props.mobile ?
+        {
+          !this.props.mobile
+          ?
           <div className="video-entry-outter-container">
             <div className='video-entry-container'>
               <div id='affdex_elements' ref='affdex_elements'> </div>
-              {this.state.start && this.renderVoiceRecognition()}
-              { this.state.playback
-                ? <video autoPlay='true' src={this.state.src} controls></video>
-                : <video autoPlay='true' src={this.state.src} muted></video>
-              }
-              {this.renderFlashMessage()}
-              {this.renderControls()}
-              {this.state.uploading ? <Loader /> : null }
-          </div>
+                {this.state.start && this.renderVoiceRecognition()}
+                { this.state.playback
+                  ? <video autoPlay='true' src={this.state.src} controls></video>
+                  : <video autoPlay='true' src={this.state.src} muted></video>
+                }
+                {this.renderFlashMessage()}
+                {this.renderControls()}
+                {this.state.uploading ? <Loader /> : null }
+            </div>
           {this.renderUploadBtn()}
-        </div>
-      : <LoaderMobileDetected />}
-    </div>
+          </div>
+          :
+          <LoaderMobileDetected />
+        }
+      </div>
     );
   }
 
@@ -451,5 +475,3 @@ export default class VideoEntry extends Component {
     this.state.detector.removeEventListener();
   }
 }
-
-
