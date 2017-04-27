@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link , Redirect} from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
@@ -21,6 +21,7 @@ export default class AppDrawer extends React.Component {
     this.state = {open: false};
     this.handleToggle = this.handleToggle.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   handleToggle() {
@@ -31,6 +32,13 @@ export default class AppDrawer extends React.Component {
     this.setState({open: false});
   }
 
+  logOut() {
+    localStorage.removeItem('id_token');
+    console.log('log out triggered')
+    window.location.reload(true)
+    window.location.assign(window.location.origin)
+    console.log('relocated to here', window.location.origin)
+  }
   render() {
     return (
       <div style={{paddingTop: '56px'}}>
@@ -87,6 +95,7 @@ export default class AppDrawer extends React.Component {
             <Divider />
             <MenuItem
               leftIcon={<Power />}
+              onTouchTap={this.logOut}
             >Logout</MenuItem>
           </Menu>
         </Drawer>
