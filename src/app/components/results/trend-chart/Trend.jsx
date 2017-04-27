@@ -4,11 +4,11 @@ import * as V from 'victory';
 import { VictoryScatter, VictoryPie, VictoryZoomContainer, VictoryBar, VictoryLabel, VictoryTheme, VictoryChart, VictoryAxis } from 'victory';
 
 class CustomPie extends React.Component {
-  // static propTypes = {
-  //   datum: React.PropTypes.object,
-  //   x: React.PropTypes.number,
-  //   y: React.PropTypes.number
-  // };
+  static propTypes = {
+    datum: React.PropTypes.object,
+    x: React.PropTypes.number,
+    y: React.PropTypes.number
+  };
 
   constructor(props) {
     super(props);
