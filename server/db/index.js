@@ -69,9 +69,7 @@ const callSchema = new mongoose.Schema({
 });
 
 responseSchema.plugin(mongoosastic, {
-  esClient: client,
-  hydrate: true,
-  bulk: {}
+  esClient: client
 });
 
 const Response = mongoose.model('Response', responseSchema);
