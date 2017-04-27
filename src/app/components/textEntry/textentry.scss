@@ -7,6 +7,13 @@
     font-size: 1.2em;
   }
 
+  .text-field {
+    padding: 1em 2em;
+    background-color: #fff;
+    box-shadow: $shadow;
+    margin-bottom: 40px;
+  }
+
   @include phone {
     margin: 20px auto;
     width: 80%;

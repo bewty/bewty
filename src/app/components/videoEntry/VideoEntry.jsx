@@ -11,6 +11,12 @@ import StopButton from 'material-ui/svg-icons/av/stop';
 import UploadButton from 'material-ui/svg-icons/file/cloud-upload';
 import { Link } from 'react-router-dom';
 
+const styles = {
+  button: {
+    marginRight: 12,
+  }
+};
+
 export default class VideoEntry extends Component {
   constructor(props) {
     super(props);
@@ -56,6 +62,9 @@ export default class VideoEntry extends Component {
     this.onEnd = this.onEnd.bind(this);
     this.onResult = this.onResult.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.renderControls = this.renderControls.bind(this);
+    this.renderFlashMessage = this.renderFlashMessage.bind(this);
+    this.renderUploadBtn = this.renderUploadBtn.bind(this);
   }
 
   componentDidMount() {
@@ -331,79 +340,104 @@ export default class VideoEntry extends Component {
     });
   }
 
+  renderControls() {
+    return (
+      <div className='controls'>
+        {this.state.okayToRecord ?
+          <MuiThemeProvider>
+            <RaisedButton
+              icon={<RecordButton
+                      color="red"
+                      style={{paddingLeft: '0'}}
+                    />}
+              onTouchTap={this.onRecord}
+              style={styles.button}
+            />
+          </MuiThemeProvider>
+          : null}
+        {this.state.recording ?
+          <MuiThemeProvider>
+            <RaisedButton
+              icon={<StopButton
+                      color="#565a5c"
+                      style={{paddingLeft: '0'}}
+                    />}
+              onTouchTap={this.onStop}
+              style={styles.button}
+            />
+          </MuiThemeProvider>
+          : null}
+        <MuiThemeProvider>
+          <RaisedButton
+            label="Reset"
+            onTouchTap={this.onReset}
+          />
+        </MuiThemeProvider>
+      </div>
+    );
+  }
+
+  renderFlashMessage() {
+    return (
+      <div className='flash-message'>
+        {this.state.loadingRecordMsg && !this.props.mobile ? <p>Loading and starting the emotions detector.<br/>This may take a moment.</p> : null }
+        {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+        {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
+        {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+      </div>
+    );
+  }
+
+  renderUploadBtn() {
+    return (
+      <div className='upload-container'>
+          <MuiThemeProvider>
+            <RaisedButton
+              icon={<UploadButton
+                      color="#fff"
+                      style={{paddingLeft: '0'}}
+                    />}
+              fullWidth={true}
+              buttonStyle={{backgroundColor: '#EB5424', height: 50, width: 400}}
+              onTouchTap={() => {
+                this.state.transcript.length > 0 && this.onSubmit();
+              }}
+            />
+          </MuiThemeProvider>
+      </div>
+    );
+  }
+
+  renderVoiceRecognition() {
+    return (
+      <VoiceRecognition
+        onEnd={this.onEnd}
+        onResult={this.onResult}
+        continuous={true}
+        lang="en-US"
+        stop={this.state.stop}
+      />
+    );
+  }
+
   render() {
     return (
       <div>
         {!this.props.mobile ?
-          <div className='container'>
-          {this.state.start &&
-          (<VoiceRecognition
-            onEnd={this.onEnd}
-            onResult={this.onResult}
-            continuous={true}
-            lang="en-US"
-            stop={this.state.stop}
-          />)}
-            { this.state.playback
-              ? <video autoPlay='true' src={this.state.src} controls></video>
-              : <video autoPlay='true' src={this.state.src} muted></video>
-            }
-            <div className='flash-message'>
-              {this.state.loadingRecordMsg && !this.props.mobile ? <p>Loading and starting the emotions detector.<br/>This may take a moment.</p> : null }
-            </div>
-            <div className='controls'>
-              {this.state.okayToRecord ?
-                <MuiThemeProvider>
-                  <RaisedButton
-                    icon={<RecordButton
-                            color="red"
-                            style={{paddingLeft: '0'}}
-                          />}
-                    onTouchTap={this.onRecord}
-                    style={{marginRight: '12px'}}
-                  />
-                </MuiThemeProvider>
-                : null}
-              {this.state.recording ?
-                <MuiThemeProvider>
-                  <RaisedButton
-                    icon={<StopButton
-                            color="#565a5c"
-                            style={{paddingLeft: '0'}}
-                          />}
-                    onTouchTap={this.onStop}
-                  />
-                </MuiThemeProvider>
-                : null}
-              {this.state.uploadable ?
-                <MuiThemeProvider>
-                  <RaisedButton
-                    icon={<UploadButton
-                            color="#565a5c"
-                            style={{paddingLeft: '0'}}
-                          />}
-                    onTouchTap={() => {
-                      console.log(this.state.transcript.length);
-                      this.state.transcript.length > 0 && this.onSubmit();
-                    }}
-                  />
-                </MuiThemeProvider>
-                : null }
-              <MuiThemeProvider>
-                <RaisedButton
-                  label="Reset"
-                  onTouchTap={this.onReset}
-                />
-              </MuiThemeProvider>
-            </div>
-            <div id='affdex_elements' ref='affdex_elements'> </div>
-            {this.state.uploading ? <Loader /> : null }
-            <div>
-              {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-              {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
-              {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
-            </div>
+          <div>
+            <div className='video-entry-container'>
+              <div id='affdex_elements' ref='affdex_elements'> </div>
+              {this.state.start && this.renderVoiceRecognition}
+              { this.state.playback
+                ? <video autoPlay='true' src={this.state.src} controls></video>
+                : <video autoPlay='true' src={this.state.src} muted></video>
+              }
+              {this.props.renderFlashMessage('Video')}
+              {this.renderControls()}
+              {this.state.uploading ? <Loader /> : null }
           </div>
+          {this.renderUploadBtn()}
+        </div>
       : <LoaderMobileDetected />}
     </div>
       );
@@ -415,3 +449,5 @@ export default class VideoEntry extends Component {
     this.state.detector.removeEventListener();
   }
 }
+
+

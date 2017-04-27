@@ -21,16 +21,14 @@ class EntryView extends Component {
         {entrySelected === null ? null :
           <div>
             <div className="chart-entry">
-            {entrySelected.entry_type === 'video' ?
-            <div>
-              <BarChart avg_data={entrySelected.video.avg_data}/>
-              <LineChart raw_data={entrySelected.video.raw_data}/>
-              <Daily barData={barData}/>
-            </div>
-            : <Daily barData={barData}/> }
-            </div>
-            <div className="entry-list-container">
               <EntryTextDisplay entry={entrySelected}/>
+            {entrySelected.entry_type === 'video' ?
+              <div>
+                <BarChart avg_data={entrySelected.video.avg_data}/>
+                <LineChart raw_data={entrySelected.video.raw_data}/>
+                <Daily barData={barData}/>
+              </div>
+            : <Daily barData={barData}/> }
             </div>
             {entrySelected.entry_type === 'text' ? null : <MediaPlayer mediaSrc={fetchMedia} mediaType={entrySelected.entry_type}/>}
           </div>

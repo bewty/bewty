@@ -73,7 +73,7 @@ webpackConfig.output = {
 // ------------------------------------------
 // Devtool
 // ------------------------------------------
-webpackConfig.devtool = isProduction ? 'source-map' : 'cheap-eval-source-map';
+webpackConfig.devtool = isProduction ? 'source-map' : 'eval-source-map';
 
 // ------------------------------------------
 // Module

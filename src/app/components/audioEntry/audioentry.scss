@@ -1,6 +1,19 @@
 .audio-entry-container {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  width: 400px;
+  background-color: #fff;
+  box-shadow: $shadow;
 }
 
-.audio {
+.audio-entry {
+
+}
+
+audio {
   padding: 20px 0;
 }

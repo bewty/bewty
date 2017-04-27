@@ -20,12 +20,15 @@
   }
 }
 
-.new-entry-nav-container {
+.nav-container {
   display: inline-flex;
   flex-flow: row nowrap;
-  justify-content: space-around;
   align-items: center;
   align-self: center;
+  max-width: 464px;
+  padding-top: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid $light-gray;
 
   @include phone {
     flex: 1;
@@ -74,10 +77,17 @@
 }
 
 .entry-type-btn {
-  padding: 16px 46px ;
+  padding: 10px 46px ;
   border: 1px $primary solid;
-  border-radius: 4px;
   &.active {
     background: $primary;
   }
+}
+
+.upload-container {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  width: 400px;
 }
