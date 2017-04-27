@@ -22,8 +22,9 @@ class EntryList extends Component {
     .then((result) => {
       this.props.fetchEntry(result.data);
     })
-    .catch((err) => {
-      console.error('Fetching Entry Error', err.message);
+    .catch( err => {
+      // console.error('Fetching Entry Error', err.message)
+      // TODO: HANDLE ERROR
     });
   }
 
@@ -33,8 +34,9 @@ class EntryList extends Component {
       .then( result => {
         this.props.fetchMedia(result.data);
       })
-      .catch((err) => {
-        console.error('Fetching Media Error');
+      .catch( err => {
+        // console.error('Fetching Media Error');
+        // TODO: HANDLE ERROR
       });
     }
   }
