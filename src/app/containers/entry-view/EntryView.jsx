@@ -14,7 +14,7 @@ class EntryView extends Component {
 
   render() {
     const {match, entrySelected, fetchMedia} = this.props;
-    console.log('LETS GO', this.props.entrySelected);
+    // console.log('LETS GO', this.props.entrySelected);
     const barData = JSON.parse(this.props.entrySelected.watson_results).document_tone.tone_categories;
     return (
       <div>
