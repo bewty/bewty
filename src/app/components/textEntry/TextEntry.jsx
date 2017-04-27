@@ -46,7 +46,6 @@ export default class TextEntry extends React.Component {
         uploading: false,
         uploadSuccess: true,
         uploadError: false });
-      console.log('text upload to server done');
     })
     .catch(err => {
       this.setState({

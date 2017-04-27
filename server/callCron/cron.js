@@ -10,7 +10,6 @@ exports.setCron = (time) => {
   let wakeTime = moment(time, 'HHmm').add(7, 'hours').format('HHmm');
   let hour = wakeTime.slice(0, 2);
   let minute = wakeTime.slice(2, 4);
-  console.log('Working with setCron time:', wakeTime);
   schedule.scheduleJob(`0 ${minute} ${hour} * * *`, () => {
     database.retrieveCall({time: time})
     .then((call) => {
@@ -20,7 +19,7 @@ exports.setCron = (time) => {
     })
     .then((callLog) => {
       callLog.forEach((user) => {
-        console.log('setCron() currently dialing:', user);
+        console.log('Currently dialing:', user);
         twilio.dialNumbers(user[0], user[1].replace(/ /g, '%20'));
       });
     })
@@ -40,7 +39,6 @@ exports.scheduleCall = () => {
   let hour = ('' + d.getHours()).length === 1 ? `0${d.getHours()}` : '' + d.getHours();
   let minute = ('' + d.getMinutes()).length === 1 ? `0${d.getMinutes()}` : '' + d.getMinutes();
   let currentTime = moment.tz(Date.now(), 'America/Los_Angeles').format('HHmm');
-  console.log('Current time is:', currentTime);
   return new Promise((resolve, reject) => {
     database.callList()
     .then((calls) => {
@@ -49,7 +47,6 @@ exports.scheduleCall = () => {
       });
       for (var i = 0; i < callArray.length; i++) {
         if (callArray[i] > currentTime) {
-          console.log('List of times to wake up:', callArray);
           return callArray[i];
         }
         if (i === callArray.length - 1) {

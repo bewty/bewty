@@ -13,7 +13,6 @@ class CallEntry extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div className="entry-container call-entry">
         <MuiThemeProvider>
