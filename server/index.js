@@ -6,7 +6,6 @@ const multer = require('multer');
 const db = require('./db/index');
 const app = express();
 const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const twilio = require('./twilioAPI/twilioAPI.js');
