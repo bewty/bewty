@@ -1,0 +1,22 @@
+.landing-container {
+  z-index: 2000;
+  width: 100%;
+  height: 100vh;
+}
+
+.hero-container {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 80vh;
+  margin: 60px;
+}
+
+.hero-tagline-container {
+  flex: 2;
+  align-content: center;
+  align-self: center;
+}
+
+.hero-img-container {
+  flex: 3;
+}

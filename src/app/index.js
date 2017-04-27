@@ -17,6 +17,7 @@ import DrawerSimpleExample from './components/drawer/Drawer.jsx';
 import AppDrawer from './components/drawer/Drawer.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Search from './components/search/Search';
+import Landing from './components/landing/Landing';
 
 import reducers from './reducers';
 import './styles/variables.scss';
@@ -34,7 +35,8 @@ ReactDOM.render(
           <AppDrawer />
         </MuiThemeProvider>
 
-        <Route exact path="/" component={App} />
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/dashboard" component={App} />
         <Route path="/new-entry" component={NewEntry} />
         <Route path="/entries" component={EntryList} />
         <Route path="/entry/:id" component={EntryView} />
