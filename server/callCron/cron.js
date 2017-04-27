@@ -6,7 +6,7 @@ const cronos = require('./cronHelpers.js');
 const twilio = require('../twilioAPI/twilioAPI.js');
 const moment = require('moment-timezone');
 
-exports.setCron = (time) => { 
+exports.setCron = (time) => {
   let wakeTime = moment(time, 'HHmm').add(7, 'hours').format('HHmm');
   let hour = wakeTime.slice(0, 2);
   let minute = wakeTime.slice(2, 4);
@@ -28,7 +28,8 @@ exports.setCron = (time) => {
       }, 5000);
     })
     .catch((err) => {
-      console.log('Received err in cron/setCron:', err);
+      // console.log('Received err in cron/setCron:', err);
+      // TO DO: HANDLE ERROR
     });
   });
 };
@@ -54,7 +55,7 @@ exports.scheduleCall = () => {
       }
     })
     .then((time) => {
-      console.log(`Set cron job for ${time}`);
+      // console.log(`Set cron job for ${time}`);
       exports.setCron(time);
     })
     .then(() => {
