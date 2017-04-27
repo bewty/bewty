@@ -19,11 +19,12 @@ class EntryList extends Component {
     };
 
     axios.post('/db/retrieveEntry', data)
-    .then( result => {
+    .then((result) => {
       this.props.fetchEntry(result.data);
     })
-    .catch( err => console.error('Fetching Entry Error', err.message));
-  }
+    .catch((err) => {
+      console.error('Fetching Entry Error', err.message);
+    }
 
   onFetchMedia(entryId, entryType) {
     if (entryType !== 'text') {
