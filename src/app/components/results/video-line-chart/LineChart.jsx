@@ -31,8 +31,6 @@ export default class LineChart extends Component {
   }
 
   render() {
-
-
     const lineRawData = {
       labels: this.state.timeStampLabel,
       datasets: [
@@ -204,4 +202,3 @@ export default class LineChart extends Component {
     );
   }
 }
-
