@@ -102,6 +102,7 @@ export default class Search extends React.Component {
           {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
           {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
         </div>
+        <SearchEntryList search_data={this.state.search_data} />
       </div>
     );
   }
