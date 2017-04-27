@@ -20,6 +20,7 @@ export default class AppDrawer extends React.Component {
     this.state = {open: false};
     this.handleToggle = this.handleToggle.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   handleToggle() {
@@ -30,6 +31,10 @@ export default class AppDrawer extends React.Component {
     this.setState({open: false});
   }
 
+  logOut() {
+    localStorage.removeItem('id_token');
+    window.location.reload();
+  }
   render() {
     return (
       <div style={{paddingTop: '56px'}}>
@@ -82,6 +87,7 @@ export default class AppDrawer extends React.Component {
             <Divider />
             <MenuItem
               leftIcon={<Power />}
+              onClick={this.logOut}
             >Logout</MenuItem>
           </Menu>
         </Drawer>
