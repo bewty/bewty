@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import SearchEntryList from './SearchEntryList.jsx';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Loader from '../loader/Loader.jsx';
+import SearchEntryList from './searchEntryList.jsx';
 
 export default class Search extends React.Component {
   constructor(props) {
