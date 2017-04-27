@@ -1,3 +1,4 @@
+const elasticsearch = require('elasticsearch');
 const mongoose = require('mongoose');
 const mongoosastic = require('mongoosastic');
 const moment = require('moment-timezone');
@@ -9,6 +10,11 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('Connected to mongoDB');
+});
+
+const client = new elasticsearch.Client({
+  host: process.env.BONSAI_URL,
+  log: 'trace'
 });
 
 const responseSchema = new mongoose.Schema({
@@ -62,7 +68,11 @@ const callSchema = new mongoose.Schema({
   user: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
-responseSchema.plugin(mongoosastic);
+responseSchema.plugin(mongoosastic, {
+  esClient: client,
+  hydrate: true,
+  bulk: {}
+});
 
 const Response = mongoose.model('Response', responseSchema);
 const Call = mongoose.model('Call', callSchema);
