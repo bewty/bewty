@@ -48,12 +48,23 @@ export default class CallEntryList extends React.Component {
           <MuiThemeProvider>
             <List>
               <h3 className="title">Call Entry List</h3>
-              <ListItem
-                primaryText="No entries yet"
-                innerDivStyle={{padding: '0'}}
-                nestedListStyle={{padding: '0'}}
-                style={{fontFamily: 'Lato, sans-serif'}}
-              />
+              <div className="entry-container call-entry">
+                <ListItem
+                  innerDivStyle={{padding: '0'}}
+                  nestedListStyle={{padding: '0'}}
+                  style={{fontFamily: 'Lato, sans-serif'}}
+                  >
+                  <div className="header-box">
+                    <h3 className="question">No entries yet</h3>
+                    <div className="entry-meta">
+                      <span className="date"></span>
+                    </div>
+                    <div className="time-container">
+                      <span className="time"></span>
+                    </div>
+                  </div>
+                </ListItem>
+              </div>
             </List>
           </MuiThemeProvider>
         </div>
