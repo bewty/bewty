@@ -76,7 +76,6 @@ app.post('/scheduleCall', (req, res) => {
   };
   database.modifyCall(callInfo)
   .then((result) => {
-    console.log('/schedulecall route result:', result);
     if (result === 'skip') {
       return;
     }
