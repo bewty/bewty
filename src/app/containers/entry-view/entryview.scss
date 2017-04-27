@@ -1,4 +1,10 @@
-.chart-entry {
+.entry-view {
   // height: 200px;
   // overflow-y: hidden;
+  .entry-container {
+    width: 100%;
+    max-width: 100%;
+    padding: 2em 3em;
+  }
 }
+
