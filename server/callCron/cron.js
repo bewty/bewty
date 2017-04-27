@@ -7,10 +7,10 @@ const twilio = require('../twilioAPI/twilioAPI.js');
 const moment = require('moment-timezone');
 
 exports.setCron = (time) => { 
-  time = moment(time, 'HHmm').add(7, 'hours').format('HHmm');
-  let hour = time.slice(0, 2);
-  let minute = time.slice(2, 4);
-  console.log('Working with setCron time:', time);
+  let wakeTime = moment(time, 'HHmm').add(7, 'hours').format('HHmm');
+  let hour = wakeTime.slice(0, 2);
+  let minute = wakeTime.slice(2, 4);
+  console.log('Working with setCron time:', wakeTime);
   schedule.scheduleJob(`0 ${minute} ${hour} * * *`, () => {
     database.retrieveCall({time: time})
     .then((call) => {
