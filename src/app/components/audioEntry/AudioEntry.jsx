@@ -244,7 +244,7 @@ class AudioEntry extends Component {
     return (
       <div>
         {!this.props.mobile ?
-        <div>
+        <div className="audio-entry-outter-container">
           <div className="audio-entry-container">
             <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
             {this.renderControls()}

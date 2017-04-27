@@ -425,7 +425,7 @@ export default class VideoEntry extends Component {
     return (
       <div>
         {!this.props.mobile ?
-          <div>
+          <div className="video-entry-outter-container">
             <div className='video-entry-container'>
               <div id='affdex_elements' ref='affdex_elements'> </div>
               {this.state.start && this.renderVoiceRecognition}

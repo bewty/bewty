@@ -1,8 +1,14 @@
+.video-entry-outter-container {
+  display: flex;
+  flex-flow:column nowrap;
+  align-items: center;
+  align-self: center;
+}
 .video-entry-container {
   margin-top: 20px;
   margin-bottom: 40px;
-  display: inline-flex;
-  flex-direction: column;
+  display: flex;
+  flex-direction:column;
   align-items: center;
   align-self: center;
   width: 400px;
