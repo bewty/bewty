@@ -12,6 +12,7 @@ import Book from 'material-ui/svg-icons/action/book';
 import AddBox from 'material-ui/svg-icons/content/add';
 import Call from 'material-ui/svg-icons/communication/call';
 import Power from 'material-ui/svg-icons/action/power-settings-new';
+
 injectTapEventPlugin();
 
 export default class AppDrawer extends React.Component {
@@ -78,6 +79,10 @@ export default class AppDrawer extends React.Component {
               onTouchTap={this.handleClose}
               leftIcon={<Call />}
               primaryText="Call Schedule"
+            />
+            <MenuItem
+              containerElement={<Link to="/search" />}
+              primaryText="Search"
             />
             <Divider />
             <MenuItem

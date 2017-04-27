@@ -16,6 +16,7 @@ const querystring = require('querystring');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
 const cron = require('./callCron/cron.js');
+const elastic = require('./elasticsearch/elasticsearch.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -45,6 +46,24 @@ AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'us-west-1'
+});
+
+app.post('/elasticSearch', (req, res) => {
+  if (req.body.phonenumber[0] !== '1') {
+    req.body.phonenumber = '1' + req.body.phonenumber;
+  }
+  let data = {
+    phonenumber: req.body.phonenumber,
+    search: req.body.search
+  };
+  console.log('elasticsearch route called with:', data);
+  elastic.eSearch(data)
+  .then((results) => {
+    res.status(200).send(results);
+  })
+  .catch((err) => {
+    res.sendStatus(400);
+  });
 });
 
 app.post('/scheduleCall', (req, res) => {
@@ -119,7 +138,6 @@ app.post('/transcribe', (req, res) => {
 });
 
 app.get('/api/watson', (req, res) => {
-  // console.log('query', req.query.text);
   watson.promisifiedPersonality(req.query.text)
   .then(tone => {
     res.json(tone);
@@ -127,22 +145,6 @@ app.get('/api/watson', (req, res) => {
   .catch(err => {
     res.sendStatus(400).send(err);
   });
-  // watson.promisifiedPersonality()
-  // let target = 'Ghandi.txt';
-  // let entry = req.body.text || `${__dirname}/watsonAPI/watsonTest/${target}`;
-
-  // fs.readFileAsync(entry, 'utf8')
-  // .then((results) => {
-  //   return watson.promisifiedPersonality(results);
-  // })
-  // .then((results) => {
-  //   return fs.writeFile(`./watsonAPI/watsonResults/${target}`, JSON.stringify(results));
-  //   res.status(200).send(results);
-  // })
-  // .error(function(e) {
-  //   // TODO: HANDLE ERROR
-  //   console.log('Error received within post to /api/watson', e);
-  // });
 });
 
 app.post('/entry', upload.single('media'), (req, res) => {

@@ -20,6 +20,9 @@ const Header = () => (
         <li>
           <Link to="/call-home">Call Schedule</Link>
         </li>
+        <li>
+          <Link to="/search">Search</Link>
+        </li>
       </ul>
     </nav>
   </header>
