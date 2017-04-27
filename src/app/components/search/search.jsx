@@ -4,13 +4,16 @@ import SearchEntryList from './SearchEntryList.jsx';
 import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
+import Loader from '../loader/Loader.jsx';
 
 export default class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       search: '',
-      search_data: ''
+      search_data: '',
+      uploading: false,
+      uploadError: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -18,21 +21,38 @@ export default class Search extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({search: event.target.value});
+    this.setState({
+      search: event.target.value,
+      uploadError: false
+    });
   }
 
   handleSubmit(event) {
-    event.preventDefault();
+    // event.preventDefault();
+    this.setState({
+      uploading: true,
+      uploadError: false
+    });
     const data = {
       search: this.state.search,
       phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
     };
     axios.post('/elasticSearch', data)
     .then((response) => {
-      this.setState({search_data: response, search: ''});
+      this.setState({
+        search_data: response,
+        search: '',
+        uploading: false,
+        uploadError: false
+      });
     })
-    .then(res => console.log('search done, results retrieved:'))
-    .catch(err => console.log('text upload error...', err));
+    .catch(err => {
+      console.log('text upload error...', err);
+      this.setState({
+        uploading: false,
+        uploadError: true
+      });
+    });
   }
   render() {
     // return (
