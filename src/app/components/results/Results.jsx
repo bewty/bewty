@@ -22,10 +22,12 @@ class Results extends Component {
 
     axios.post('/db/retrieveEntry', data)
     .then( result => {
-      console.log('result in retrieve entry', result)
       this.props.fetchEntry(result.data);
     })
-    .catch( err => console.error('Fetching Entry Error'));
+    .catch( err => {
+      // console.error('Fetching Entry Error');
+      // TODO: HANDLE ERROR
+    });
   }
 
   componentDidMount() {
@@ -34,27 +36,24 @@ class Results extends Component {
     };
     axios.post('/db/userentry', data)
     .then((user_id) => {
-      // localStorage.setItem('scheduled_message', user_id.data.scheduled_message);
-      // localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
-      console.log(user_id);
       if (user_id.data.aggregated_entries.length > 800) {
-        console.log('say ayeeee', user_id.data.aggregated_entries.length);
         let params = {text: JSON.stringify(user_id.data.aggregated_entries)};
         axios.get('/api/watson', {params})
         .then(results => {
-          console.log('success!', results);
           this.setState({
             watson: results.data,
             textLength: user_id.data.aggregated_entries.length
           });
         })
         .catch(err => {
-          console.log('error', err);
+          // console.log('error', err);
+          // TODO: HANDLE ERROR
         });
       }
     })
     .catch((err) => {
-      console.log('Received error in retrieving state:', err);
+      // console.log('Received error in retrieving state:', err);
+      // TODO: HANDLE ERROR
     });
   }
 
@@ -62,10 +61,12 @@ class Results extends Component {
     if (entryType !== 'text') {
       axios.get(`/entry/${entryId}/${entryType}/${localStorage.user_id}`)
       .then( result => {
-        console.log('result from Acios call', result)
         this.props.fetchMedia(result.data);
       })
-      .catch( err => console.error('Fetching Media Error'));
+      .catch( err => {
+        // console.error('Fetching Media Error');
+        // TODO: HANDLE ERROR
+      });
     }
   }
 
@@ -75,7 +76,10 @@ class Results extends Component {
       .then( result => {
         this.props.fetchMedia(result.data);
       })
-      .catch( err => console.error('Fetching Media Error'));
+      .catch( err => {
+        // console.error('Fetching Media Error');
+        // TODO: HANDLE ERROR
+      });
     }
   }
 
@@ -98,16 +102,12 @@ class Results extends Component {
     });
   }
   render() {
-    console.log('this is the state', this);
-    const pieData = JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories.filter((obj) => {return obj.category_id === 'emotion_tone'});
-    const scatterData = JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories.filter((obj) => {return obj.category_id === 'social_tone'});
-    const barData =  JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories
+    const barData = JSON.parse(this.props.entries[0].watson_results).document_tone.tone_categories;
     return (
       <div>
       <h2 className="title">Results</h2>
       <h3 className="title"> Your overall report</h3>
       {this.state.textLength > 800 && <Trend watson={this.state.watson} />}
-      {/*<Trend scatterData={scatterData} pieData ={pieData}/>*/}
       <h3 className="title"> Your daily report</h3>
       <Daily barData={barData}/>
       </div>
@@ -116,17 +116,16 @@ class Results extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('YO THIS IS THE STATE BEFORE MAPPED', state)
   return {
     entries: state.entries
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     FetchMedia: fetchMedia,
     fetchEntry: fetchEntry,
-  }, dispatch) ;
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Results);
