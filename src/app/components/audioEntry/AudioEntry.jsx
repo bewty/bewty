@@ -99,7 +99,6 @@ class AudioEntry extends Component {
   }
 
   stopRecord() {
-    console.log('stop');
     this.state.recordAudio.stopRecording((audioURL) => {
       this.setState({
         blob: this.state.recordAudio.blob,
@@ -115,7 +114,6 @@ class AudioEntry extends Component {
       uploadError: false,
       uploadSuccess: false
     });
-    let self = this;
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('media', blob);
@@ -126,7 +124,6 @@ class AudioEntry extends Component {
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
     };
-
     axios.post('/entry', fd, config)
     .then( res => {
       this.setState({
@@ -134,7 +131,6 @@ class AudioEntry extends Component {
         uploadSuccess: true,
         uploadError: false,
         transcript: '' });
-      console.log('audio upload to server done', res);
     })
     .catch(err => {
       this.setState({
@@ -142,12 +138,10 @@ class AudioEntry extends Component {
         uploadSuccess: false,
         uploadError: true
       });
-      console.log('audio upload error...', err);
     });
   }
 
   onEnd() {
-    console.log('end');
     if (this.state.transcript.length > 0) {
       this.setState({
         start: false,
