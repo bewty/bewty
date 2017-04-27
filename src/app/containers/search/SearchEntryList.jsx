@@ -11,40 +11,29 @@ class SearchEntryList extends React.Component {
   constructor(props) {
     super(props);
   }
-
   render() {
-    console.log(this.props);
     if (this.props.search_data !== '') {
       return (
         <div className="entry-container call-entry">
-          <MuiThemeProvider>
-              <ListItem
-                innerDivStyle={{padding: '0'}}
-                nestedListStyle={{padding: '0'}}
-                style={{fontFamily: 'Lato, sans-serif'}}
-                primaryTogglesNestedList={true}
-                nestedItems={this.props.search_data.data.map((response, index) => {
-                  return (
-                    <div
-                      key={index}
-                      onClick={ () => {
-                        this.props.selectEntry(response);
-                      }}
-                    >
-                      <EntryTextDisplay entry={response} type={'snippet'} index={index}/>
-                    </div>
-                  );
-                }
-              )}
-              >
-              </ListItem>
-          </MuiThemeProvider>
+        {this.props.search_data.data.map((response, index) => {
+          return (
+            <div
+              key={index}
+              onClick={ () => {
+                this.props.selectEntry(response);
+              }}
+            >
+              <EntryTextDisplay entry={response} type={'snippet'} index={index}/>
+            </div>
+          );
+        }
+      )}
         </div>
       );
     } else {
       return (
         <div>
-          <h1>No entries yet...</h1>  
+          <h3>No entries yet...</h3>  
         </div>
       );
     }
