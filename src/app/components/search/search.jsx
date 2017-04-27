@@ -4,7 +4,8 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Loader from '../loader/Loader.jsx';
-import SearchEntryList from './searchEntryList.jsx';
+import SearchEntryList from '../../containers/search/SearchEntryList.jsx';
+// import SearchEntryList from './searchEntryList.jsx';
 
 export default class Search extends React.Component {
   constructor(props) {
