@@ -5,7 +5,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Loader from '../loader/Loader.jsx';
 import SearchEntryList from '../../containers/search/SearchEntryList.jsx';
-// import SearchEntryList from './searchEntryList.jsx';
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -29,7 +28,6 @@ export default class Search extends React.Component {
   }
 
   handleSubmit(event) {
-    // event.preventDefault();
     this.setState({
       uploading: true,
       uploadError: false
