@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import SearchEntryList from './SearchEntryList.jsx';
+import SearchEntryList from './searchEntryList.jsx';
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -37,10 +37,10 @@ export default class Search extends React.Component {
       <h1>Search</h1>
         <form onSubmit={this.handleSubmit}>
         <label>
-          <input 
-          type="text" 
-          value={this.state.search} 
-          onChange={this.handleChange} 
+          <input
+          type="text"
+          value={this.state.search}
+          onChange={this.handleChange}
           placeholder="Search for anything..."
           size="100"
           />
