@@ -24,7 +24,8 @@ class EntryList extends Component {
     })
     .catch((err) => {
       console.error('Fetching Entry Error', err.message);
-    }
+    });
+  }
 
   onFetchMedia(entryId, entryType) {
     if (entryType !== 'text') {
@@ -32,7 +33,9 @@ class EntryList extends Component {
       .then( result => {
         this.props.fetchMedia(result.data);
       })
-      .catch( err => console.error('Fetching Media Error'));
+      .catch((err) => {
+        console.error('Fetching Media Error');
+      });
     }
   }
 
