@@ -4,11 +4,7 @@ import TextField from 'material-ui/TextField';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import Loader from '../loader/Loader.jsx';
-<<<<<<< HEAD
 import SearchEntryList from '../../containers/search/SearchEntryList.jsx';
-=======
-import SearchEntryList from './searchEntryList.jsx';
->>>>>>> [Refactor] Capitalization
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -50,7 +46,7 @@ export default class Search extends React.Component {
       });
     })
     .catch(err => {
-      console.log('text upload error...', err);
+      // console.log('text upload error...', err);
       this.setState({
         uploading: false,
         uploadError: true
@@ -68,7 +64,11 @@ export default class Search extends React.Component {
             fullWidth={true}
             underlineFocusStyle={{borderColor: '#EB5424'}}
             style={{fontFamily: 'Lato, san-serif'}}
-            errorText={!this.state.search.length > 0 && 'This field is required'}
+            errorText={
+              !this.state.search.length > 0
+              &&
+              'This field is required'
+            }
           />
         </MuiThemeProvider>
         <MuiThemeProvider>
@@ -76,16 +76,30 @@ export default class Search extends React.Component {
             fullWidth={true}
             label="Search"
             onTouchTap={() => {
-              this.state.search.length > 0 && this.handleSubmit();
+              this.state.search.length > 0
+              &&
+              this.handleSubmit();
             }}
             labelStyle={{fontFamily: 'Lato, san-serif'}}
           />
         </MuiThemeProvider>
-        {this.state.uploading ? <Loader /> : null }
+        {this.state.uploading ? <Loader /> : null}
         <br/>
         <div>
-          {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-          {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+          {
+            this.state.uploadError
+            ?
+            <p className="error">There seems to have been an error.<br/>Please try again later!</p>
+            :
+            null
+          }
+          {
+            this.state.uploadSuccess
+            ?
+            <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p>
+            :
+            null
+          }
         </div>
         <SearchEntryList search_data={this.state.search_data} />
       </div>
