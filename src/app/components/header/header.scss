@@ -3,20 +3,15 @@ header {
   padding: 0;
   background: #fff;
   border-bottom: 1px solid $light-gray;
-
   nav {
-
     ul {
       text-align: center;
-
       li {
         display: inline;
         margin-right: 60px;
-
         a {
           color: #333;
           text-decoration: none;
-
           &:hover {
             color: $primary;
             text-decoration: underline;
@@ -26,4 +21,3 @@ header {
     }
   }
 }
-
