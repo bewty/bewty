@@ -71,7 +71,7 @@ export default class AppDrawer extends React.Component {
             />
             <MenuItem
               containerElement={<Link to="/entries" />}
-              onClick={this.handleClose}
+              onTouchTap={this.handleClose}
               leftIcon={<Book />}
               primaryText="Saved Entries"
             />
