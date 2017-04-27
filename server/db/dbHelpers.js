@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-
+const moment = require('moment-timezone');
 const mongoDatabase = require('./index.js');
 const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
@@ -34,7 +34,7 @@ exports.saveEntry = (req, res, log) => {
   const _id = log.user_id;
   let logEntry = {
     entry_type: log.entry_type,
-    created_at: Date.now(),
+    created_at: moment.tz(Date.now(), 'America/Los_Angeles').format(),
     video: {
       bucket: log.video ? log.video.bucket : null,
       key: log.video ? log.video.key : null,

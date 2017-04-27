@@ -4,6 +4,7 @@ const database = require('../db/dbHelpers.js');
 const schedule = require('node-schedule');
 const cronos = require('./cronHelpers.js');
 const twilio = require('../twilioAPI/twilioAPI.js');
+const moment = require('moment-timezone');
 
 exports.setCron = (time) => { 
   let hour = time.slice(0, 2);
@@ -36,7 +37,7 @@ exports.scheduleCall = () => {
   let d = new Date();
   let hour = ('' + d.getHours()).length === 1 ? `0${d.getHours()}` : '' + d.getHours();
   let minute = ('' + d.getMinutes()).length === 1 ? `0${d.getMinutes()}` : '' + d.getMinutes();
-  let currentTime = hour + minute;
+  let currentTime = moment.tz(Date.now(), 'America/Los_Angeles').format('HHmm');
   console.log('Current time is:', currentTime);
   return new Promise((resolve, reject) => {
     database.callList()
