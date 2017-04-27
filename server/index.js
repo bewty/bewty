@@ -88,7 +88,8 @@ app.post('/scheduleCall', (req, res) => {
     return database.callEntry(req, res, callInfo);
   })
   .catch((e) => {
-    console.log('Received error:', e);
+    // console.log('Received error:', e);
+    // TODO: HANDLE ERROR
   });
 });
 
@@ -99,8 +100,9 @@ app.post('/db/retrieveEntry', (req, res) => {
   .then((results) => {
     res.send(results);
   })
-  .catch((err) => {
-    console.error(err);
+  .catch( err => {
+    // console.error(err);
+    // TODO: HANDLE ERROR
   });
 });
 
@@ -120,7 +122,6 @@ app.get('/callentry/:user/:search', (req, res) => {
   let query = {};
   query.user = req.params.user;
   query.search = req.params.search;
-
   database.retrievePhoneEntry(req, res, query);
 });
 
