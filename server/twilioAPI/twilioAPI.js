@@ -1,8 +1,5 @@
 const express = require('express');
 const app = express();
-
-const twilio = require('twilio');
-
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
 
@@ -16,7 +13,7 @@ exports.dialNumbers = (number, message) => {
     if (err) {
       console.log('Error occurred in twilioAPI clientCall:', err);
     } else {
-      console.log('Making call to:', call.to, 'Twilio SID:', call.sid, 'uri:', call.uri);
+      console.log('TwilioAPI making call to:', call.to);
     }
   });
 };

@@ -19,7 +19,6 @@ exports.setCron = (time) => {
     })
     .then((callLog) => {
       callLog.forEach((user) => {
-        console.log('Currently dialing:', user);
         twilio.dialNumbers(user[0], user[1].replace(/ /g, '%20'));
       });
     })

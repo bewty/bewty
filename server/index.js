@@ -56,7 +56,6 @@ app.post('/elasticSearch', (req, res) => {
     phonenumber: req.body.phonenumber,
     search: req.body.search
   };
-  console.log('elasticsearch route called with:', data);
   elastic.eSearch(data)
   .then((results) => {
     res.status(200).send(results);
@@ -95,12 +94,14 @@ app.post('/scheduleCall', (req, res) => {
 
 app.post('/db/retrieveEntry', (req, res) => {
   let query = {};
-  query.user_id = req.body.user_id
+  query.user_id = req.body.user_id;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
   })
-  .catch( err => console.error(err));
+  .catch((err) => {
+    console.error(err);
+  });
 });
 
 app.post('/db/userentry', (req, res) => {
@@ -118,7 +119,6 @@ app.get('/callentry/:user/:search', (req, res) => {
   let query = {};
   query.user = req.params.user;
   query.search = req.params.search;
-  console.log('Received call to call entry with:', query);
 
   database.retrievePhoneEntry(req, res, query);
 });
