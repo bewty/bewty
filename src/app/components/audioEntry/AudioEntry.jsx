@@ -218,6 +218,16 @@ class AudioEntry extends Component {
     );
   }
 
+  renderFlashMessage() {
+    return (
+      <div className='flash-message'>
+        {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
+        {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
+        {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+      </div>
+    );
+  }
+
   renderVoiceRecognition() {
     return (
       <VoiceRecognition
@@ -240,7 +250,7 @@ class AudioEntry extends Component {
             {this.renderControls()}
             <p>{this.state.transcript}</p>
             {this.state.start && this.renderVoiceRecognition()}
-            {this.props.renderFlashMessage()}
+            {this.renderFlashMessage()}
             {this.state.uploading ? <Loader /> : null }
           </div>
           {this.renderUploadBtn()}

@@ -24,24 +24,12 @@ export default class NewEntry extends Component {
     this._entryTypeOnClick = this._entryTypeOnClick.bind(this);
     this.renderNav = this.renderNav.bind(this);
     this._detectMobileUser = this._detectMobileUser.bind(this);
-    this.renderFlashMessage = this.renderFlashMessage.bind(this);
   }
 
   _entryTypeOnClick(name) {
     this.setState({
       activeTab: name
     });
-  }
-
-  renderFlashMessage(type) {
-    return (
-      <div className='flash-message'>
-        {this.state.loadingRecordMsg && !this.props.mobile && type ==='Video' ? <p>Loading and starting the emotions detector.<br/>This may take a moment.</p> : null }
-        {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-        {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
-        {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
-      </div>
-    );
   }
 
   renderNav() {
@@ -99,8 +87,8 @@ export default class NewEntry extends Component {
         {this.renderNav()}
         <div className="entry-type-container">
         {this.state.activeTab === 'Text' ? <TextEntry /> : null}
-        {this.state.activeTab === 'Video' ? <VideoEntry mobile={this.state.mobile} _detectMobileUser={this._detectMobileUser} renderFlashMessage={this.renderFlashMessage}/> : null}
-        {this.state.activeTab === 'Audio' ? <AudioEntry mobile={this.state.mobile} _detectMobileUser={this._detectMobileUser} renderFlashMessage={this.renderFlashMessage}/> : null}
+        {this.state.activeTab === 'Video' ? <VideoEntry mobile={this.state.mobile} _detectMobileUser={this._detectMobileUser} /> : null}
+        {this.state.activeTab === 'Audio' ? <AudioEntry mobile={this.state.mobile} _detectMobileUser={this._detectMobileUser} /> : null}
         </div>
       </div>
     );

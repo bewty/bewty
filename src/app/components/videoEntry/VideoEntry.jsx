@@ -381,6 +381,7 @@ export default class VideoEntry extends Component {
     return (
       <div className='flash-message'>
         {this.state.loadingRecordMsg && !this.props.mobile ? <p>Loading and starting the emotions detector.<br/>This may take a moment.</p> : null }
+        {this.state.loadingRecordMsg && !this.props.mobile ? <Loader /> : null }
         {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
         {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
         {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
@@ -432,7 +433,7 @@ export default class VideoEntry extends Component {
                 ? <video autoPlay='true' src={this.state.src} controls></video>
                 : <video autoPlay='true' src={this.state.src} muted></video>
               }
-              {this.props.renderFlashMessage('Video')}
+              {this.renderFlashMessage()}
               {this.renderControls()}
               {this.state.uploading ? <Loader /> : null }
           </div>
