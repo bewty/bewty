@@ -55,7 +55,7 @@ export default class TextEntry extends React.Component {
         uploadSuccess: false,
         uploadError: true
       });
-      console.log('text upload error...', err);
+      // console.log('text upload error...', err);
     });
 
     this.setState({value: ''});
@@ -88,7 +88,9 @@ export default class TextEntry extends React.Component {
                       style={{paddingLeft: '0'}}
                     />}
             onTouchTap={() => {
-              this.state.value.length > 0 && this.handleSubmit();
+              this.state.value.length > 0
+              &&
+              this.handleSubmit();
             }}
             buttonStyle={{backgroundColor: '#EB5424', height: 50}}
             labelStyle={{fontFamily: 'Lato, san-serif', fontSize: '18px', color: '#fff'}}
@@ -97,8 +99,20 @@ export default class TextEntry extends React.Component {
         {this.state.uploading ? <Loader /> : null }
         <br/>
         <div>
-          {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-          {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+          {
+            this.state.uploadError
+            ?
+            <p className="error">There seems to have been an error.<br/>Please try again later!</p>
+            :
+            null
+          }
+          {
+            this.state.uploadSuccess
+            ?
+            <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p>
+            :
+            null
+          }
         </div>
       </div>
     );
