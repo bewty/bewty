@@ -87,7 +87,6 @@ export default class App extends React.Component {
       return (
         <div className="container">
           <h2 className="profileName">Welcome!</h2>
-          <button onClick={this.logOut}>Logout</button>
         </div>
       );
     } else {

@@ -4,26 +4,12 @@ import { Link } from 'react-router-dom';
 const Header = () => (
   <header>
     <nav>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/new-entry">New Entry</Link>
-        </li>
-        <li>
-          <Link to="/entries">Entries</Link>
-        </li>
-        <li>
-          <Link to="/results">Results</Link>
-        </li>
-        <li>
-          <Link to="/call-home">Call Schedule</Link>
-        </li>
-        <li>
-          <Link to="/search">Search</Link>
-        </li>
-      </ul>
+      <div className='brand-logo'>
+        <Link to='/'><h1>Mind Fits</h1></Link>
+      </div>
+      <div className='links'>
+        <Link to='/login' className='login-btn'>LOGIN</Link>
+      </div>
     </nav>
   </header>
 );

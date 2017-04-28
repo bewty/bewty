@@ -13,6 +13,7 @@ import AddBox from 'material-ui/svg-icons/content/add';
 import Call from 'material-ui/svg-icons/communication/call';
 import Power from 'material-ui/svg-icons/action/power-settings-new';
 import Search from 'material-ui/svg-icons/action/search';
+import Header from '../header/Header.jsx';
 
 injectTapEventPlugin();
 
@@ -43,15 +44,23 @@ export default class AppDrawer extends React.Component {
     window.location.assign(window.location.origin)
     console.log('relocated to here', window.location.origin)
   }
+
+  logIn() {
+
+  }
+
   render() {
     return (
-      <div style={{paddingTop: '56px'}}>
+      <div style={this.state.authenticated ? {paddingTop: '56px'} : null}>
+      {this.state.authenticated ?
         <AppBar
           onLeftIconButtonTouchTap={this.handleToggle}
           style={{backgroundColor: '#EB5424',
                   position: 'fixed',
                   top: 0}}
         />
+        : <Header />
+      }
         <Drawer
           docked={false}
           open={this.state.open}
@@ -108,7 +117,7 @@ export default class AppDrawer extends React.Component {
               :
               <MenuItem
                 leftIcon={<Power />}
-                onTouchTap={this.logOut}
+                onTouchTap={this.logIn}
               >Log In</MenuItem>
             }
           </Menu>

@@ -7,23 +7,31 @@
 .hero-container {
   display: flex;
   flex-flow: row nowrap;
-  height: 60vh;
-  margin: 40px 90px;
+  height: 56vh;
+  margin: 80px 90px;
 }
 
 .hero-tagline-container {
   flex: 2;
-  align-content: center;
   align-self: center;
-  padding-right: 120px;
+  padding-right: 100px;
 }
 
 .hero-tagline-text {
   max-width: 360px;
+  h1 {
+    font-size: 2.2em;
+  }
+
+  p {
+    line-height: 1.6em;
+    font-size: 1.2em;
+    font-weight: 100;
+  }
 }
 
 .hero-cta {
-  margin: 6em 0;
+  margin-top: 4em;
 }
 
 .cta-button {
@@ -33,30 +41,15 @@
   font-size: 0.8em;
   border-radius: 50px;
   color: #fff;
+  text-transform: uppercase;
 }
 
 .hero-img-container {
   flex: 3;
-  // background: url('./assets/entries.png');
   .hero-img {
     width: 600px;
   }
 }
-
-// .wave {
-//   opacity: .4;
-//   position: absolute;
-//   top: 3%;
-//   left: 50%;
-//   background: #0af;
-//   width: 500px;
-//   height: 500px;
-//   margin-left: -250px;
-//   margin-top: -250px;
-//   transform-origin: 50% 48%;
-//   border-radius: 43%;
-//   animation: drift 3000ms infinite linear;
-// }
 
 .wave {
   opacity: .4;
@@ -110,13 +103,48 @@
 }
 
 .feature-container {
-  // background-color: $primary;
   background-color: #f08a83;
-  height: 60vh;
-  -webkit-clip-path: polygon(0 0, 100% 30%, 100% 100%, 0% 100%);
-  clip-path: polygon(0 0, 100% 30%, 100% 100%, 0% 100%);
+  height: 120vh;
+  -webkit-clip-path: polygon(0 0, 100% 20%, 100% 100%, 0% 100%);
+  clip-path: polygon(0 0, 100% 20%, 100% 100%, 0% 100%);
+
+  .feature-content {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .callschedule_iphone-img {
+    z-index: 13;
+    height: 600px;
+  }
+
+  .feature-text {
+    margin-left: 180px;
+    z-index: 13;
+    color: #fff;
+    max-width: 400px;
+  }
 }
 
 .feature-entry-type-container {
-  height: 30vh;
+  height: 0vh;
+  margin: 80px 90px;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.entry-type {
+  flex: 1;
+  text-align: center;
+}
+
+.footer {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 20vh;
+  background-color: $light-gray;
+  color: $font-hint;
 }
