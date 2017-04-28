@@ -10,6 +10,17 @@ import Text from 'material-ui/svg-icons/editor/text-fields';
 import Video from 'material-ui/svg-icons/AV/videocam';
 import Audio from 'material-ui/svg-icons/AV/mic';
 
+const styles = {
+  active: {
+    backgroundColor: 'red',
+    margin: 12,
+  },
+  button: {
+    backgroundColor: '#a4c639',
+    margin: 12,
+  }
+};
+
 export default class NewEntry extends Component {
   constructor(props) {
     super(props);
@@ -94,14 +105,3 @@ export default class NewEntry extends Component {
     );
   }
 }
-
-const styles = {
-  active: {
-    backgroundColor: 'red',
-    margin: 12,
-  },
-  button: {
-    backgroundColor: "#a4c639",
-    margin: 12,
-  }
-};

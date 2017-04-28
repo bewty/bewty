@@ -20,9 +20,6 @@ export default class App extends React.Component {
     });
   }
 
-  componentDidMount() {
-  }
-
   userLog() {
     let data = {};
     if (localStorage.smsCred) {
@@ -35,7 +32,8 @@ export default class App extends React.Component {
       localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
     })
     .catch((err) => {
-      console.log('text upload error...', err);
+      // console.log('text upload error...', err);
+      // TODO: HANDLE ERROR
     });
   }
 
@@ -87,7 +85,6 @@ export default class App extends React.Component {
       return (
         <div className="container">
           <h2 className="profileName">Welcome!</h2>
-          <button onClick={this.logOut}>Logout</button>
         </div>
       );
     } else {

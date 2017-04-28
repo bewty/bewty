@@ -16,12 +16,13 @@ class CallEntry extends React.Component {
     return (
       <div className="entry-container call-entry">
         <MuiThemeProvider>
-            <ListItem
-              innerDivStyle={{padding: '0'}}
-              nestedListStyle={{padding: '0'}}
-              style={{fontFamily: 'Lato, sans-serif'}}
-              primaryTogglesNestedList={true}
-              nestedItems={this.props.call.responses.map((response, index) => {
+          <ListItem
+            innerDivStyle={{padding: '0'}}
+            nestedListStyle={{padding: '0'}}
+            style={{fontFamily: 'Lato, sans-serif'}}
+            primaryTogglesNestedList={true}
+            nestedItems={
+              this.props.call.responses.map((response, index) => {
                 if (response.text) {
                   return (
                     <div
@@ -34,18 +35,24 @@ class CallEntry extends React.Component {
                     </div>
                   );
                 }
-              })}
-            >
-              <div className="header-box">
-                <h3 className="question">{this.props.call.question[this.props.call.question.length - 1] === '?' ? this.props.call.question : this.props.call.question + '?'}</h3>
-                <div className="entry-meta">
-                  <span className="date">{moment(this.props.call.date_set).format('MM-DD-YYYY')}</span>
-                </div>
-                <div className="time-container">
-                  <span className="time">{moment(this.props.call.date_set).format('h:mm a')}</span>
-                </div>
+              })
+            }
+          >
+            <div className="header-box">
+              <h3 className="question">{
+                this.props.call.question[this.props.call.question.length - 1] === '?'
+                ?
+                this.props.call.question
+                :
+                this.props.call.question + '?'}</h3>
+              <div className="entry-meta">
+                <span className="date">{moment(this.props.call.date_set).format('MM-DD-YYYY')}</span>
               </div>
-            </ListItem>
+              <div className="time-container">
+                <span className="time">{moment(this.props.call.date_set).format('h:mm a')}</span>
+              </div>
+            </div>
+          </ListItem>
         </MuiThemeProvider>
       </div>
     );
