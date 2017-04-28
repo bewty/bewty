@@ -2,22 +2,26 @@ header {
   width: 100%;
   padding: 0;
   background: #fff;
-  border-bottom: 1px solid $light-gray;
+
   nav {
-    ul {
-      text-align: center;
-      li {
-        display: inline;
-        margin-right: 60px;
-        a {
-          color: #333;
-          text-decoration: none;
-          &:hover {
-            color: $primary;
-            text-decoration: underline;
-          }
-        }
-      }
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin: 0 90px;
+    color: $primary;
+
+    a {
+      color: $primary;
+    }
+
+    .brand-logo {
+      flex: 1;
+    }
+
+    .login-btn {
+      padding: 0.4em 1em;
+      border: 1px solid $primary;
+      border-radius: 100px;
     }
   }
 }

@@ -1,0 +1,12 @@
+.footer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center;
+  height: 10vh;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: $font-hint;
+  color: #fff;
+}

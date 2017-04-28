@@ -120,6 +120,7 @@ class AudioEntry extends Component {
     fd.append('entryType', 'audio');
     fd.append('text', this.state.transcript);
     fd.append('user_id', localStorage.user_id);
+    fd.append('phonenumber', JSON.parse(localStorage.smsCred).phoneNumber.number);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }

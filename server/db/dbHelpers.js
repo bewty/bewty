@@ -29,6 +29,26 @@ exports.userEntry = (req, res, userInfo) => {
   });
 };
 
+exports.saveResponse = (log) => {
+  let data = {
+    user_id: log.user_id,
+    phonenumber: log.phonenumber,
+    text: log.text,
+    watson_results: log.watson_results
+  };
+
+  return new Promise((resolve, reject) => {
+    let newResponse = Response(data);
+    newResponse.save()
+    .then((response) => {
+      resolve(response);
+    })
+    .catch((err) => {
+      reject(err);
+    });
+  });
+};
+
 exports.saveEntry = (req, res, log) => {
   const _id = log.user_id;
   let logEntry = {
@@ -54,8 +74,12 @@ exports.saveEntry = (req, res, log) => {
   .then(result => {
     result.aggregated_entries += (log.text + ' ');
     result.save();
+    let resLog = log;
+    resLog.phonenumber = log.phonenumber;
+    exports.saveResponse(resLog);
+  })
+  .then(() => {
     res.sendStatus(201);
-
   })
   .error(err => res.sendStatus(500).send(err))
   .catch(err => res.sendStatus(400).send(err));
@@ -253,25 +277,6 @@ exports.callEntry = (req, res, log) => {
   .catch(err => res.sendStatus(400).send(err));
 };
 
-exports.saveResponse = (log) => {
-  let data = {
-    user_id: log.user_id,
-    phonenumber: log.phonenumber,
-    text: log.text,
-    watson_results: log.watson_results
-  };
-
-  return new Promise((resolve, reject) => {
-    let newResponse = Response(data);
-    newResponse.save()
-    .then((response) => {
-      resolve(response);
-    })
-    .catch((err) => {
-      reject(err);
-    });
-  });
-};
 
 exports.saveCall = (req, res, log) => {
   let phonenumber = log.phonenumber;

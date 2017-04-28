@@ -40,7 +40,8 @@ export default class TextEntry extends React.Component {
     const data = {
       text: this.state.value,
       entryType: 'text',
-      user_id: localStorage.user_id
+      user_id: localStorage.user_id,
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
     };
     axios.post('/entry', data)
     .then(res => {

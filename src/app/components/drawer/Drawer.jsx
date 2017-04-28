@@ -13,13 +13,17 @@ import AddBox from 'material-ui/svg-icons/content/add';
 import Call from 'material-ui/svg-icons/communication/call';
 import Power from 'material-ui/svg-icons/action/power-settings-new';
 import Search from 'material-ui/svg-icons/action/search';
+import Header from '../header/Header.jsx';
 
 injectTapEventPlugin();
 
 export default class AppDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {open: false};
+    this.state = {
+      open: false,
+      authenticated: localStorage.getItem('id_token') || false
+    };
     this.handleToggle = this.handleToggle.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.logOut = this.logOut.bind(this);
@@ -43,7 +47,8 @@ export default class AppDrawer extends React.Component {
 
   render() {
     return (
-      <div style={{paddingTop: '56px'}}>
+      <div style={this.state.authenticated ? {paddingTop: '56px'} : null}>
+      {this.state.authenticated ?
         <AppBar
           onLeftIconButtonTouchTap={this.handleToggle}
           style={{
@@ -52,6 +57,8 @@ export default class AppDrawer extends React.Component {
             top: 0
           }}
         />
+        : <Header />
+      }
         <Drawer
           docked={false}
           open={this.state.open}
@@ -59,7 +66,7 @@ export default class AppDrawer extends React.Component {
           onRequestChange={(open) => this.setState({open})}
         >
           <AppBar
-          title={<Link to="/" style={{color: '#fff', textDecoration: 'none'}}>MindFits</Link>}
+            title={<Link to="/" style={{color: '#fff', textDecoration: 'none'}}>MindFits</Link>}
             onTitleTouchTap={this.handleClose}
             onLeftIconButtonTouchTap={this.handleToggle}
             style={{
@@ -101,10 +108,17 @@ export default class AppDrawer extends React.Component {
               primaryText="Search"
             />
             <Divider />
-            <MenuItem
-              leftIcon={<Power />}
-              onTouchTap={this.logOut}
-            >Logout</MenuItem>
+            {this.state.authenticated ?
+              <MenuItem
+                leftIcon={<Power />}
+                onTouchTap={this.logOut}
+              >Logout</MenuItem>
+              :
+              <MenuItem
+                leftIcon={<Power />}
+                onTouchTap={this.logIn}
+              >Log In</MenuItem>
+            }
           </Menu>
         </Drawer>
       </div>
