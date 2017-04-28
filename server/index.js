@@ -6,7 +6,6 @@ const multer = require('multer');
 const db = require('./db/index');
 const app = express();
 const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const twilio = require('./twilioAPI/twilioAPI.js');
@@ -16,6 +15,7 @@ const querystring = require('querystring');
 const multerS3 = require('multer-s3');
 const s3 = new AWS.S3();
 const cron = require('./callCron/cron.js');
+const elastic = require('./elasticsearch/elasticsearch.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -47,29 +47,48 @@ AWS.config.update({
   region: 'us-west-1'
 });
 
+app.post('/elasticSearch', (req, res) => {
+  if (req.body.phonenumber[0] !== '1') {
+    req.body.phonenumber = '1' + req.body.phonenumber;
+  }
+  let data = {
+    phonenumber: req.body.phonenumber,
+    search: req.body.search
+  };
+  elastic.eSearch(data)
+  .then((results) => {
+    res.status(200).send(results);
+  })
+  .catch((err) => {
+    res.sendStatus(400);
+  });
+});
+
 app.post('/scheduleCall', (req, res) => {
   let time = req.body.time.replace(':', '');
   let question = req.body.question;
-  // console.log('Receiving user_id phonenumber:', req.body.user_id);
-  let user_id = req.body.user_id || '01';
-  // console.log('User_id:', user_id, 'Received scheduleCall post:', time, question);
+  let user_id = req.body.user_id;
   let callInfo = {
     user_id: user_id,
     message: question,
     time: time
   };
-
   database.modifyCall(callInfo)
   .then((result) => {
-    // console.log('Received successful result:', result);
+    if (result === 'skip') {
+      return;
+    }
     return cron.scheduleCall();
   })
-  .then((time) => {
-    // console.log(`Successfully set cron for ${time}`);
-    res.status(200);
+  .then(() => {
+    if (callInfo.time === '') {
+      return;
+    }
+    return database.callEntry(req, res, callInfo);
   })
   .catch((e) => {
     // console.log('Received error:', e);
+    // TODO: HANDLE ERROR
   });
 });
 
@@ -80,20 +99,34 @@ app.post('/db/retrieveEntry', (req, res) => {
   .then((results) => {
     res.send(results);
   })
-  .catch( err => console.error(err));
+  .catch( err => {
+    // console.error(err);
+    // TODO: HANDLE ERROR
+  });
 });
 
 app.post('/db/userentry', (req, res) => {
+  // console.log('Receiving from server:', req.body);
+  if (req.body.phonenumber[0] !== '1') {
+    req.body.phonenumber = '1' + req.body.phonenumber;
+  }
   let userInfo = {
-    phonenumber: req.body.phonenumber || '11234567835'
+    phonenumber: req.body.phonenumber
   };
 
   database.userEntry(req, res, userInfo);
 });
 
+app.get('/callentry/:user/:search', (req, res) => {
+  let query = {};
+  query.user = req.params.user;
+  query.search = req.params.search;
+  database.retrievePhoneEntry(req, res, query);
+});
+
 app.post('/transcribe', (req, res) => {
-  let text = req.body.TranscriptionText || 'Test123123';
-  let phonenumber = req.body.Called.slice(1) || '01';
+  let text = req.body.TranscriptionText;
+  let phonenumber = req.body.Called.slice(1);
   watson.promisifiedTone(text)
   .then((tone) => {
     let log = {
@@ -101,49 +134,45 @@ app.post('/transcribe', (req, res) => {
       text: text,
       watson_results: tone
     };
-    database.saveEntry(req, res, log);
+    database.saveCall(req, res, log);
   });
 });
 
-app.post('/api/watson', (req, res) => {
-  let target = 'Ghandi.txt';
-  let entry = req.body.text || `${__dirname}/watsonAPI/watsonTest/${target}`;
-
-  fs.readFileAsync(entry, 'utf8')
-  .then((results) => {
-    return watson.promisifiedPersonality(results);
+app.get('/api/watson', (req, res) => {
+  watson.promisifiedPersonality(req.query.text)
+  .then(tone => {
+    res.json(tone);
   })
-  .then((results) => {
-    return fs.writeFile(`./watsonAPI/watsonResults/${target}`, JSON.stringify(results));
-    res.status(200).send(results);
-  })
-  .error(function(e) {
-    // TODO: HANDLE ERROR
-    // console.log('Error received within post to /api/watson', e);
+  .catch(err => {
+    res.sendStatus(400).send(err);
   });
 });
 
 app.post('/entry', upload.single('media'), (req, res) => {
-  watson.promisifiedTone(req.body.text)
-  .then(tone => {
-    let log = {
-      user_id: req.body.user_id,
-      entry_type: req.body.entryType,
-      video: {
-        bucket: req.file ? req.file.bucket : null,
-        key: req.file ? req.file.key : null,
-        avgData: req.body.avgData ? req.body.avgData : null,
-        rawData: req.body.rawData ? req.body.rawData : null,
-      },
-      audio: {
-        bucket: req.file ? req.file.bucket : null, // should be same as video later
-        key: req.file ? req.file.key : null,
-      },
-      text: req.body.text,
-      watson_results: tone
-    };
-    database.saveEntry(req, res, log);
-  });
+  if (req.body.text.length === 0) {
+    res.sendStatus(400);
+  } else {
+    watson.promisifiedTone(req.body.text)
+    .then(tone => {
+      let log = {
+        user_id: req.body.user_id,
+        entry_type: req.body.entryType,
+        video: {
+          bucket: req.file ? req.file.bucket : null,
+          key: req.file ? req.file.key : null,
+          avgData: req.body.avgData ? req.body.avgData : null,
+          rawData: req.body.rawData ? req.body.rawData : null,
+        },
+        audio: {
+          bucket: req.file ? req.file.bucket : null, // should be same as video later
+          key: req.file ? req.file.key : null,
+        },
+        text: req.body.text,
+        watson_results: tone
+      };
+      database.saveEntry(req, res, log);
+    });
+  }
 });
 
 const getAWSSignedUrl = (bucket, key) => {
@@ -170,7 +199,6 @@ app.get('/entry/:entryId/:entryType/:user_id', (req, res) => {
   })
   .catch( err => res.sendStatus(400).send(err));
 });
-
 
 app.get('*', (req, res) => {
   res.sendFile( path.resolve(__dirname, '..', 'dist', 'index.html'));

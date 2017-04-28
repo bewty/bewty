@@ -9,13 +9,7 @@ const Header = () => (
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/text-entry">Text</Link>
-        </li>
-        <li>
-          <Link to="/audio-entry">Audio</Link>
-        </li>
-        <li>
-          <Link to="/video-entry">Video</Link>
+          <Link to="/new-entry">New Entry</Link>
         </li>
         <li>
           <Link to="/entries">Entries</Link>
@@ -24,7 +18,10 @@ const Header = () => (
           <Link to="/results">Results</Link>
         </li>
         <li>
-          <Link to="/call-schedule">Call Schedule</Link>
+          <Link to="/call-home">Call Schedule</Link>
+        </li>
+        <li>
+          <Link to="/search">Search</Link>
         </li>
       </ul>
     </nav>

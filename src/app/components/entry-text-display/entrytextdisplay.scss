@@ -1,19 +1,42 @@
 .entry-container {
+  max-width: 600px;
   padding: 1em 2em;
-  margin-bottom: 12px;
   background-color: #fff;
   box-shadow: $shadow;
+  margin: auto auto 12px auto;
+
+  a {
+    text-decoration: none;
+    color: $font-normal;
+  }
+
+  @include phone {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1em;
+  }
 }
 
 .entry-meta {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  height: 2em;
 }
 
 .date {
   font-size: 0.9em;
   font-weight: bold;
+  color: $font-light;
+}
+
+.time {
+  font-size: 0.7em;
+  color: $font-light
+}
+
+.time-container {
+  margin-top: -10px;
 }
 
 .entry-icon {

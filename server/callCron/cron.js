@@ -4,10 +4,12 @@ const database = require('../db/dbHelpers.js');
 const schedule = require('node-schedule');
 const cronos = require('./cronHelpers.js');
 const twilio = require('../twilioAPI/twilioAPI.js');
+const moment = require('moment-timezone');
 
 exports.setCron = (time) => {
-  let hour = time.slice(0, 2);
-  let minute = time.slice(2, 4);
+  let wakeTime = moment(time, 'HHmm').add(7, 'hours').format('HHmm');
+  let hour = wakeTime.slice(0, 2);
+  let minute = wakeTime.slice(2, 4);
   schedule.scheduleJob(`0 ${minute} ${hour} * * *`, () => {
     database.retrieveCall({time: time})
     .then((call) => {
@@ -17,23 +19,26 @@ exports.setCron = (time) => {
     })
     .then((callLog) => {
       callLog.forEach((user) => {
-        console.log('setCron() currently dialing:', user);
         twilio.dialNumbers(user[0], user[1].replace(/ /g, '%20'));
       });
     })
     .then(() => {
-      exports.scheduleCall();
+      setTimeout(() => {
+        exports.scheduleCall();
+      }, 5000);
+    })
+    .catch((err) => {
+      // console.log('Received err in cron/setCron:', err);
+      // TO DO: HANDLE ERROR
     });
   });
 };
 
 exports.scheduleCall = () => {
   let d = new Date();
-  console.log('Recent d is:', d.getMinutes());
   let hour = ('' + d.getHours()).length === 1 ? `0${d.getHours()}` : '' + d.getHours();
   let minute = ('' + d.getMinutes()).length === 1 ? `0${d.getMinutes()}` : '' + d.getMinutes();
-  let currentTime = hour + minute;
-  console.log('Current time is:', currentTime);
+  let currentTime = moment.tz(Date.now(), 'America/Los_Angeles').format('HHmm');
   return new Promise((resolve, reject) => {
     database.callList()
     .then((calls) => {
@@ -42,7 +47,6 @@ exports.scheduleCall = () => {
       });
       for (var i = 0; i < callArray.length; i++) {
         if (callArray[i] > currentTime) {
-          console.log('List of times to wake up:', callArray);
           return callArray[i];
         }
         if (i === callArray.length - 1) {
@@ -51,9 +55,13 @@ exports.scheduleCall = () => {
       }
     })
     .then((time) => {
+      // console.log(`Set cron job for ${time}`);
       exports.setCron(time);
-      let resolved = `Set cron job for ${time}`;
+    })
+    .then(() => {
+      let resolved = 'Call scheduled';
       resolve(resolved);
+
     })
     .catch((err) => {
       reject(err);

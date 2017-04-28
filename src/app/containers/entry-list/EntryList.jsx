@@ -19,10 +19,13 @@ class EntryList extends Component {
     };
 
     axios.post('/db/retrieveEntry', data)
-    .then( result => {
+    .then((result) => {
       this.props.fetchEntry(result.data);
     })
-    .catch( err => console.error('Fetching Entry Error'));
+    .catch( err => {
+      // console.error('Fetching Entry Error', err.message)
+      // TODO: HANDLE ERROR
+    });
   }
 
   onFetchMedia(entryId, entryType) {
@@ -31,7 +34,10 @@ class EntryList extends Component {
       .then( result => {
         this.props.fetchMedia(result.data);
       })
-      .catch( err => console.error('Fetching Media Error'));
+      .catch( err => {
+        // console.error('Fetching Media Error');
+        // TODO: HANDLE ERROR
+      });
     }
   }
 
@@ -56,31 +62,25 @@ class EntryList extends Component {
 
   render() {
     return (
-      <div>
+      <div className="entry-list-container">
         {this.renderList()}
       </div>
     );
   }
 }
 
-//anything returned from this function will end up as props on the EntryList container
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {
     entries: state.entries
   };
-}
+};
 
-//anything returned from this function will end up as props on the EntryList container
-function mapDispatchToProps(dispatch) {
-  //whenever actions are called, the result should be passed to all reducers
+const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     selectEntry: selectEntry,
     fetchEntry: fetchEntry,
     fetchMedia: fetchMedia,
   }, dispatch);
-}
+};
 
-//promote EntryList from component to container. It needs to know about
-//this new dispatch method, selectEntry, fetchEntry. Make it available
-//as a prop
 export default connect(mapStateToProps, mapDispatchToProps)(EntryList);

@@ -6,7 +6,7 @@ import EntrySelected from './reducer_entry_selected.js';
 const rootReducer = combineReducers({
   entries: FetchEntry,
   entrySelected: EntrySelected,
-  fetchMedia : FetchMedia
+  fetchMedia: FetchMedia
 });
 
 export default rootReducer;

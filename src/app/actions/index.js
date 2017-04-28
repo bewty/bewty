@@ -1,7 +1,6 @@
 export const FETCH_ENTRY = 'FETCH_ENTRY';
 export const ENTRY_SELECTED = 'ENTRY_SELECTED';
 export const FETCH_MEDIA = 'FETCH_MEDIA';
-import axios from 'axios';
 
 export function fetchEntry(entries) {
   return {
@@ -23,4 +22,3 @@ export function fetchMedia(url) {
     payload: url
   };
 }
-
