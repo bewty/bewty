@@ -57,7 +57,7 @@ export default class AppDrawer extends React.Component {
           onRequestChange={(open) => this.setState({open})}
         >
           <AppBar
-          title={<Link to="/" style={{color: '#fff', textDecoration: 'none'}}>Mind Fits</Link>}
+          title={<Link to="/" style={{color: '#fff', textDecoration: 'none'}}>MindFits</Link>}
             onTitleTouchTap={this.handleClose}
             onLeftIconButtonTouchTap={this.handleToggle}
             style={{'backgroundColor': '#EB5424',
