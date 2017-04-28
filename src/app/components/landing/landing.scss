@@ -1,7 +1,17 @@
+h1 {
+  font-size: 2.2em;
+}
+
+p {
+  line-height: 1.6em;
+  font-size: 1.2em;
+  font-weight: 100;
+}
+
 .landing-container {
   z-index: 2000;
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
 
 .hero-container {
@@ -19,15 +29,7 @@
 
 .hero-tagline-text {
   max-width: 360px;
-  h1 {
-    font-size: 2.2em;
-  }
 
-  p {
-    line-height: 1.6em;
-    font-size: 1.2em;
-    font-weight: 100;
-  }
 }
 
 .hero-cta {
@@ -130,10 +132,17 @@
 }
 
 .feature-entry-type-container {
-  height: 0vh;
+  height: 40vh;
   margin: 80px 90px;
   display: flex;
-  flex-flow: row nowrap;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  .knowledge-img {
+    width: 120px;
+  }
 }
 
 .entry-type {
@@ -141,10 +150,85 @@
   text-align: center;
 }
 
-.footer {
+.emotion-container {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 50vh;
+  background: linear-gradient(45deg,#a177ff,#02ceff);
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 0 100%);
+  padding: 80px 90px;
+  color: #fff;
+
+  .emotion-text-container {
+    flex: 1;
+    margin-right: 160px;
+  }
+
+  .emotion-img-container {
+    flex: 1;
+  }
+
+  .emotion-icons {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+  }
+
+  .emotion-img-container::before {
+    content: '';
+    background: url( '../../../public/assets/emotion_data.png');
+    width: 200px;
+  }
+
+  .emotion_data {
+    width: 400px;
+  }
+}
+
+.watson-container {
+  display: flex;
+  flex-flow: row nowrap;
+  height: 50vh;
+  padding: 80px 90px;
+
+  .watson-img-container {
+    flex: 1;
+  }
+
+  .watson-text-container {
+    flex: 1;
+  }
+}
+
+.testimony-container {
   display: flex;
   flex-flow: row nowrap;
   height: 20vh;
-  background-color: $light-gray;
-  color: $font-hint;
+  background: linear-gradient(45deg,#a177ff,#02ceff);
+  padding: 80px 90px;
+  color: #fff;
+  justify-content: center;
+  text-align: center;
+  .testimony-text-container{
+    align-self: center;
+  }
+}
+
+.team-container  {
+  height: 16vh;
+  width: 100%;
+  background-color: black;
+  justify-content: center;
+
+  .team-text-container{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-around;
+    align-items: center;
+    padding-top: 3em;
+    a {
+      color: #fff;
+    }
+  }
 }
