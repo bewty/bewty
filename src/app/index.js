@@ -26,6 +26,9 @@ import './styles/bundle.scss';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 const store = createStoreWithMiddleware(reducers);
+const authenticated = localStorage.getItem('id_token') || false;
+
+console.log('====authenticated', authenticated );
 
 ReactDOM.render(
   <Provider store={store}>
@@ -35,7 +38,7 @@ ReactDOM.render(
           <AppDrawer />
         </MuiThemeProvider>
 
-        <Route exact path="/" component={Landing} />
+        {authenticated ? <Route exact path="/" component={App} /> : <Route exact path="/" component={Landing} />}
         <Route exact path="/dashboard" component={App} />
         <Route path="/new-entry" component={NewEntry} />
         <Route path="/entries" component={EntryList} />

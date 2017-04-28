@@ -19,7 +19,10 @@ injectTapEventPlugin();
 export default class AppDrawer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {open: false};
+    this.state = {
+      open: false,
+      authenticated: localStorage.getItem('id_token') || false
+    };
     this.handleToggle = this.handleToggle.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.logOut = this.logOut.bind(this);
@@ -97,10 +100,17 @@ export default class AppDrawer extends React.Component {
               primaryText="Search"
             />
             <Divider />
-            <MenuItem
-              leftIcon={<Power />}
-              onTouchTap={this.logOut}
-            >Logout</MenuItem>
+            {this.state.authenticated ?
+              <MenuItem
+                leftIcon={<Power />}
+                onTouchTap={this.logOut}
+              >Logout</MenuItem>
+              :
+              <MenuItem
+                leftIcon={<Power />}
+                onTouchTap={this.logOut}
+              >Log In</MenuItem>
+            }
           </Menu>
         </Drawer>
       </div>
