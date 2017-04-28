@@ -44,6 +44,10 @@ var webpackConfig = {
         loader: 'svg-url-loader',
       },
       {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: 'file-loader?name=/public/assets/[name].[ext]',
+      },
+      {
         test: /\.json$/,
         use: 'json-loader'
       }],
