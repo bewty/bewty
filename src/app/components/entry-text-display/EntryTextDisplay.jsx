@@ -7,8 +7,8 @@ import {
 import moment from 'moment';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Text from 'material-ui/svg-icons/editor/text-fields';
-import Video from 'material-ui/svg-icons/AV/videocam';
-import Audio from 'material-ui/svg-icons/AV/mic';
+import Video from 'material-ui/svg-icons/av/videocam';
+import Audio from 'material-ui/svg-icons/av/mic';
 
 const EntryText = ({entry, index, type}) => {
   let text;

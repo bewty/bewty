@@ -15,7 +15,7 @@ import CallSchedule from './components/callSchedule/CallSchedule';
 import CallHome from './components/callSchedule/CallHome';
 import AppDrawer from './components/drawer/Drawer.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Search from './components/search/Search';
+import Search from './components/search/search';
 import Landing from './components/landing/Landing';
 
 import reducers from './reducers';
