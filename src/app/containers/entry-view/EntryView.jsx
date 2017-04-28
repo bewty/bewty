@@ -5,6 +5,7 @@ import BarChart from '../../components/results/video-bar-chart/BarChart';
 import LineChart from '../../components/results/video-line-chart/LineChart';
 import MediaPlayer from '../../components/mediaplayer/MediaPlayer.jsx';
 import EntryTextDisplay from '../../components/entry-text-display/EntryTextDisplay.jsx';
+import CallChart from '../../components/results/call-chart/CallChart';
 // import svg from '../../styles/assets/nombile_animated.svg';
 
 class EntryView extends Component {
@@ -28,7 +29,10 @@ class EntryView extends Component {
                   <LineChart raw_data={entrySelected.video.raw_data}/>
                   <Daily barData={barData}/>
                 </div>
-              : <Daily barData={barData}/> }
+              : <div>
+                  <CallChart avg_data={entrySelected} />
+                  <Daily barData={barData}/> 
+                </div> }
             </div>
             {entrySelected.entry_type === 'text' ? null : <MediaPlayer mediaSrc={fetchMedia} mediaType={entrySelected.entry_type}/>}
           </div>

@@ -48,6 +48,7 @@ AWS.config.update({
 });
 
 app.post('/elasticSearch', (req, res) => {
+//   console.log('Received results:', req.body);
   if (req.body.phonenumber[0] !== '1') {
     req.body.phonenumber = '1' + req.body.phonenumber;
   }

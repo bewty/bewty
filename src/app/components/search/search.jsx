@@ -25,6 +25,25 @@ export default class Search extends React.Component {
       search: event.target.value,
       uploadError: false
     });
+    const data = {
+      search: event.target.value,
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
+    };
+    axios.post('/elasticSearch', data)
+    .then((response) => {
+      this.setState({
+        search_data: response,
+        uploading: false,
+        uploadError: false
+      });
+    })
+    .catch(err => {
+//       console.log('text upload error...', err);
+      this.setState({
+        uploading: false,
+        uploadError: true
+      });
+    });
   }
 
   handleSubmit(event) {
