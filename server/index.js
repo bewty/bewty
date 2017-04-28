@@ -152,9 +152,13 @@ app.post('/entry', upload.single('media'), (req, res) => {
   if (req.body.text.length === 0) {
     res.sendStatus(400);
   } else {
+    if (req.body.phonenumber[0] !== '1') {
+      req.body.phonenumber = '1' + req.body.phonenumber;
+    }
     watson.promisifiedTone(req.body.text)
     .then(tone => {
       let log = {
+        phonenumber: req.body.phonenumber,
         user_id: req.body.user_id,
         entry_type: req.body.entryType,
         video: {
