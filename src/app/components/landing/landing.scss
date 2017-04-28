@@ -8,7 +8,7 @@
   display: flex;
   flex-flow: row nowrap;
   height: 60vh;
-  margin: 90px;
+  margin: 40px 90px;
 }
 
 .hero-tagline-container {
@@ -63,11 +63,11 @@
   position: absolute;
   bottom: 0;
   left: 50%;
-  background: #0af;
-  width: 1000px;
-  height: 1000px;
+  background: $primary;
+  width: 1800px;
+  height: 1800px;
   margin-left: -500px;
-  margin-top: -550px;
+  margin-top: -750px;
   transform-origin: 42% 50%;
   border-radius: 43%;
   animation: drift 3000ms infinite linear;
@@ -80,7 +80,7 @@
 .wave.-two {
   animation: drift 7000ms infinite linear;
   opacity: .1;
-  background: yellow;
+  background: $primary;
 }
 
 .box {
@@ -110,10 +110,11 @@
 }
 
 .feature-container {
-  background-color: $primary;
+  // background-color: $primary;
+  background-color: #f08a83;
   height: 60vh;
-  // -webkit-clip-path: polygon(0 0, 100% 30%, 100% 100%, 0% 100%);
-  // clip-path: polygon(0 0, 100% 30%, 100% 100%, 0% 100%);
+  -webkit-clip-path: polygon(0 0, 100% 30%, 100% 100%, 0% 100%);
+  clip-path: polygon(0 0, 100% 30%, 100% 100%, 0% 100%);
 }
 
 .feature-entry-type-container {
