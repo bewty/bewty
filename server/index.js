@@ -106,7 +106,7 @@ app.post('/db/retrieveEntry', (req, res) => {
 });
 
 app.post('/db/userentry', (req, res) => {
-  console.log('Receiving from server:', req.body);
+  // console.log('Receiving from server:', req.body);
   if (req.body.phonenumber[0] !== '1') {
     req.body.phonenumber = '1' + req.body.phonenumber;
   }
