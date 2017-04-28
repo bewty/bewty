@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link , Redirect} from 'react-router-dom';
+import { Link, Redirect} from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
@@ -35,10 +35,10 @@ export default class AppDrawer extends React.Component {
 
   logOut() {
     localStorage.removeItem('id_token');
-    console.log('log out triggered');
+    // console.log('log out triggered');
     window.location.reload(true);
     window.location.assign(window.location.origin);
-    console.log('relocated to here', window.location.origin);
+    // console.log('relocated to here', window.location.origin);
   }
 
   render() {
