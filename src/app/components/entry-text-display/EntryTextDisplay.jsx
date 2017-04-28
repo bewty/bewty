@@ -5,10 +5,20 @@ import {
   Link
 } from 'react-router-dom';
 import moment from 'moment';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Text from 'material-ui/svg-icons/editor/text-fields';
+import Video from 'material-ui/svg-icons/AV/videocam';
+import Audio from 'material-ui/svg-icons/AV/mic';
 
 const EntryText = ({entry, index, type}) => {
   let text;
   entry.text.length > 220 && type === 'snippet' ? text = `${entry.text.slice(0, 220)}...` : text = entry.text;
+
+  const icon = {
+    video: <Video color={'#EB5424'} style={{marginLeft: 10}}/>,
+    audio: <Audio color={'#EB5424'} style={{marginLeft: 10}}/>,
+    text: <Text color={'#EB5424'} style={{marginLeft: 10}}/>,
+  };
 
   return (
     <div className="entry-container">
@@ -17,7 +27,9 @@ const EntryText = ({entry, index, type}) => {
         <div>
           <div className="entry-meta">
             <span className="date">{moment(entry.created_at).format('MM-DD-YYYY')}</span>
-            <span className={`${entry.entry_type}-entry`}></span>
+            <MuiThemeProvider>
+              {icon[entry.entry_type]}
+            </MuiThemeProvider>
           </div>
           <div className="time-container">
             <span className="time">{moment(entry.created_at).format('h:mm a')}</span>

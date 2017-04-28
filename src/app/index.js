@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom';
 
 import App from './components/App';
 import Home from './components/home/Home';
@@ -15,7 +15,8 @@ import CallSchedule from './components/callSchedule/CallSchedule';
 import CallHome from './components/callSchedule/CallHome';
 import AppDrawer from './components/drawer/Drawer.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Search from './components/search/search';
+import Search from './components/search/Search';
+import Landing from './components/landing/Landing';
 
 import reducers from './reducers';
 import './styles/variables.scss';
@@ -24,6 +25,7 @@ import './styles/bundle.scss';
 
 const createStoreWithMiddleware = applyMiddleware()(createStore);
 const store = createStoreWithMiddleware(reducers);
+const authenticated = localStorage.getItem('id_token') || false;
 
 ReactDOM.render(
   <Provider store={store}>
@@ -32,7 +34,14 @@ ReactDOM.render(
         <MuiThemeProvider>
           <AppDrawer />
         </MuiThemeProvider>
-        <Route exact path="/" component={App} />
+        {authenticated ? <Route exact path="/" component={App} /> : <Route exact path="/" component={Landing} />}
+        <Route path="/login" render={() => (
+          authenticated ? (
+            <Redirect to="/entries"/>
+          ) : (
+            <App />
+          )
+        )}/>
         <Route path="/new-entry" component={NewEntry} />
         <Route path="/entries" component={EntryList} />
         <Route path="/entry/:id" component={EntryView} />
