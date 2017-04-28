@@ -35,11 +35,12 @@ export default class AppDrawer extends React.Component {
 
   logOut() {
     localStorage.removeItem('id_token');
-    console.log('log out triggered')
-    window.location.reload(true)
-    window.location.assign(window.location.origin)
-    console.log('relocated to here', window.location.origin)
+    console.log('log out triggered');
+    window.location.reload(true);
+    window.location.assign(window.location.origin);
+    console.log('relocated to here', window.location.origin);
   }
+
   render() {
     return (
       <div style={{paddingTop: '56px'}}>
@@ -56,7 +57,8 @@ export default class AppDrawer extends React.Component {
           onRequestChange={(open) => this.setState({open})}
         >
           <AppBar
-            title="MindFit"
+          title={<Link to="/" style={{color: '#fff', textDecoration: 'none'}}>MindFits</Link>}
+            onTitleTouchTap={this.handleClose}
             onLeftIconButtonTouchTap={this.handleToggle}
             style={{'backgroundColor': '#EB5424',
                     fontFamily: 'Lato, san-serif'}}
