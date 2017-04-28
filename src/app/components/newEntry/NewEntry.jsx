@@ -7,8 +7,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Card} from 'material-ui/Card';
 import Text from 'material-ui/svg-icons/editor/text-fields';
-import Video from 'material-ui/svg-icons/AV/videocam';
-import Audio from 'material-ui/svg-icons/AV/mic';
+import Video from 'material-ui/svg-icons/av/videocam';
+import Audio from 'material-ui/svg-icons/av/mic';
 
 const styles = {
   active: {
