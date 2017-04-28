@@ -16,6 +16,7 @@ class SearchEntryList extends React.Component {
       return (
         <div className="entry-container call-entry">
         {this.props.search_data.data.map((response, index) => {
+          response.chart = 'call';
           return (
             <div
               key={index}
