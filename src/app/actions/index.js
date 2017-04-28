@@ -22,10 +22,3 @@ export function fetchMedia(url) {
     payload: url
   };
 }
-
-export const setSourceUrl = (url) => {
-  return {
-    type: 'SET_SOURCE_URL',
-    url
-  };
-};
