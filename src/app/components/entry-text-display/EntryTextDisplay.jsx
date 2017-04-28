@@ -20,10 +20,9 @@ const EntryText = ({entry, index, type}) => {
     text: <Text color={'#EB5424'} style={{marginLeft: 10}}/>,
   };
 
-  console.log('=====entrytype', entry.entry_type, '====icon', icon[entry.entry_type]);
   return (
     <div className="entry-container">
-     {entry.length === 0 ? null :
+      {entry.length === 0 ? null :
       <Link to={`/entry/${entry._id}`}>
         <div>
           <div className="entry-meta">
@@ -38,7 +37,7 @@ const EntryText = ({entry, index, type}) => {
           <p>{text}</p>
         </div>
       </Link>
-    }
+      }
     </div>
   );
 };

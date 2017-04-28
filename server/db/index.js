@@ -1,6 +1,7 @@
+const elasticsearch = require('elasticsearch');
 const mongoose = require('mongoose');
 const mongoosastic = require('mongoosastic');
-
+const moment = require('moment-timezone');
 mongoose.Promise = require('bluebird');
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/bewty');
@@ -11,11 +12,16 @@ db.once('open', function() {
   console.log('Connected to mongoDB');
 });
 
+const client = new elasticsearch.Client({
+  host: process.env.BONSAI_URL,
+  log: 'trace'
+});
+
 const responseSchema = new mongoose.Schema({
   user_id: String,
   phonenumber: String,
   text: String,
-  created_at: {type: Date, default: Date.now},
+  created_at: {type: Date, default: moment.tz(Date.now(), 'America/Los_Angeles').format()},
   entry_type: {type: String, default: 'audio'},
   watson_results: String
 });
@@ -29,7 +35,7 @@ const userSchema = new mongoose.Schema({
   aggregated_entries: { type: String, default: '' },
   entries: [{
     entry_type: String,
-    created_at: {type: Date, default: Date.now},
+    created_at: {type: Date, default: moment.tz(Date.now(), 'America/Los_Angeles').format()},
     video: {
       bucket: String,
       key: String,
@@ -47,10 +53,10 @@ const userSchema = new mongoose.Schema({
   call_entries: [{
     question: String,
     call_time: String,
-    date_set: {type: Date, default: Date.now},
+    date_set: {type: Date, default: moment.tz(Date.now(), 'America/Los_Angeles').format()},
     responses: [{
       text: String,
-      created_at: {type: Date, default: Date.now},
+      created_at: {type: Date, default: moment.tz(Date.now(), 'America/Los_Angeles').format()},
       entry_type: {type: String, default: 'audio'},
       watson_results: String
     }]
@@ -62,7 +68,9 @@ const callSchema = new mongoose.Schema({
   user: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 });
 
-responseSchema.plugin(mongoosastic);
+responseSchema.plugin(mongoosastic, {
+  esClient: client
+});
 
 const Response = mongoose.model('Response', responseSchema);
 const Call = mongoose.model('Call', callSchema);

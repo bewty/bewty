@@ -13,7 +13,6 @@ import EntryView from './containers/entry-view/EntryView';
 import Results from './components/results/Results';
 import CallSchedule from './components/callSchedule/CallSchedule';
 import CallHome from './components/callSchedule/CallHome';
-import DrawerSimpleExample from './components/drawer/Drawer.jsx';
 import AppDrawer from './components/drawer/Drawer.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Search from './components/search/Search';
@@ -35,7 +34,6 @@ ReactDOM.render(
         <MuiThemeProvider>
           <AppDrawer />
         </MuiThemeProvider>
-
         {authenticated ? <Route exact path="/" component={App} /> : <Route exact path="/" component={Landing} />}
         <Route path="/login" render={() => (
           authenticated ? (

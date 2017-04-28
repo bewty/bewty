@@ -95,6 +95,7 @@
     "jquery": "^3.2.1",
     "material-ui": "^0.17.4",
     "moment": "^2.18.1",
+    "moment-timezone": "^0.5.13",
     "mongoosastic": "^4.3.0",
     "mongoose": "^4.9.3",
     "morgan": "^1.8.1",

@@ -99,7 +99,6 @@ class AudioEntry extends Component {
   }
 
   stopRecord() {
-    console.log('stop');
     this.state.recordAudio.stopRecording((audioURL) => {
       this.setState({
         blob: this.state.recordAudio.blob,
@@ -115,18 +114,17 @@ class AudioEntry extends Component {
       uploadError: false,
       uploadSuccess: false
     });
-    let self = this;
     let blob = this.state.blob;
     let fd = new FormData();
     fd.append('media', blob);
     fd.append('entryType', 'audio');
     fd.append('text', this.state.transcript);
     fd.append('user_id', localStorage.user_id);
+    fd.append('phonenumber', JSON.parse(localStorage.smsCred).phoneNumber.number);
 
     const config = {
       headers: { 'content-type': 'multipart/form-data' }
     };
-
     axios.post('/entry', fd, config)
     .then( res => {
       this.setState({
@@ -134,7 +132,6 @@ class AudioEntry extends Component {
         uploadSuccess: true,
         uploadError: false,
         transcript: '' });
-      console.log('audio upload to server done', res);
     })
     .catch(err => {
       this.setState({
@@ -142,12 +139,10 @@ class AudioEntry extends Component {
         uploadSuccess: false,
         uploadError: true
       });
-      console.log('audio upload error...', err);
     });
   }
 
   onEnd() {
-    console.log('end');
     if (this.state.transcript.length > 0) {
       this.setState({
         start: false,
@@ -174,15 +169,22 @@ class AudioEntry extends Component {
       <div className='upload-container'>
         <MuiThemeProvider>
           <RaisedButton
-            icon={<UploadButton
-                    color="#fff"
-                    style={{paddingLeft: '0'}}
-                  />}
+            icon={
+              <UploadButton
+                color="#fff"
+                style={{paddingLeft: '0'}}
+              />
+            }
             fullWidth={true}
-            buttonStyle={{backgroundColor: '#EB5424', height: 50, width: 400}}
+            buttonStyle={{
+              backgroundColor: '#EB5424',
+              height: 50,
+              width: 400
+            }}
             onTouchTap={() => {
-              console.log(this.state.transcript.length);
-              this.state.transcript.length > 0 && this.uploadAudio();
+              this.state.transcript.length > 0
+              &&
+              this.uploadAudio();
             }}
           />
         </MuiThemeProvider>
@@ -196,34 +198,58 @@ class AudioEntry extends Component {
         <MuiThemeProvider>
           <RaisedButton
             icon={
-               (!this.state.start && !this.state.stop) ?
-                <RecordButton
-                  color="red"
-                  onTouchTap={this.startRecord}
-                  style={{paddingLeft: '0'}}
-                />
-                :
-                <StopButton
-                  color="#565a5c"
-                  onTouchTap={this.stopRecord}
-                  style={{paddingLeft: '0'}}
-                />
-              }
-            onTouchTap={(!this.state.start && !this.state.stop) ?
-                        this.startRecord : this.stopRecord}
+              (!this.state.start && !this.state.stop)
+              ?
+              <RecordButton
+                color="red"
+                onTouchTap={this.startRecord}
+                style={{paddingLeft: '0'}}
+              />
+              :
+              <StopButton
+                color="#565a5c"
+                onTouchTap={this.stopRecord}
+                style={{paddingLeft: '0'}}
+              />
+            }
+            onTouchTap={
+              (!this.state.start && !this.state.stop)
+              ?
+              this.startRecord
+              :
+              this.stopRecord
+            }
             style={{marginRight: '12px'}}
           />
-          </MuiThemeProvider>
-        </div>
+        </MuiThemeProvider>
+      </div>
     );
   }
 
   renderFlashMessage() {
     return (
       <div className='flash-message'>
-        {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-        {this.state.noTranscript ? <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p> : null }
-        {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+        {
+          this.state.uploadError
+          ?
+          <p className="error">There seems to have been an error.<br/>Please try again later!</p>
+          :
+          null
+        }
+        {
+          this.state.noTranscript
+          ?
+          <p className="error">There seems to be an issue recognizing your voice.<br/>Please refresh and try again later!</p>
+          :
+          null
+        }
+        {
+          this.state.uploadSuccess
+          ?
+          <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p>
+          :
+          null
+        }
       </div>
     );
   }
@@ -243,19 +269,23 @@ class AudioEntry extends Component {
   render() {
     return (
       <div>
-        {!this.props.mobile ?
-        <div className="audio-entry-outter-container">
-          <div className="audio-entry-container">
-            <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
-            {this.renderControls()}
-            <p>{this.state.transcript}</p>
-            {this.state.start && this.renderVoiceRecognition()}
-            {this.renderFlashMessage()}
-            {this.state.uploading ? <Loader /> : null }
+        {
+          !this.props.mobile
+          ?
+          <div className="audio-entry-outter-container">
+            <div className="audio-entry-container">
+              <audio autoPlay='true' src={this.state.src} muted="muted" controls></audio>
+              {this.renderControls()}
+              <p>{this.state.transcript}</p>
+              {this.state.start && this.renderVoiceRecognition()}
+              {this.renderFlashMessage()}
+              {this.state.uploading ? <Loader /> : null }
+            </div>
+            {this.renderUploadBtn()}
           </div>
-          {this.renderUploadBtn()}
-        </div>
-        : <LoaderMobileDetected /> }
+          :
+          <LoaderMobileDetected />
+        }
       </div>
     );
   }

@@ -61,8 +61,7 @@ export default class Landing extends React.Component {
             <img src={knowledge} className='knowledge-img animated slideInUp'/>
             <div className="feature-text animated slideInUp">
             <h1>Fitbit for Your Mind</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Praesent nec volutpat enim.</p>
+            <p>Record entries via multiple media inputs, including video, audio, phone call or text and receive analysis in beautifully designed graphs</p>
         </div>
           </div>
         <div className="emotion-container">

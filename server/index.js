@@ -6,7 +6,6 @@ const multer = require('multer');
 const db = require('./db/index');
 const app = express();
 const Promise = require('bluebird');
-const fs = Promise.promisifyAll(require('file-system'));
 const watson = require('./watsonAPI/watsonAPI.js');
 const database = require('./db/dbHelpers');
 const twilio = require('./twilioAPI/twilioAPI.js');
@@ -49,6 +48,7 @@ AWS.config.update({
 });
 
 app.post('/elasticSearch', (req, res) => {
+//   console.log('Received results:', req.body);
   if (req.body.phonenumber[0] !== '1') {
     req.body.phonenumber = '1' + req.body.phonenumber;
   }
@@ -56,7 +56,6 @@ app.post('/elasticSearch', (req, res) => {
     phonenumber: req.body.phonenumber,
     search: req.body.search
   };
-  console.log('elasticsearch route called with:', data);
   elastic.eSearch(data)
   .then((results) => {
     res.status(200).send(results);
@@ -89,21 +88,26 @@ app.post('/scheduleCall', (req, res) => {
     return database.callEntry(req, res, callInfo);
   })
   .catch((e) => {
-    console.log('Received error:', e);
+    // console.log('Received error:', e);
+    // TODO: HANDLE ERROR
   });
 });
 
 app.post('/db/retrieveEntry', (req, res) => {
   let query = {};
-  query.user_id = req.body.user_id
+  query.user_id = req.body.user_id;
   database.retrieveEntry(query)
   .then((results) => {
     res.send(results);
   })
-  .catch( err => console.error(err));
+  .catch( err => {
+    // console.error(err);
+    // TODO: HANDLE ERROR
+  });
 });
 
 app.post('/db/userentry', (req, res) => {
+  // console.log('Receiving from server:', req.body);
   if (req.body.phonenumber[0] !== '1') {
     req.body.phonenumber = '1' + req.body.phonenumber;
   }
@@ -118,8 +122,6 @@ app.get('/callentry/:user/:search', (req, res) => {
   let query = {};
   query.user = req.params.user;
   query.search = req.params.search;
-  console.log('Received call to call entry with:', query);
-
   database.retrievePhoneEntry(req, res, query);
 });
 
@@ -151,9 +153,13 @@ app.post('/entry', upload.single('media'), (req, res) => {
   if (req.body.text.length === 0) {
     res.sendStatus(400);
   } else {
+    if (req.body.phonenumber[0] !== '1') {
+      req.body.phonenumber = '1' + req.body.phonenumber;
+    }
     watson.promisifiedTone(req.body.text)
     .then(tone => {
       let log = {
+        phonenumber: req.body.phonenumber,
         user_id: req.body.user_id,
         entry_type: req.body.entryType,
         video: {
