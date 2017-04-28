@@ -7,8 +7,19 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import RaisedButton from 'material-ui/RaisedButton';
 import {Card} from 'material-ui/Card';
 import Text from 'material-ui/svg-icons/editor/text-fields';
-import Video from 'material-ui/svg-icons/AV/videocam';
-import Audio from 'material-ui/svg-icons/AV/mic';
+import Video from 'material-ui/svg-icons/av/videocam';
+import Audio from 'material-ui/svg-icons/av/mic';
+
+const styles = {
+  active: {
+    backgroundColor: 'red',
+    margin: 12,
+  },
+  button: {
+    backgroundColor: '#a4c639',
+    margin: 12,
+  }
+};
 
 export default class NewEntry extends Component {
   constructor(props) {
@@ -94,14 +105,3 @@ export default class NewEntry extends Component {
     );
   }
 }
-
-const styles = {
-  active: {
-    backgroundColor: 'red',
-    margin: 12,
-  },
-  button: {
-    backgroundColor: "#a4c639",
-    margin: 12,
-  }
-};

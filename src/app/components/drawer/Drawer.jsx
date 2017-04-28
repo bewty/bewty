@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link , Redirect} from 'react-router-dom';
+import { Link, Redirect} from 'react-router-dom';
 import Drawer from 'material-ui/Drawer';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
@@ -35,10 +35,10 @@ export default class AppDrawer extends React.Component {
 
   logOut() {
     localStorage.removeItem('id_token');
-    console.log('log out triggered');
+    // console.log('log out triggered');
     window.location.reload(true);
     window.location.assign(window.location.origin);
-    console.log('relocated to here', window.location.origin);
+    // console.log('relocated to here', window.location.origin);
   }
 
   render() {
@@ -46,9 +46,11 @@ export default class AppDrawer extends React.Component {
       <div style={{paddingTop: '56px'}}>
         <AppBar
           onLeftIconButtonTouchTap={this.handleToggle}
-          style={{backgroundColor: '#EB5424',
-                  position: 'fixed',
-                  top: 0}}
+          style={{
+            backgroundColor: '#EB5424',
+            position: 'fixed',
+            top: 0
+          }}
         />
         <Drawer
           docked={false}
@@ -60,13 +62,14 @@ export default class AppDrawer extends React.Component {
           title={<Link to="/" style={{color: '#fff', textDecoration: 'none'}}>MindFits</Link>}
             onTitleTouchTap={this.handleClose}
             onLeftIconButtonTouchTap={this.handleToggle}
-            style={{'backgroundColor': '#EB5424',
-                    fontFamily: 'Lato, san-serif'}}
+            style={{
+              'backgroundColor': '#EB5424',
+              fontFamily: 'Lato, san-serif'
+            }}
           />
           <Menu
             menuItemStyle={{fontFamily: 'Lato, san-serif'}}
-
-            >
+          >
             <MenuItem
               containerElement={<Link to="/new-entry" />}
               onTouchTap={this.handleClose}

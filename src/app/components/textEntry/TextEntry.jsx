@@ -36,12 +36,13 @@ export default class TextEntry extends React.Component {
       uploadError: false,
       uploadSuccess: false
     });
+
     const data = {
       text: this.state.value,
       entryType: 'text',
-      user_id: localStorage.user_id
+      user_id: localStorage.user_id,
+      phonenumber: JSON.parse(localStorage.smsCred).phoneNumber.number
     };
-
     axios.post('/entry', data)
     .then(res => {
       this.setState({
@@ -55,9 +56,8 @@ export default class TextEntry extends React.Component {
         uploadSuccess: false,
         uploadError: true
       });
-      console.log('text upload error...', err);
+      // console.log('text upload error...', err);
     });
-
     this.setState({value: ''});
   }
 
@@ -83,22 +83,42 @@ export default class TextEntry extends React.Component {
           <RaisedButton
             className="submitButton"
             fullWidth={true}
-             icon={<UploadButton
-                      color="#fff"
-                      style={{paddingLeft: '0'}}
-                    />}
+             icon={
+              <UploadButton
+                color="#fff"
+                style={{paddingLeft: '0'}}
+              />
+            }
             onTouchTap={() => {
-              this.state.value.length > 0 && this.handleSubmit();
+              this.state.value.length > 0
+              &&
+              this.handleSubmit();
             }}
             buttonStyle={{backgroundColor: '#EB5424', height: 50}}
-            labelStyle={{fontFamily: 'Lato, san-serif', fontSize: '18px', color: '#fff'}}
+            labelStyle={{
+              fontFamily: 'Lato, san-serif',
+              fontSize: '18px',
+              color: '#fff'
+            }}
           />
         </MuiThemeProvider>
         {this.state.uploading ? <Loader /> : null }
         <br/>
         <div>
-          {this.state.uploadError ? <p className="error">There seems to have been an error.<br/>Please try again later!</p> : null }
-          {this.state.uploadSuccess ? <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p> : null}
+          {
+            this.state.uploadError
+            ?
+            <p className="error">There seems to have been an error.<br/>Please try again later!</p>
+            :
+            null
+          }
+          {
+            this.state.uploadSuccess
+            ?
+            <p><Link className="success" to="/entries">Success! You can view your submissions here!</Link></p>
+            :
+            null
+          }
         </div>
       </div>
     );

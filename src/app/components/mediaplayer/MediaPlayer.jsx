@@ -33,5 +33,3 @@ export default class MediaPlayer extends React.Component {
     );
   }
 }
-
-

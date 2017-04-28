@@ -6,6 +6,7 @@ export default class UserProfile extends React.Component {
   constructor(props) {
     super (props);
   }
+
   componentDidMount() {
     var appearanceOpts = {
       autoclose: true
@@ -23,7 +24,7 @@ export default class UserProfile extends React.Component {
 
   userLog() {
     let data = {};
-    console.log('Userlog triggered');
+    // console.log('Userlog triggered');
     if (localStorage.smsCred) {
       data.phonenumber = JSON.parse(localStorage.smsCred).phoneNumber.number;
     }
@@ -34,7 +35,8 @@ export default class UserProfile extends React.Component {
       localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
     })
     .catch((err) => {
-      console.log('text upload error...', err);
+      // console.log('text upload error...', err);
+      // TODO: HANDLE ERROR
     });
   }
 
@@ -45,7 +47,6 @@ export default class UserProfile extends React.Component {
         <div>
           <img className="profilePic" src={this.props.state.profile.picture} />
           <h2 className="profileName">Welcome!</h2>
-          <button onClick={this.props.logOut.bind(this)}>Logout</button>
         </div>
       );
     } else {

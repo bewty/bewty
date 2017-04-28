@@ -4,7 +4,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TimePicker from 'material-ui/TimePicker';
 import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import moment from 'moment';
@@ -41,9 +40,11 @@ export default class CallSchedule extends React.Component {
     this.defaultTime = new Date();
     this.handleQuestionSubmit = this.handleQuestionSubmit.bind(this);
   }
+
   componentWillMount() {
     this.retrieveUserState();
   }
+
   componentDidMount() {
     if (localStorage.scheduled_time === '') {
       this.setState({
@@ -68,7 +69,8 @@ export default class CallSchedule extends React.Component {
       localStorage.setItem('scheduled_time', user_id.data.scheduled_time);
     })
     .catch((err) => {
-      console.log('Received error in retrieving state:', err);
+      // console.log('Received error in retrieving state:', err);
+      // TODO: HANDLE ERROR
     });
   }
 
@@ -130,7 +132,8 @@ export default class CallSchedule extends React.Component {
       this.retrieveUserState();
     })
     .catch((err) => {
-      console.log('Received err', err);
+      // console.log('Received err', err);
+      // TODO: HANDLE ERROR
     });
     localStorage.setItem('scheduled', false);
     localStorage.setItem('stopCalls', true);
@@ -148,42 +151,55 @@ export default class CallSchedule extends React.Component {
     if (this.state.scheduled === false) {
       return (
         <div className="call-entry-container call-home">
-        {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
-        {!this.state.hasQuestion ?
+          {
+            !this.state.hasQuestion
+            ?
+            <h3>What question would you like to be asked?</h3>
+            :
+            <h3>When would you like your call?</h3>
+          }
+          {
+            !this.state.hasQuestion
+            ?
+            <MuiThemeProvider>
+              <TextField
+                value={this.state.scheduled_message}
+                onChange={this.handleQuestion}
+                fullWidth={true}
+                underlineFocusStyle={{borderColor: '#EB5424'}}
+                style={{fontFamily: 'Lato, san-serif'}}
+                errorText={
+                  !this.state.scheduled_message.length > 0
+                  &&
+                  'This field is required'
+                }
+              />
+            </MuiThemeProvider>
+            :
+            <MuiThemeProvider muiTheme={muiTheme}>
+              <TimePicker
+                onChange={this.handleTime}
+                defaultTime={this.defaultTime}
+                textFieldStyle={{fontFamily: 'Lato, san-serif'}}
+              />
+            </MuiThemeProvider>
+          }
           <MuiThemeProvider>
-            <TextField
-              value={this.state.scheduled_message}
-              onChange={this.handleQuestion}
+            <RaisedButton
               fullWidth={true}
-              underlineFocusStyle={{borderColor: '#EB5424'}}
-              style={{fontFamily: 'Lato, san-serif'}}
-              errorText={!this.state.scheduled_message.length > 0 && 'This field is required'}
+              label="Submit"
+              labelStyle={{fontFamily: 'Lato, san-serif'}}
+              onTouchTap={(event) => {
+                if (!this.state.hasQuestion) {
+                  this.state.scheduled_message.length > 0
+                  &&
+                  this.handleQuestionSubmit();
+                } else {
+                  this.handleSubmit(event);
+                }
+              }}
             />
           </MuiThemeProvider>
-          :
-          <MuiThemeProvider muiTheme={muiTheme}>
-            <TimePicker
-              onChange={this.handleTime}
-              defaultTime={this.defaultTime}
-              textFieldStyle={{fontFamily: 'Lato, san-serif'}}
-            />
-          </MuiThemeProvider>
-        }
-        <MuiThemeProvider>
-          <RaisedButton
-            fullWidth={true}
-            label="Submit"
-            labelStyle={{fontFamily: 'Lato, san-serif'}}
-            onTouchTap={(event) => {
-              if (!this.state.hasQuestion) {
-                this.state.scheduled_message.length > 0 && this.handleQuestionSubmit();
-              } else {
-                this.handleSubmit(event);
-              }
-            }}
-
-          />
-        </MuiThemeProvider>
         </div>
       );
     } else {
@@ -192,7 +208,6 @@ export default class CallSchedule extends React.Component {
           <h3>You currently have a call scheduled!</h3>
           <MuiThemeProvider muiTheme={muiTheme}>
             <TextField
-
               value={this.state.scheduled_message}
               fullWidth={true}
               underlineDisabledStyle={{borderColor: '#EB5424'}}
@@ -200,11 +215,15 @@ export default class CallSchedule extends React.Component {
               disabled={true}
             />
           </MuiThemeProvider>
-
           <MuiThemeProvider muiTheme={muiTheme}>
             <TimePicker
-
-              defaultTime={this.state.time ? this.state.time : moment(localStorage.scheduled_time, 'HHmm')._d}
+              defaultTime={
+                this.state.time
+                ?
+                this.state.time
+                :
+                moment(localStorage.scheduled_time, 'HHmm')._d
+              }
               textFieldStyle={{fontFamily: 'Lato, san-serif'}}
               underlineDisabledStyle={{borderColor: '#EB5424'}}
               disabled={true}
@@ -230,21 +249,16 @@ export default class CallSchedule extends React.Component {
               open={typeof this.state.stopCalls === 'boolean' ? this.state.stopCalls : this.state.stopCalls === 'true'}
               */
               bodyStyle={{fontFamily: 'Lato, san-serif'}}
-              contentStyle={{
-                width: '40%'
-
-              }}
+              contentStyle={{width: '40%'}}
               open={this.state.stopCalls === true}
               actions={
                 [
                   <MuiThemeProvider>
-                  <RaisedButton
-                    label="Ok"
-                    labelStyle={{fontFamily: 'Lato, san-serif'}}
-                    onTouchTap={this.revise}
-
-
-                  />
+                    <RaisedButton
+                      label="Ok"
+                      labelStyle={{fontFamily: 'Lato, san-serif'}}
+                      onTouchTap={this.revise}
+                    />
                   </MuiThemeProvider>
                 ]
               }
