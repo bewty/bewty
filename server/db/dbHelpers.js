@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
-
+const moment = require('moment-timezone');
 const mongoDatabase = require('./index.js');
 const User = mongoDatabase.User;
 const Call = mongoDatabase.Call;
@@ -10,7 +10,6 @@ const ObjectId = mongoose.Types.ObjectId;
 exports.userEntry = (req, res, userInfo) => {
   User.findOne({'phonenumber': userInfo.phonenumber})
   .then((user) => {
-    console.log(user);
     if (user === null) {
       let newUser = User({
         phonenumber: userInfo.phonenumber,
@@ -34,7 +33,7 @@ exports.saveEntry = (req, res, log) => {
   const _id = log.user_id;
   let logEntry = {
     entry_type: log.entry_type,
-    created_at: Date.now(),
+    created_at: moment.tz(Date.now(), 'America/Los_Angeles').format(),
     video: {
       bucket: log.video ? log.video.bucket : null,
       key: log.video ? log.video.key : null,
@@ -178,7 +177,7 @@ exports.callEntry = (callInfo) => {
   return new Promise((resolve, reject) => {
     newCall.save()
     .then(function(success) {
-      // resolve(console.log(`${callInfo.user_id} scheduled call successfully added`));
+      resolve(success);
     })
     .error(function(err) {
       reject(err);
@@ -303,7 +302,6 @@ exports.retrievePhoneEntry = (req, res, log) => {
   let query = log.search;
   User.findOne({_id: user})
   .then((user) => {
-    console.log('Found user:', user.call_entries);
     res.status(200).send(JSON.stringify(user.call_entries));
   })
   .error(err => res.sendStatus(500).send(err))

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import CallSchedule from './CallSchedule.jsx';
-import CallEntryList from './CallEntryList.jsx';
+import CallEntryList from './callEntryList.jsx';
 
 export default class CallHome extends React.Component {
   constructor(props) {

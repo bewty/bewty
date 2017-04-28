@@ -16,7 +16,7 @@ import CallHome from './components/callSchedule/CallHome';
 import DrawerSimpleExample from './components/drawer/Drawer.jsx';
 import AppDrawer from './components/drawer/Drawer.jsx';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Search from './components/search/Search';
+import Search from './components/search/search';
 
 import reducers from './reducers';
 import './styles/variables.scss';

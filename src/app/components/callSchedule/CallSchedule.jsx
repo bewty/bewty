@@ -29,7 +29,6 @@ export default class CallSchedule extends React.Component {
       question: '',
       time: '',
       phonenumber: '',
-      // user_id: '',
       hasQuestion: false
     };
 
@@ -54,7 +53,6 @@ export default class CallSchedule extends React.Component {
     this.setState({
       scheduled_time: localStorage.scheduled_time,
       scheduled_message: localStorage.scheduled_message,
-      //stop: localStorage.stopCalls,
       stopCalls: localStorage.stopCalls,
       time: moment(localStorage.scheduled_time, 'HHmm')._d
     });
@@ -80,9 +78,7 @@ export default class CallSchedule extends React.Component {
   }
 
   handleTime(event, date) {
-    console.log(date);
     let time = (('00' + date.getHours()).slice(-2)) + ':' + (('00' + date.getMinutes()).slice(-2));
-    console.log(time);
     this.setState({
       scheduled_time: time,
       time: date
@@ -99,10 +95,8 @@ export default class CallSchedule extends React.Component {
     axios.post('/scheduleCall', data)
     .then(() => {
       this.retrieveUserState();
-      console.log('Successfully sent data');
     });
 
-    // should set state on success
     this.setState({
       scheduled_time: this.state.scheduled_time,
       scheduled_message: this.state.scheduled_message,
@@ -142,7 +136,6 @@ export default class CallSchedule extends React.Component {
     localStorage.setItem('stopCalls', true);
     this.setState({
       stopCalls: true,
-      // scheduled: false,
       hasQuestion: false
     });
   }
@@ -152,55 +145,7 @@ export default class CallSchedule extends React.Component {
   }
 
   render() {
-    console.log(this.state);
-    // if (this.state.stopCalls === true) {
-    //   // return (
-    //   //   <div>
-    //   //     <h1>All scheduled calls have been stopped.</h1>
-    //   //     <h3>Create new scheduled call:</h3>
-    //   //     <input onClick={this.revise} type="submit" value="Schedule" />
-    //   //   </div>
-    //   // );
-    //   return (
-    //     <MuiThemeProvider>
-    //       <Dialog
-    //          Weird bug where stopCalls is sometimes string instead of boolean
-    //         open={typeof this.state.stopCalls === 'boolean' ? this.state.stopCalls : this.state.stopCalls === 'true'}
-
-    //         open={true}
-    //         actions={
-    //           [
-    //             <MuiThemeProvider>
-    //             <FlatButton
-    //               label="Ok"
-    //               onTouchTap={this.revise}
-    //             />
-    //             </MuiThemeProvider>
-    //           ]
-    //         }
-    //       >
-    //       All scheduled calls have been stopped
-    //       </Dialog>
-    //     </MuiThemeProvider>
-
-    //   );
-    // }
     if (this.state.scheduled === false) {
-      // return (
-      //   <div className="container">
-      //     <h1>What question would you like to be asked?</h1>
-      //     <form onSubmit={this.handleSubmit}>
-      //       <label>
-      //         <input type="text" value={this.state.scheduled_message} onChange={this.handleQuestion} />
-      //       </label>
-      //       <h2>When would you like your call?</h2>
-      //       <input type="time" step="900" value={this.state.scheduled_time} onChange={this.handleTime} />
-      //       <p></p>
-      //       <input type="submit" value="Submit" />
-      //     </form>
-      //   </div>
-      // );
-      console.log('testing');
       return (
         <div className="call-entry-container call-home">
         {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
@@ -242,7 +187,6 @@ export default class CallSchedule extends React.Component {
         </div>
       );
     } else {
-      console.log('else');
       return (
         <div className="call-entry-container call-home">
           <h3>You currently have a call scheduled!</h3>
@@ -310,51 +254,6 @@ export default class CallSchedule extends React.Component {
           </MuiThemeProvider>
         </div>
       );
-      // return (
-      //   <div>
-      //     <h2>You currently have a call scheduled for {this.state.scheduled_time}</h2>
-      //     <h2>With the question:</h2>
-      //     <h1>{this.state.scheduled_message}</h1>
-      //     <h4>Would you like to revise your message or time?</h4>
-      //     <input onClick={this.revise} type="submit" value="Revise" />
-      //     <h4>Or stop current call schedule?</h4>
-      //     <input onClick={this.endCall} type="submit" value="End Schedule" />
-      //   </div>
-      // );
     }
-// =======
-//     return (
-//       <div className="new-entry-container">
-//         {!this.state.hasQuestion ? <h3>What question would you like to be asked?</h3> : <h3>When would you like your call?</h3>}
-//       {!this.state.hasQuestion ?
-//         <MuiThemeProvider>
-//           <TextField
-//             value={this.state.question}
-//             onChange={this.handleQuestion}
-//             fullWidth={true}
-//             underlineFocusStyle={{borderColor: '#EB5424'}}
-//             style={{fontFamily: 'Lato, san-serif'}}
-//           />
-//         </MuiThemeProvider>
-//         :
-//         <MuiThemeProvider muiTheme={muiTheme}>
-//           <TimePicker
-//             onChange={this.handleTime}
-//             defaultTime={this.defaultTime}
-//             textFieldStyle={{fontFamily: 'Lato, san-serif'}}
-//           />
-//         </MuiThemeProvider>
-//       }
-//       <MuiThemeProvider>
-//         <RaisedButton
-//           fullWidth={true}
-//           label="Submit"
-//           labelStyle={{fontFamily: 'Lato, san-serif'}}
-//           onTouchTap={!this.state.hasQuestion ? this.handleQuestionSubmit : this.handleSubmit}
-//         />
-//       </MuiThemeProvider>
-//       </div>
-//     );
-// >>>>>>> [Style] change class name to not mess with original containers
   }
 }
