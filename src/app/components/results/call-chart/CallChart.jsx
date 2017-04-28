@@ -9,12 +9,12 @@ export default class BarChart extends Component {
   }
 
   render() {
-    console.log('Rendering within CallChart:', this.props);
+//     console.log('Rendering within CallChart:', this.props);
     let watData = JSON.parse(this.props.avg_data.watson_results).document_tone.tone_categories[0].tones;
     let chartData = watData.map((tone) => {
       return tone.score * 100;
     });
-    console.log('Watson data is:', watData, 'Chart data is:', chartData);
+//     console.log('Watson data is:', watData, 'Chart data is:', chartData);
     let avgChartData = [];
 
     const barAvgData = {
