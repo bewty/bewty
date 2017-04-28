@@ -38,7 +38,7 @@ export default class Search extends React.Component {
       });
     })
     .catch(err => {
-      console.log('text upload error...', err);
+//       console.log('text upload error...', err);
       this.setState({
         uploading: false,
         uploadError: true
