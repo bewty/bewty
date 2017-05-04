@@ -49,9 +49,40 @@ This repository is the source of truth for MindFits application, used to:
  - Contribute to the project by openning pull request against the dev branch
  - Test existing APIs and components
 
+## Technologies
+
+### Frontend
+- React (ES6)
+- React Router
+- Redux
+- Material-UI
+- Sass
+- Web Speech API
+- RecordRTC
+- Affectiva
+- ChartJS
+- VictoryJS
+
+### Backend
+- Node
+- Express
+- MongoDB
+
+### Other
+- Heroku
+- AWS S3
+- Twilio
+- IBM Watson
+- Cron
+- Elastic Search
+
+
 ## Requirements
 
 - Node 6.4.x
+- React 15.0.x
+- React-redux 5.0.x
+- Elastic Search 13.0.x
 
 
 ## Setup
@@ -83,15 +114,16 @@ start webpack
 ```
 npm run dev-build
 ```
-
 start hacking!
 ```
-
-
+Follow steps for installing Elastic Search
+https://www.elastic.co/downloads/elasticsearch
+```
+.env file for Watson, Twilio, AWS, and Elastic Search credentials
+```
 ### Roadmap
 
 View the project roadmap [here](https://docs.google.com/spreadsheets/d/1U2LnuViAdiEOzhrswlQvq69frDh2r4jc7K7SI0TMMmI/edit#gid=0)
-
 
 ## Contributing
 
