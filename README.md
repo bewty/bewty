@@ -1,4 +1,4 @@
-# Bewty
+# Mind Fits
 Daily journaling that analyzes your emotions
 
 ![](./docs/doc11.png)
@@ -115,12 +115,30 @@ start webpack
 npm run dev-build
 ```
 start hacking!
-```
+
 Follow steps for installing Elastic Search
 https://www.elastic.co/downloads/elasticsearch
+
+Create .env file to manage Watson, Twilio, AWS, and Elastic Search credentials as shown below
 ```
-.env file for Watson, Twilio, AWS, and Elastic Search credentials
+WATSON_ID= 
+WATSON_PASS= 
+TWILIO_ACCOUNT_SID=
+TWILIO_SECRET= 
+TWILIO_AUTH_TOKEN= 
+TWILIO_TO= 
+TWILIO_APP_SID= 
+TONE_ID= 
+TONE_PASS= 
+AUTH0_CLIENT_ID= 
+AUTH0_DOMAIN= 
+AWS_ACCESS_KEY_ID= 
+AWS_SECRET_ACCESS_KEY= 
+AWS_S3_BUCKET= 
+BONSAI_URL= 
+MONGODB_URI= 
 ```
+
 ### Roadmap
 
 View the project roadmap [here](https://docs.google.com/spreadsheets/d/1U2LnuViAdiEOzhrswlQvq69frDh2r4jc7K7SI0TMMmI/edit#gid=0)
