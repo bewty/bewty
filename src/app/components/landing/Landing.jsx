@@ -9,9 +9,9 @@ import callschedule_iphone from '../../../../public/assets/callschedule_iphone.g
 import multimediaEntry from '../../../../public/assets/multimediaEntry.svg';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Text from 'material-ui/svg-icons/editor/text-fields';
-import Video from 'material-ui/svg-icons/AV/videocam';
+import Video from 'material-ui/svg-icons/av/videocam';
 import Lock from 'material-ui/svg-icons/action/lock';
-import Audio from 'material-ui/svg-icons/AV/mic';
+import Audio from 'material-ui/svg-icons/av/mic';
 
 export default class Landing extends React.Component {
   static propTypes = {
